@@ -28,7 +28,7 @@ In addition, the GOG release includes its own updated icon set, with the raw `.i
 Three icon variants have been preserved:
 
 <p align="center">
-  <img src="./icons/gog.png" alt="GOG icon" width="32">
-  <img src="./icons/goggame-2099484877.png" alt="GOG launcher icon" width="32">
-  <img src="./icons/Icon1.png" alt="Original game icon" width="32">
+  <img src="./icons/gog.png" alt="GOG icon" width="64">
+  <img src="./icons/goggame-2099484877.png" alt="GOG launcher icon" width="64">
+  <img src="./icons/Icon1.png" alt="Original game icon" width="64">
 </p>
