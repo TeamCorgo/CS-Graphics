@@ -48,3 +48,11 @@ Progress so far: `.anx` & `.bmx` files contain image information with palette in
 
 Next step: Each image file needs to be matched with the correct palette information, although the two are only loosely tied together. It appears that the game selects the appropriate palette based on the current game screen, with the expectation that any newly loaded image content will inherit that palette. Another complication is that effects such as muzzle flashes and the HERCs' blinking lights appear to dynamically alter their palette colors.
 
+## Tools
+### FNX Converter
+<img src="./images/FNX Converter.png" alt="FNX Converter" width="264">
+
+Used to render and convert `.fnx` fonts into useable formats (`.png` & `.ttf`). 
+
+
+The game cursors were extracted using **Resource Hacker**. They were converted from `.cur` format to `.png` for easier viewing and use.
