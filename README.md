@@ -6,6 +6,7 @@
 
 ## Cursors
 Progress: 🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩 100%
+
 The game cursors were extracted using **Resource Hacker**. They were converted from `.cur` format to `.png` for easier viewing and use.
 
 Seven cursor variants have been preserved:
@@ -22,6 +23,7 @@ Seven cursor variants have been preserved:
 
 ## Icons
 Progress: 🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩 100%
+
 The original hexagonal game icon was extracted using **Resource Hacker**.  
 In addition, the GOG release includes its own updated icon set, with the raw `.ico` files provided directly in the installation directory, making extraction unnecessary.
 
@@ -34,11 +36,10 @@ Three icon variants have been preserved:
 </p>
 
 ## Fonts
-Progress: 🟩🟩⬜⬜⬜⬜⬜⬜⬜⬜ 20%
+Progress: 🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩 100%
 
-Progress so far: The files `FONT0.FNX`, `FONT1.FNX`, `FONT2.FNX`, `FONT3.FNX`, `FONT4.FNX`, and `FONT10.FNX` are likely font data for the game.
+Fonts are stored in `.FNX` files with a shading, gradient, or shadow effect (fat). Without the gradient applied, the text can be difficult to read. A readable (slim) version is also provided, as modern font formats do not support the gradient effect.
 
-Next step: Decode the .fnx format and preserve it in a modern, accessible format.
 
 ## Images
 Progress: 🟩🟩⬜⬜⬜⬜⬜⬜⬜⬜ 20%

@@ -1,0 +1,1623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FNX Font Reader</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:        #0f1117;
+    --panel:     #161b27;
+    --border:    #232b3e;
+    --border-hi: #2e3d58;
+    --text:      #c9d1e0;
+    --text-dim:  #5a6a85;
+    --text-hi:   #eef2ff;
+    --cyan:      #00d4ff;
+    --cyan-dim:  #0a3d50;
+    --green:     #4ade80;
+    --green-dim: #0f2d1a;
+    --amber:     #f59e0b;
+    --amber-dim: #2d1f04;
+    --red:       #f87171;
+    --red-dim:   #2d0f0f;
+    --mono:      'JetBrains Mono', monospace;
+    --sans:      'Inter', sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 14px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  header {
+    border-bottom: 1px solid var(--border);
+    padding: 14px 24px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-shrink: 0;
+  }
+
+  header .logo {
+    font-family: var(--mono);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: .04em;
+    color: var(--cyan);
+  }
+
+  header .logo span { color: var(--text-dim); font-weight: 400; }
+
+  header .tagline {
+    font-size: 12px;
+    color: var(--text-dim);
+    padding-left: 14px;
+    border-left: 1px solid var(--border);
+  }
+
+  .workspace {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    gap: 0;
+    overflow: hidden;
+  }
+
+  /* ── LEFT PANEL ── */
+  .left {
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    height: calc(100vh - 53px);
+  }
+
+  .drop-zone {
+    margin: 20px;
+    border: 1.5px dashed var(--border-hi);
+    border-radius: 10px;
+    padding: 32px 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: border-color .15s, background .15s;
+    position: relative;
+  }
+
+  .drop-zone:hover, .drop-zone.drag-over {
+    border-color: var(--cyan);
+    background: var(--cyan-dim);
+  }
+
+  .drop-zone input[type=file] {
+    position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%;
+  }
+
+  .drop-zone .drop-icon {
+    font-size: 28px;
+    margin-bottom: 10px;
+  }
+
+  .drop-zone .drop-label {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--text-dim);
+    line-height: 1.6;
+  }
+
+  .drop-zone .drop-label strong {
+    display: block;
+    font-size: 13px;
+    color: var(--text);
+    margin-bottom: 4px;
+    font-weight: 600;
+  }
+
+  .section-head {
+    padding: 10px 20px 6px;
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: .1em;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    border-top: 1px solid var(--border);
+    margin-top: 4px;
+  }
+
+  .field-table {
+    padding: 4px 20px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  .field-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 8px;
+    padding: 4px 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .field-row:last-child { border-bottom: none; }
+
+  .field-key {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-dim);
+    flex-shrink: 0;
+  }
+
+  .field-val {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--cyan);
+    text-align: right;
+    word-break: break-all;
+  }
+
+  .field-val.ok  { color: var(--green); }
+  .field-val.warn { color: var(--amber); }
+  .field-val.err  { color: var(--red); }
+
+  .badge {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 10px;
+    padding: 1px 6px;
+    border-radius: 3px;
+    font-weight: 600;
+  }
+
+  .badge-raw      { background: var(--border); color: var(--text); }
+  .badge-rle      { background: var(--cyan-dim); color: var(--cyan); }
+  .badge-lzss     { background: var(--green-dim); color: var(--green); }
+  .badge-1bpp     { background: var(--amber-dim); color: var(--amber); }
+  .badge-8bpp     { background: var(--cyan-dim); color: var(--cyan); }
+
+  .hex-dump {
+    margin: 0 20px 16px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 10px 12px;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-dim);
+    line-height: 1.7;
+    overflow-x: auto;
+    white-space: pre;
+  }
+
+  .hex-dump .hl { color: var(--cyan); }
+  .hex-dump .hl2 { color: var(--green); }
+  .hex-dump .hl3 { color: var(--amber); }
+
+  .warn-box {
+    margin: 0 20px 12px;
+    background: var(--amber-dim);
+    border: 1px solid var(--amber);
+    border-radius: 6px;
+    padding: 8px 12px;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--amber);
+    line-height: 1.5;
+  }
+
+  .err-box {
+    margin: 0 20px 12px;
+    background: var(--red-dim);
+    border: 1px solid var(--red);
+    border-radius: 6px;
+    padding: 10px 12px;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--red);
+    line-height: 1.5;
+  }
+
+  /* ── RIGHT PANEL ── */
+  .right {
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 53px);
+    overflow: hidden;
+  }
+
+  .right-toolbar {
+    border-bottom: 1px solid var(--border);
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-shrink: 0;
+    flex-wrap: wrap;
+  }
+
+  .right-toolbar label {
+    font-size: 12px;
+    color: var(--text-dim);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .right-toolbar input[type=range] {
+    accent-color: var(--cyan);
+    width: 90px;
+  }
+
+  .right-toolbar select {
+    background: var(--panel);
+    border: 1px solid var(--border-hi);
+    color: var(--text);
+    font-family: var(--mono);
+    font-size: 11px;
+    padding: 3px 6px;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+
+  .right-toolbar .scale-val {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--cyan);
+    min-width: 24px;
+  }
+
+  #exportTtfBtn:hover { background: var(--cyan); color: #04222c; }
+  #exportTtfBtn:active { transform: translateY(1px); }
+
+  .glyph-scroll {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+  }
+
+  .glyph-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    align-content: flex-start;
+  }
+
+  .glyph-cell {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    padding: 8px 6px 5px;
+    cursor: default;
+    transition: border-color .1s;
+    position: relative;
+  }
+
+  .glyph-cell:hover { border-color: var(--cyan); }
+
+  .glyph-cell.zero-width { border-color: var(--border); opacity: .5; }
+  .glyph-cell.space-char { border-style: dashed; }
+
+  .glyph-cell canvas {
+    display: block;
+    image-rendering: pixelated;
+  }
+
+  .glyph-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--text-dim);
+    line-height: 1;
+  }
+
+  .glyph-char {
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--text-dim);
+  }
+
+  .tooltip {
+    display: none;
+    position: absolute;
+    bottom: calc(100% + 6px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: #1e2736;
+    border: 1px solid var(--border-hi);
+    border-radius: 5px;
+    padding: 6px 9px;
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text);
+    white-space: nowrap;
+    z-index: 10;
+    pointer-events: none;
+    line-height: 1.6;
+  }
+
+  .glyph-cell:hover .tooltip { display: block; }
+
+  .empty-state {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    color: var(--text-dim);
+    font-family: var(--mono);
+    font-size: 13px;
+    padding: 40px;
+  }
+
+  .empty-state .big { font-size: 40px; margin-bottom: 4px; }
+  .empty-state p { max-width: 340px; text-align: center; line-height: 1.6; }
+  .empty-state code {
+    color: var(--cyan);
+    background: var(--cyan-dim);
+    padding: 1px 5px;
+    border-radius: 3px;
+    font-size: 11px;
+  }
+
+  /* scrollbars */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border-hi); border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">.fnx <span>reader</span></div>
+  <div class="tagline">Hex-strategy bitmap font inspector — reads raw &amp; PKX-compressed files</div>
+</header>
+
+<div class="workspace">
+
+  <!-- LEFT: file info -->
+  <div class="left" id="left">
+    <div class="drop-zone" id="dropZone">
+      <input type="file" id="fileInput" accept="*">
+      <div class="drop-icon">📂</div>
+      <div class="drop-label">
+        <strong>Drop a .fnx file here</strong>
+        or click to browse<br>
+        <span style="margin-top:6px;display:block">font0.fnx · font1.fnx · font3.fnx …</span>
+      </div>
+    </div>
+    <div id="infoPanel"></div>
+  </div>
+
+  <!-- RIGHT: glyph grid -->
+  <div class="right">
+    <div class="right-toolbar" id="toolbar" style="display:none">
+      <label>
+        Scale
+        <input type="range" id="scaleSlider" min="1" max="12" value="4">
+        <span class="scale-val" id="scaleVal">4×</span>
+      </label>
+      <label>
+        BG
+        <select id="bgSelect">
+          <option value="#161b27">Dark</option>
+          <option value="#ffffff">White</option>
+          <option value="#888888">Mid grey</option>
+          <option value="#000000">Black</option>
+        </select>
+      </label>
+      <label>
+        Shading
+        <select id="shadingSelect">
+          <option value="shaded">Shaded (as-is)</option>
+          <option value="brightest">Brightest only</option>
+        </select>
+      </label>
+      <label>
+        Ink
+        <select id="inkSelect">
+          <option value="#00d4ff">Cyan</option>
+          <option value="#ffffff">White</option>
+          <option value="#4ade80">Green</option>
+          <option value="#f59e0b">Amber</option>
+          <option value="#f87171">Red</option>
+        </select>
+      </label>
+      <label style="color: var(--text-dim);" id="glyphCount"></label>
+      <label style="margin-left:auto;">
+        <input type="text" id="familyNameInput" placeholder="Font family name" value="FNX Converted"
+          style="background: var(--panel); border: 1px solid var(--border-hi); color: var(--text);
+                 font-family: var(--mono); font-size: 11px; padding: 4px 7px; border-radius: 4px;
+                 width: 130px;">
+      </label>
+      <button id="exportBitmapBtn" style="background: var(--panel); border: 1px solid var(--border-hi);
+        color: var(--text); font-family: var(--mono); font-size: 11px; font-weight: 600;
+        padding: 5px 12px; border-radius: 4px; cursor: pointer;">
+        ⬇ Export .png
+      </button>
+      <button id="exportTtfBtn" style="background: var(--cyan-dim); border: 1px solid var(--cyan);
+        color: var(--cyan); font-family: var(--mono); font-size: 11px; font-weight: 600;
+        padding: 5px 12px; border-radius: 4px; cursor: pointer;">
+        ⬇ Export .ttf
+      </button>
+    </div>
+    <div id="glyphArea" class="glyph-scroll">
+      <div class="empty-state">
+        <div class="big">⬡</div>
+        <p>Load a <code>.fnx</code> file to inspect its glyphs and structure</p>
+        <p style="font-size:11px;margin-top:8px;">Supports raw blobs and <code>PKX:</code> compressed containers. RLE and LZSS decompression built-in.</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ─── Utilities ───────────────────────────────────────────────────
+function r32(buf, off) {
+  const v = buf[off] | (buf[off+1]<<8) | (buf[off+2]<<16) | (buf[off+3]<<24);
+  return v >>> 0; // unsigned
+}
+function r32s(buf, off) {
+  const v = buf[off] | (buf[off+1]<<8) | (buf[off+2]<<16) | (buf[off+3]<<24);
+  return v | 0; // signed
+}
+function r16(buf, off) { return buf[off] | (buf[off+1]<<8); }
+function hex(n, pad=2) { return n.toString(16).toUpperCase().padStart(pad,'0'); }
+function hexN(n, pad=8) { return '0x' + n.toString(16).toUpperCase().padStart(pad,'0'); }
+
+// ─── RLE Decompress (codecId 12 / 0x0C) ──────────────────────────
+// Control-byte RLE with an extended 16-bit form for long runs.
+// Ported from the verified PKX/.ANX/.BMX codec spec.
+function rleDecompress(src, dstSize) {
+  const dst = new Uint8Array(dstSize);
+  let si = 0, di = 0;
+
+  while (di < dstSize && si < src.length) {
+    const c = src[si++];
+
+    if (c >= 0x01 && c <= 0x7f) {
+      // literal copy of c bytes
+      for (let i = 0; i < c && di < dstSize && si < src.length; i++) dst[di++] = src[si++];
+
+    } else if (c === 0x00) {
+      // short run-fill: count byte, then fill byte
+      const k = src[si++];
+      const f = src[si++];
+      for (let i = 0; i < k && di < dstSize; i++) dst[di++] = f;
+
+    } else if (c === 0x80) {
+      // extended form: next 2 bytes little-endian
+      const raw16 = r16(src, si); si += 2;
+      if (raw16 === 0x0000) {
+        break; // end of stream
+      } else if (raw16 <= 0x7fff) {
+        // extended skip — leaves buffer untouched (already zero in Uint8Array)
+        di += raw16;
+      } else if (raw16 <= 0xbfff) {
+        // extended literal copy
+        const n = raw16 - 0x8000;
+        for (let i = 0; i < n && di < dstSize && si < src.length; i++) dst[di++] = src[si++];
+      } else {
+        // extended run-fill
+        const n = raw16 - 0xc000;
+        const f = src[si++];
+        for (let i = 0; i < n && di < dstSize; i++) dst[di++] = f;
+      }
+    } else {
+      // 0x81-0xff: short skip
+      di += (c & 0x7f);
+    }
+  }
+  return dst;
+}
+
+// ─── RLE Zero-Run Optimized (codecId 1) ──────────────────────────
+// Simpler single-byte control scheme, no extended form.
+function rleZeroDecompress(src, dstSize) {
+  const dst = new Uint8Array(dstSize);
+  let si = 0, di = 0;
+
+  while (di < dstSize && si < src.length) {
+    const c = src[si++];
+
+    if ((c & 0x7f) === 0) {
+      // c == 0x00 or 0x80: end of stream
+      break;
+    } else if (c & 0x80) {
+      // 0x81-0xff: run-fill
+      const count = c & 0x7f;
+      const f = src[si++];
+      for (let i = 0; i < count && di < dstSize; i++) dst[di++] = f;
+    } else {
+      // 0x01-0x7f: literal copy
+      for (let i = 0; i < c && di < dstSize && si < src.length; i++) dst[di++] = src[si++];
+    }
+  }
+  return dst;
+}
+
+// ─── LZSS Decompress (codecId 14 / 0x0E) ─────────────────────────
+// Verified byte-exact against real files. Handles the explicit-length
+// and packed stream-header forms, the 8-byte raw fast path, and the
+// segment-continuation bit-budget (this is the part that's easy to
+// get wrong — the continuation group processes only `segmentFlag`
+// bits, not a full 8).
+function lzssDecompress(src, dstSize) {
+  const out = new Uint8Array(dstSize);
+  let outLen = 0;
+  let pos = 0;
+
+  const header = src[pos];
+  let segmentFlag, blockCount;
+  if (header < 8) {
+    segmentFlag = header;
+    blockCount = r16(src, pos + 1);
+    pos += 3;
+    if (blockCount === 0xffff) {
+      blockCount = r32(src, pos);
+      pos += 4;
+    }
+  } else {
+    segmentFlag = header & 0x07;
+    blockCount = (header >> 3) - 1;
+    pos += 1;
+  }
+
+  while (true) {
+    let bitBudget = segmentFlag;
+    blockCount -= 1;
+    let flag;
+    if (blockCount < 0) {
+      if (segmentFlag === 0) break; // done
+      segmentFlag = 0; // one-shot continuation, consumed
+      flag = src[pos++];
+      // bitBudget keeps its pre-exhaustion value (NOT reset to 8)
+    } else {
+      flag = src[pos++];
+      if (flag === 0x00) {
+        // raw fast path: unconditional 8-byte copy
+        for (let i = 0; i < 8 && outLen < dstSize; i++) out[outLen++] = src[pos++];
+        continue;
+      }
+      bitBudget = 8; // normal group: full byte
+    }
+
+    let bitsDone = 0;
+    while (bitsDone < bitBudget) {
+      const bit = (flag >> (7 - bitsDone)) & 1;
+      bitsDone++;
+      if (bit) {
+        const token = r16(src, pos); pos += 2;
+        const length   = (token & 0x0f) + 3;
+        const distance = (token >> 4) + 1;
+        const start = outLen - distance;
+        for (let i = 0; i < length && outLen < dstSize; i++) {
+          out[outLen] = out[start + i];
+          outLen++;
+        }
+      } else {
+        out[outLen++] = src[pos++];
+      }
+    }
+  }
+
+  return out;
+}
+
+// ─── PKX Container Parser ────────────────────────────────────────
+// Verified against real files: all three magic dwords must match exactly.
+const PKX_MAGIC1 = 0x3A584B50; // "PKX:"
+const PKX_MAGIC2 = 0x10011966;
+const PKX_MAGIC3 = 0x9BAEBACF;
+
+function parsePKX(bytes) {
+  if (bytes.length < 0x18) return null;
+  const m1 = r32(bytes, 0);
+  const m2 = r32(bytes, 4);
+  const m3 = r32(bytes, 8);
+  if (m1 !== PKX_MAGIC1 || m2 !== PKX_MAGIC2 || m3 !== PKX_MAGIC3) return null;
+  // all three magics matched — it's a PKX container
+  const cmpType  = r32(bytes, 0x0c);
+  const cmpSize  = r32(bytes, 0x10);
+  const dstSize  = r32(bytes, 0x14);
+  const payload  = bytes.slice(0x18, 0x18 + cmpSize);
+
+  return { magic1: m1, magic2: m2, magic3: m3, cmpType, cmpSize, dstSize, payload };
+}
+
+function decompress(pkx) {
+  const type = pkx.cmpType & 0x0f;
+  const src  = pkx.payload;
+  const dst  = pkx.dstSize;
+
+  if (type === 0x01) return rleZeroDecompress(src, dst);
+  if (type === 0x0c) return rleDecompress(src, dst);
+  if (type === 0x0e) return lzssDecompress(src, dst);
+  throw new Error(`Unknown compression type: 0x${hex(type)}`);
+}
+
+// ─── FNX Parser ──────────────────────────────────────────────────
+function parseFNX(raw) {
+  const warnings = [];
+  const errors   = [];
+
+  if (raw.length < 0x28) {
+    errors.push(`File too short: ${raw.length} bytes (need at least 0x28)`);
+    return { errors, warnings };
+  }
+
+  const magicBytes = raw.slice(0, 4);
+  const magicAscii = Array.from(magicBytes).map(b => (b >= 32 && b < 127) ? String.fromCharCode(b) : '.').join('');
+  if (magicAscii !== 'FNX:') {
+    warnings.push(`Expected "FNX:" tag at +0x00, found "${magicAscii}" — may not be a valid .fnx payload`);
+  }
+
+  const fontMode       = raw[0x06];
+  const glyphHeight    = r32s(raw, 0x0c);
+  const underlineRow   = r32s(raw, 0x10);
+  const firstCharCode  = r32s(raw, 0x14);
+  const charCount      = r32s(raw, 0x18);
+  const offsetTableOff = r32(raw,  0x1c); // file-relative
+  const widthTableOff  = r32(raw,  0x20); // file-relative
+  const bitmapDataOff  = r32(raw,  0x24); // file-relative
+
+  // Validate
+  if (glyphHeight < 1 || glyphHeight > 256)
+    warnings.push(`Unusual glyph_height: ${glyphHeight}`);
+  if (charCount < 1 || charCount > 65536)
+    errors.push(`Implausible char_count: ${charCount}`);
+  if (firstCharCode < 0 || firstCharCode > 255)
+    warnings.push(`first_char_code ${firstCharCode} is outside 0–255`);
+  if (offsetTableOff >= raw.length)
+    errors.push(`glyph_offset_table offset 0x${hex(offsetTableOff,6)} is past EOF`);
+  if (widthTableOff >= raw.length)
+    errors.push(`char_width_table offset 0x${hex(widthTableOff,6)} is past EOF`);
+  if (bitmapDataOff >= raw.length)
+    errors.push(`glyph_bitmap_data offset 0x${hex(bitmapDataOff,6)} is past EOF`);
+
+  if (errors.length) return { errors, warnings };
+
+  // Read width table (256 bytes, indexed by raw char code)
+  const widths = new Uint8Array(256);
+  const wEnd   = Math.min(widthTableOff + 256, raw.length);
+  for (let i = 0; i + widthTableOff < wEnd; i++) widths[i] = raw[widthTableOff + i];
+
+  // Read glyph offset table (int32 per char)
+  const glyphOffsets = [];
+  for (let i = 0; i < charCount; i++) {
+    const off = offsetTableOff + i * 4;
+    if (off + 4 > raw.length) { warnings.push(`Truncated offset table at char ${i}`); break; }
+    glyphOffsets.push(r32s(raw, off));
+  }
+
+  // Build glyph list
+  const glyphs = [];
+  for (let i = 0; i < glyphOffsets.length; i++) {
+    const code    = firstCharCode + i;
+    const width   = widths[code] || 0;
+    const relOff  = glyphOffsets[i];
+    const absOff  = bitmapDataOff + relOff;
+    const isSpace = (code === 0x20);
+
+    let pixelData = null;
+    if (width > 0 && !isSpace) {
+      const needed = glyphHeight * width;
+      if (absOff + needed > raw.length) {
+        warnings.push(`Glyph 0x${hex(code)}: bitmap extends past EOF`);
+        pixelData = raw.slice(absOff, raw.length);
+      } else {
+        pixelData = raw.slice(absOff, absOff + needed);
+      }
+    }
+
+    glyphs.push({ code, width, relOff, absOff, pixelData, isSpace });
+  }
+
+  return {
+    errors, warnings, magicAscii,
+    fontMode, glyphHeight, underlineRow,
+    firstCharCode, charCount,
+    offsetTableOff, widthTableOff, bitmapDataOff,
+    widths, glyphs, raw
+  };
+}
+
+// ─── Hex dump of first 0x30 bytes ────────────────────────────────
+function buildHexDump(raw) {
+  const lines = [];
+  const offsets = [
+    // [offset, length, class, label]
+    [0x00, 4, 'hl',  'unk00'],
+    [0x06, 1, 'hl2', 'mode'],
+    [0x0c, 4, 'hl3', 'height'],
+    [0x14, 4, 'hl2', 'first_char'],
+    [0x18, 4, 'hl2', 'count'],
+    [0x1c, 4, 'hl',  'off_table'],
+    [0x20, 4, 'hl',  'wid_table'],
+    [0x24, 4, 'hl',  'bmp_data'],
+  ];
+
+  const limit = Math.min(0x30, raw.length);
+  for (let row = 0; row < limit; row += 16) {
+    let addr = `<span style="color:var(--text-dim)">${hex(row,4)}</span>  `;
+    let hexPart = '';
+    for (let col = 0; col < 16 && row + col < limit; col++) {
+      const abs = row + col;
+      const b   = raw[abs];
+      // find if this byte belongs to a highlighted field
+      let cls = '';
+      for (const [o, l, c] of offsets) {
+        if (abs >= o && abs < o + l) { cls = c; break; }
+      }
+      const bStr = hex(b);
+      hexPart += cls ? `<span class="${cls}">${bStr}</span>` : bStr;
+      hexPart += col === 7 ? '  ' : ' ';
+    }
+    lines.push(addr + hexPart);
+  }
+
+  return lines.join('\n');
+}
+
+// ─── Render glyph to canvas ──────────────────────────────────────
+function renderGlyph(glyph, fontMode, glyphHeight, scale, bgColor, inkColor, shadingMode) {
+  const w = Math.max(glyph.width, 1);
+  const h = glyphHeight;
+  const canvas = document.createElement('canvas');
+  canvas.width  = w * scale;
+  canvas.height = h * scale;
+  const ctx = canvas.getContext('2d');
+
+  ctx.fillStyle = bgColor;
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  if (!glyph.pixelData || glyph.isSpace || glyph.width === 0) return canvas;
+
+  const is1bpp = (fontMode === 1);
+  ctx.fillStyle = inkColor;
+
+  if (is1bpp) {
+    // 1bpp glyphs are a pure on/off bitmask — no shading levels exist to
+    // toggle between, so both modes render identically here.
+    for (let row = 0; row < h; row++) {
+      for (let col = 0; col < w; col++) {
+        const byteOff = row * Math.ceil(w / 8) + Math.floor(col / 8); // NOTE: this is the corrected version, not the buggy engine version
+        const bitOff  = 7 - (col % 8);
+        if (byteOff < glyph.pixelData.length) {
+          const bit = (glyph.pixelData[byteOff] >> bitOff) & 1;
+          if (bit) ctx.fillRect(col * scale, row * scale, scale, scale);
+        }
+      }
+    }
+  } else {
+    // 8bpp: each byte is a palette index, 0 = transparent. In the real
+    // engine this indexes a per-scene color table (from a separate .PLX
+    // palette file we don't have here) — different nonzero values are
+    // genuinely different colors, not an alpha/coverage ramp, and not a
+    // boolean mask either. Without the real palette we can't reproduce
+    // exact colors, so this offers two approximations:
+    //   'shaded'    - proportional shade ramp scaled to this glyph's own
+    //                 observed value range (closest to how the real
+    //                 shading reads, though not the real colors)
+    //   'brightest' - keep only pixels at the glyph's maximum value,
+    //                 drawn fully solid; every lower shade level is
+    //                 dropped entirely (treated as transparent) rather
+    //                 than flattened into the same solid color as the
+    //                 brightest pixels
+    let maxVal = 0;
+    for (let i = 0; i < glyph.pixelData.length; i++) {
+      if (glyph.pixelData[i] > maxVal) maxVal = glyph.pixelData[i];
+    }
+    for (let row = 0; row < h; row++) {
+      for (let col = 0; col < w; col++) {
+        const idx = row * w + col;
+        if (idx < glyph.pixelData.length) {
+          const v = glyph.pixelData[idx];
+          if (v !== 0) {
+            if (shadingMode === 'brightest') {
+              if (v === maxVal) {
+                ctx.globalAlpha = 1;
+                ctx.fillRect(col * scale, row * scale, scale, scale);
+              }
+              // lower values are simply skipped, not drawn at all
+            } else {
+              const shade = maxVal > 0 ? v / maxVal : 1;
+              ctx.globalAlpha = 0.35 + 0.65 * shade; // keep even the faintest value visible
+              ctx.fillRect(col * scale, row * scale, scale, scale);
+            }
+          }
+        }
+      }
+    }
+    ctx.globalAlpha = 1.0;
+  }
+
+  return canvas;
+}
+
+// ─── Build info panel ────────────────────────────────────────────
+function buildInfoPanel(fileName, fileSize, pkx, fnx) {
+  let html = '';
+
+  // File section
+  html += `<div class="section-head">File</div><div class="field-table">`;
+  html += fieldRow('name', fileName);
+  html += fieldRow('size', `${fileSize.toLocaleString()} bytes`);
+  if (pkx) {
+    const typeName = { 0x01:'RLE-zero', 0x0c:'RLE', 0x0e:'LZSS' }[pkx.cmpType & 0xf] || `type ${hex(pkx.cmpType)}`;
+    html += fieldRow('container', `<span class="badge badge-rle">PKX</span>`);
+    html += fieldRow('compression', `<span class="badge badge-rle">${typeName}</span>`);
+    html += fieldRow('compressed', `${pkx.cmpSize.toLocaleString()} bytes`);
+    html += fieldRow('decompressed', `${pkx.dstSize.toLocaleString()} bytes`);
+  } else {
+    html += fieldRow('container', `<span class="badge badge-raw">RAW</span>`);
+  }
+  html += `</div>`;
+
+  if (fnx.errors && fnx.errors.length) {
+    html += `<div class="section-head">Errors</div>`;
+    fnx.errors.forEach(e => {
+      html += `<div class="err-box">${e}</div>`;
+    });
+    return html;
+  }
+
+  if (fnx.warnings && fnx.warnings.length) {
+    fnx.warnings.forEach(w => {
+      html += `<div class="warn-box">⚠ ${w}</div>`;
+    });
+  }
+
+  // Font header
+  html += `<div class="section-head">Font Header</div><div class="field-table">`;
+  const magicCls = fnx.magicAscii === 'FNX:' ? 'ok' : 'warn';
+  html += fieldRow('+0x00 tag', `<span class="field-val ${magicCls}">"${fnx.magicAscii}"</span>`);
+  const modeLabel = fnx.fontMode === 1
+    ? `<span class="badge badge-1bpp">1bpp bitpacked</span>`
+    : `<span class="badge badge-8bpp">8bpp per-pixel</span>`;
+  html += fieldRow('font_mode', `${fnx.fontMode} — ${modeLabel}`);
+  html += fieldRow('glyph_height', `${fnx.glyphHeight} px`);
+  html += fieldRow('underline_row', `${fnx.underlineRow}`);
+  html += `</div>`;
+
+  // Char range
+  html += `<div class="section-head">Character Range</div><div class="field-table">`;
+  const lastCode  = fnx.firstCharCode + fnx.charCount - 1;
+  const firstDisp = fnx.firstCharCode >= 32 ? ` '${String.fromCharCode(fnx.firstCharCode)}'` : '';
+  const lastDisp  = lastCode >= 32 ? ` '${String.fromCharCode(lastCode)}'` : '';
+  html += fieldRow('first_char_code', `0x${hex(fnx.firstCharCode)}${firstDisp}`);
+  html += fieldRow('char_count', `${fnx.charCount}`);
+  html += fieldRow('last_char_code', `0x${hex(lastCode)}${lastDisp}`);
+  const nonZero   = fnx.glyphs.filter(g => g.width > 0 && !g.isSpace).length;
+  html += fieldRow('drawable glyphs', `<span class="field-val ok">${nonZero}</span>`);
+  const zeroW     = fnx.glyphs.filter(g => g.width === 0).length;
+  if (zeroW) html += fieldRow('zero-width', `<span class="field-val warn">${zeroW}</span>`);
+  html += `</div>`;
+
+  // Offsets
+  html += `<div class="section-head">File Offsets</div><div class="field-table">`;
+  html += fieldRow('+0x1C glyph_offset_table', hexN(fnx.offsetTableOff));
+  html += fieldRow('+0x20 char_width_table',   hexN(fnx.widthTableOff));
+  html += fieldRow('+0x24 glyph_bitmap_data',  hexN(fnx.bitmapDataOff));
+  html += `</div>`;
+
+  // Hex dump
+  html += `<div class="section-head">Raw Header (first 0x30 bytes)</div>`;
+  html += `<div class="hex-dump">${buildHexDump(fnx.raw)}</div>`;
+  html += `<div style="padding:0 20px 4px; font-size:10px; font-family:var(--mono); color:var(--text-dim);">
+    <span class="hl" style="color:var(--cyan)">■</span> ptr fields &nbsp;
+    <span class="hl2" style="color:var(--green)">■</span> mode/range &nbsp;
+    <span class="hl3" style="color:var(--amber)">■</span> height
+  </div>`;
+
+  return html;
+}
+
+function fieldRow(key, val) {
+  const isHtml = /</.test(String(val));
+  const valHtml = isHtml ? val : `<span class="field-val">${val}</span>`;
+  return `<div class="field-row">
+    <span class="field-key">${key}</span>
+    ${valHtml}
+  </div>`;
+}
+
+// ─── Render glyph grid ───────────────────────────────────────────
+let currentFNX   = null;
+let currentPKX   = null;
+let currentScale = 4;
+let bgColor      = '#161b27';
+let inkColor     = '#00d4ff';
+let shadingMode  = 'shaded';
+
+function renderGrid() {
+  const fnx   = currentFNX;
+  const area  = document.getElementById('glyphArea');
+  if (!fnx || fnx.errors?.length) return;
+
+  area.innerHTML = '';
+  const grid = document.createElement('div');
+  grid.className = 'glyph-grid';
+
+  let rendered = 0;
+  fnx.glyphs.forEach(glyph => {
+    const cell = document.createElement('div');
+    cell.className = 'glyph-cell' +
+      (glyph.width === 0 ? ' zero-width' : '') +
+      (glyph.isSpace ? ' space-char' : '');
+
+    // Tooltip
+    const charRepr = glyph.code >= 32 && glyph.code < 127
+      ? `'${String.fromCharCode(glyph.code)}'`
+      : (glyph.code === 0x20 ? 'SPACE' : `ctrl`);
+    const tip = document.createElement('div');
+    tip.className = 'tooltip';
+    tip.innerHTML =
+      `code  0x${hex(glyph.code)}  ${charRepr}<br>` +
+      `width ${glyph.width} px<br>` +
+      `off   0x${hex(glyph.relOff, 6)} (file: 0x${hex(glyph.absOff, 6)})`;
+    cell.appendChild(tip);
+
+    // Canvas
+    const canvas = renderGlyph(glyph, fnx.fontMode, fnx.glyphHeight, currentScale, bgColor, inkColor, shadingMode);
+    cell.appendChild(canvas);
+
+    // Labels
+    const lbl = document.createElement('div');
+    lbl.className = 'glyph-label';
+    lbl.textContent = `0x${hex(glyph.code)}`;
+    cell.appendChild(lbl);
+
+    const charLbl = document.createElement('div');
+    charLbl.className = 'glyph-char';
+    if (glyph.isSpace) charLbl.textContent = '␣';
+    else if (glyph.code >= 32 && glyph.code < 127) charLbl.textContent = String.fromCharCode(glyph.code);
+    else charLbl.textContent = '·';
+    cell.appendChild(charLbl);
+
+    grid.appendChild(cell);
+    rendered++;
+  });
+
+  area.appendChild(grid);
+  document.getElementById('glyphCount').textContent = `${rendered} glyphs`;
+}
+
+// ─── Main file load handler ───────────────────────────────────────
+async function handleFile(file) {
+  const buf  = await file.arrayBuffer();
+  const raw  = new Uint8Array(buf);
+
+  let workingRaw = raw;
+  let pkx = null;
+
+  // Try PKX
+  const maybe = parsePKX(raw);
+  if (maybe) {
+    pkx = maybe;
+    try {
+      workingRaw = decompress(pkx);
+    } catch(e) {
+      document.getElementById('infoPanel').innerHTML =
+        `<div class="err-box">Decompression failed: ${e.message}</div>`;
+      return;
+    }
+  }
+
+  const fnx = parseFNX(workingRaw);
+  currentFNX = fnx;
+  currentPKX = pkx;
+
+  // Info panel
+  document.getElementById('infoPanel').innerHTML =
+    buildInfoPanel(file.name, file.size, pkx, fnx);
+
+  // Toolbar
+  const toolbar = document.getElementById('toolbar');
+  if (!fnx.errors?.length) {
+    toolbar.style.display = 'flex';
+    renderGrid();
+  } else {
+    toolbar.style.display = 'none';
+    document.getElementById('glyphArea').innerHTML = '';
+  }
+}
+
+// ─── TrueType (.ttf) Export ───────────────────────────────────────
+// Builds a minimal, valid TTF directly in the browser: traces each
+// glyph's filled pixels into axis-aligned rectangle contours (exact,
+// since the source bitmap has no anti-aliasing to curve-fit), then
+// hand-packs the required sfnt tables. No external font libraries.
+
+// -- Binary writer helper --------------------------------------------
+class BinWriter {
+  constructor() { this.chunks = []; this.length = 0; }
+  u8(v)  { this.chunks.push(new Uint8Array([v & 0xff])); this.length += 1; }
+  u16(v) { const b = new Uint8Array(2); new DataView(b.buffer).setUint16(0, v & 0xffff, false); this.chunks.push(b); this.length += 2; }
+  i16(v) { const b = new Uint8Array(2); new DataView(b.buffer).setInt16(0, v|0, false); this.chunks.push(b); this.length += 2; }
+  u32(v) { const b = new Uint8Array(4); new DataView(b.buffer).setUint32(0, v >>> 0, false); this.chunks.push(b); this.length += 4; }
+  i32(v) { const b = new Uint8Array(4); new DataView(b.buffer).setInt32(0, v|0, false); this.chunks.push(b); this.length += 4; }
+  tag(s) { for (let i = 0; i < 4; i++) this.u8(s.charCodeAt(i) || 0x20); }
+  bytes(arr) { this.chunks.push(new Uint8Array(arr)); this.length += arr.length; }
+  str16(s) { for (const ch of s) this.u16(ch.charCodeAt(0)); } // UTF-16BE, BMP only
+  padTo4() { while (this.length % 4 !== 0) this.u8(0); }
+  toUint8Array() {
+    const out = new Uint8Array(this.length);
+    let off = 0;
+    for (const c of this.chunks) { out.set(c, off); off += c.length; }
+    return out;
+  }
+}
+
+function tableChecksum(bytes) {
+  let sum = 0;
+  const padded = new Uint8Array(Math.ceil(bytes.length / 4) * 4);
+  padded.set(bytes);
+  const dv = new DataView(padded.buffer);
+  for (let i = 0; i < padded.length; i += 4) {
+    sum = (sum + dv.getUint32(i, false)) >>> 0;
+  }
+  return sum >>> 0;
+}
+
+// -- Rectangle-run tracing (same approach as the .fnx -> .ttf spec) --
+function traceGlyphRects(glyph, height) {
+  const rects = [];
+  if (!glyph.pixelData || glyph.width === 0) return rects;
+  const w = glyph.width;
+  const px = glyph.pixelData;
+  for (let row = 0; row < height; row++) {
+    let col = 0;
+    while (col < w) {
+      const idx = row * w + col;
+      const v = idx < px.length ? px[idx] : 0;
+      if (v !== 0) {
+        const start = col;
+        while (col < w) {
+          const idx2 = row * w + col;
+          const v2 = idx2 < px.length ? px[idx2] : 0;
+          if (v2 === 0) break;
+          col++;
+        }
+        rects.push([row, start, col]);
+      } else {
+        col++;
+      }
+    }
+  }
+  return rects;
+}
+
+// -- Simple glyph (glyf table entry) from a set of rectangles --------
+function buildSimpleGlyph(rects, pixelSize, baselineRow) {
+  if (rects.length === 0) return { data: new Uint8Array(0), xMin: 0, yMin: 0, xMax: 0, yMax: 0, numPoints: 0, numContours: 0 };
+
+  const rowToYTop    = row => (baselineRow - row) * pixelSize;
+  const rowToYBottom = row => (baselineRow - row - 1) * pixelSize;
+
+  const contours = rects.map(([row, c0, c1]) => {
+    const x0 = c0 * pixelSize, x1 = c1 * pixelSize;
+    const y0 = rowToYBottom(row), y1 = rowToYTop(row);
+    return [[x0, y0], [x0, y1], [x1, y1], [x1, y0]]; // 4-point rectangle, clockwise
+  });
+
+  let xMin = Infinity, yMin = Infinity, xMax = -Infinity, yMax = -Infinity;
+  const endPts = [];
+  const allPoints = [];
+  for (const contour of contours) {
+    for (const [x, y] of contour) {
+      allPoints.push([x, y]);
+      if (x < xMin) xMin = x; if (x > xMax) xMax = x;
+      if (y < yMin) yMin = y; if (y > yMax) yMax = y;
+    }
+    endPts.push(allPoints.length - 1);
+  }
+
+  const w = new BinWriter();
+  w.i16(contours.length);       // numberOfContours
+  w.i16(xMin); w.i16(yMin); w.i16(xMax); w.i16(yMax);
+  for (const e of endPts) w.u16(e);
+  w.u16(0); // instructionLength = 0
+
+  // flags: on-curve bit only, full int16 deltas for every point (no short-vector optimization)
+  for (let i = 0; i < allPoints.length; i++) w.u8(0x01);
+
+  let prevX = 0;
+  for (const [x] of allPoints) { w.i16(x - prevX); prevX = x; }
+  let prevY = 0;
+  for (const [, y] of allPoints) { w.i16(y - prevY); prevY = y; }
+
+  w.padTo4();
+  return { data: w.toUint8Array(), xMin, yMin, xMax, yMax, numPoints: allPoints.length, numContours: contours.length };
+}
+
+// -- cmap table (format 4, single contiguous segment) -----------------
+function buildCmapTable(codeToGlyphIndex) {
+  const codes = Object.keys(codeToGlyphIndex).map(Number).sort((a, b) => a - b);
+  const startCode = codes[0];
+  const endCode = codes[codes.length - 1];
+  const firstGlyphIndex = codeToGlyphIndex[startCode];
+  const idDelta = (firstGlyphIndex - startCode) & 0xffff;
+
+  const segCount = 2; // one real segment + mandatory terminator
+  const w = new BinWriter();
+  w.u16(4);            // format
+  const lengthPos = w.length; w.u16(0); // placeholder length
+  w.u16(0);             // language
+  w.u16(segCount * 2);  // segCountX2
+  const searchRange = 2 * Math.pow(2, Math.floor(Math.log2(segCount)));
+  w.u16(searchRange);
+  w.u16(Math.floor(Math.log2(segCount)));
+  w.u16(segCount * 2 - searchRange);
+  // endCode[]
+  w.u16(endCode); w.u16(0xffff);
+  w.u16(0); // reservedPad
+  // startCode[]
+  w.u16(startCode); w.u16(0xffff);
+  // idDelta[]
+  w.i16(idDelta > 0x7fff ? idDelta - 0x10000 : idDelta);
+  w.i16(1);
+  // idRangeOffset[]
+  w.u16(0); w.u16(0);
+
+  const full = w.toUint8Array();
+  new DataView(full.buffer).setUint16(lengthPos, full.length, false);
+
+  // wrap in cmap header: version, numTables, then one encoding record (Windows BMP) + subtable
+  const header = new BinWriter();
+  header.u16(0); // version
+  header.u16(1); // numTables
+  header.u16(3); // platformID (Windows)
+  header.u16(1); // encodingID (Unicode BMP)
+  header.u32(12); // offset to subtable (right after this 12-byte header)
+  const headerBytes = header.toUint8Array();
+
+  const out = new Uint8Array(headerBytes.length + full.length);
+  out.set(headerBytes, 0);
+  out.set(full, headerBytes.length);
+  return out;
+}
+
+// -- name table (minimal Windows Unicode BMP records) -----------------
+function buildNameTable(familyName) {
+  const records = [
+    [1, familyName],                       // Family
+    [2, 'Regular'],                        // Subfamily
+    [3, `${familyName}-Regular:fnx-export`], // Unique ID
+    [4, `${familyName} Regular`],           // Full name
+    [5, 'Version 1.0'],                    // Version
+    [6, familyName.replace(/\s+/g, '') + '-Regular'], // PostScript name
+  ];
+
+  const stringWriter = new BinWriter();
+  const entries = [];
+  for (const [nameID, value] of records) {
+    const offset = stringWriter.length;
+    stringWriter.str16(value);
+    entries.push({ nameID, offset, length: value.length * 2 });
+  }
+
+  const header = new BinWriter();
+  header.u16(0);              // format
+  header.u16(entries.length); // count
+  header.u16(6 + entries.length * 12); // storageOffset (after header + records)
+  for (const e of entries) {
+    header.u16(3);  // platformID Windows
+    header.u16(1);  // encodingID Unicode BMP
+    header.u16(0x409); // languageID en-US
+    header.u16(e.nameID);
+    header.u16(e.length);
+    header.u16(e.offset);
+  }
+
+  const headerBytes = header.toUint8Array();
+  const stringBytes = stringWriter.toUint8Array();
+  const out = new Uint8Array(headerBytes.length + stringBytes.length);
+  out.set(headerBytes, 0);
+  out.set(stringBytes, headerBytes.length);
+  return out;
+}
+
+// -- post table (version 3.0, no glyph names) --------------------------
+function buildPostTable() {
+  const w = new BinWriter();
+  w.u32(0x00030000); // version 3.0
+  w.i32(0);           // italicAngle
+  w.i16(-20);          // underlinePosition
+  w.i16(60);           // underlineThickness
+  w.u32(0);            // isFixedPitch
+  w.u32(0); w.u32(0); w.u32(0); w.u32(0); // min/max mem (unused)
+  return w.toUint8Array();
+}
+
+// -- OS/2 table (version 0, minimal) -----------------------------------
+function buildOS2Table(avgCharWidth, ascent, descent, firstChar, lastChar) {
+  const w = new BinWriter();
+  w.u16(0);              // version
+  w.i16(avgCharWidth);   // xAvgCharWidth
+  w.u16(400);             // usWeightClass
+  w.u16(5);               // usWidthClass
+  w.u16(0);               // fsType
+  w.i16(650); w.i16(0); w.i16(500); w.i16(100); // ySubscript x/y size/offset
+  w.i16(650); w.i16(0); w.i16(500); w.i16(100); // ySuperscript x/y size/offset
+  w.i16(50); w.i16(200); // yStrikeout size/position
+  w.i16(0);               // sFamilyClass
+  for (let i = 0; i < 10; i++) w.u8(0); // panose
+  w.u32(1); w.u32(0); w.u32(0); w.u32(0); // ulUnicodeRange1-4 (bit0: basic latin)
+  w.tag('NONE');          // achVendID
+  w.u16(0x40);             // fsSelection (regular)
+  w.u16(firstChar);
+  w.u16(lastChar);
+  w.i16(ascent);           // sTypoAscender
+  w.i16(descent);          // sTypoDescender
+  w.i16(0);                // sTypoLineGap
+  w.u16(Math.max(ascent, 0));  // usWinAscent
+  w.u16(Math.max(-descent, 0)); // usWinDescent
+  return w.toUint8Array();
+}
+
+// -- Master builder -----------------------------------------------------
+function buildTTF(fnx, shadingMode, familyName, pixelSize, upm) {
+  const height = fnx.glyphHeight;
+  const baselineRow = fnx.underlineRow;
+  const codes = fnx.glyphs.map(g => g.code).sort((a, b) => a - b);
+
+  const glyphOrder = ['.notdef', ...codes.map(c => `uni${c.toString(16).toUpperCase().padStart(4, '0')}`)];
+  const codeToGlyphIndex = {};
+  codes.forEach((c, i) => { codeToGlyphIndex[c] = i + 1; });
+
+  // .notdef: simple empty glyph (rarely displayed, kept minimal)
+  const notdefBoxW = pixelSize * 4;
+  const notdefGlyph = buildSimpleGlyph([], pixelSize, baselineRow);
+
+  const glyphs = [{ ...notdefGlyph, advanceWidth: notdefBoxW }];
+
+  let maxPoints = 0, maxContours = 0;
+  let globalXMin = 0, globalYMin = 0, globalXMax = 0, globalYMax = 0;
+  let advanceWidthMax = notdefBoxW;
+
+  for (const code of codes) {
+    const g = fnx.glyphs.find(x => x.code === code);
+    let effectiveGlyph = g;
+
+    // Apply the current shading-mode filter: 'brightest' keeps only
+    // max-value pixels (matches the on-screen "Brightest only" view);
+    // 'shaded' keeps every nonzero pixel (the full glyph shape).
+    if (g.pixelData && fnx.fontMode !== 1 && shadingMode === 'brightest') {
+      let maxVal = 0;
+      for (const v of g.pixelData) if (v > maxVal) maxVal = v;
+      const filtered = new Uint8Array(g.pixelData.length);
+      for (let i = 0; i < g.pixelData.length; i++) filtered[i] = (g.pixelData[i] === maxVal) ? maxVal : 0;
+      effectiveGlyph = { ...g, pixelData: filtered };
+    }
+
+    const rects = fnx.fontMode === 1
+      ? trace1bppRects(effectiveGlyph, height)
+      : traceGlyphRects(effectiveGlyph, height);
+
+    const built = buildSimpleGlyph(rects, pixelSize, baselineRow);
+    const advanceWidth = Math.max(g.width * pixelSize, 1);
+
+    glyphs.push({ ...built, advanceWidth });
+    maxPoints = Math.max(maxPoints, built.numPoints);
+    maxContours = Math.max(maxContours, built.numContours);
+    advanceWidthMax = Math.max(advanceWidthMax, advanceWidth);
+    if (built.numContours > 0) {
+      globalXMin = Math.min(globalXMin, built.xMin);
+      globalYMin = Math.min(globalYMin, built.yMin);
+      globalXMax = Math.max(globalXMax, built.xMax);
+      globalYMax = Math.max(globalYMax, built.yMax);
+    }
+  }
+
+  const numGlyphs = glyphs.length;
+  const ascent = (baselineRow - 0) * pixelSize;
+  const descent = (baselineRow - (height - 1) - 1) * pixelSize;
+
+  // ---- glyf + loca ----
+  const glyfWriter = new BinWriter();
+  const locaOffsets = [0];
+  for (const g of glyphs) {
+    glyfWriter.bytes(g.data);
+    locaOffsets.push(glyfWriter.length);
+  }
+  const glyfBytes = glyfWriter.toUint8Array();
+  const useLongLoca = locaOffsets[locaOffsets.length - 1] > 0xffff * 2;
+  const locaWriter = new BinWriter();
+  for (const off of locaOffsets) {
+    if (useLongLoca) locaWriter.u32(off); else locaWriter.u16(off / 2);
+  }
+  const locaBytes = locaWriter.toUint8Array();
+
+  // ---- hmtx ----
+  const hmtxWriter = new BinWriter();
+  for (const g of glyphs) { hmtxWriter.u16(g.advanceWidth); hmtxWriter.i16(0); }
+  const hmtxBytes = hmtxWriter.toUint8Array();
+
+  // ---- cmap ----
+  const cmapBytes = buildCmapTable(codeToGlyphIndex);
+
+  // ---- name ----
+  const nameBytes = buildNameTable(familyName);
+
+  // ---- post ----
+  const postBytes = buildPostTable();
+
+  // ---- OS/2 ----
+  const avgCharWidth = Math.round(glyphs.reduce((s, g) => s + g.advanceWidth, 0) / numGlyphs);
+  const os2Bytes = buildOS2Table(avgCharWidth, ascent, descent, codes[0], codes[codes.length - 1]);
+
+  // ---- maxp (version 1.0) ----
+  const maxpW = new BinWriter();
+  maxpW.u32(0x00010000);
+  maxpW.u16(numGlyphs);
+  maxpW.u16(maxPoints);
+  maxpW.u16(maxContours);
+  maxpW.u16(0); maxpW.u16(0); // maxCompositePoints/Contours
+  maxpW.u16(2);  // maxZones
+  maxpW.u16(0);  // maxTwilightPoints
+  maxpW.u16(0);  // maxStorage
+  maxpW.u16(0);  // maxFunctionDefs
+  maxpW.u16(0);  // maxInstructionDefs
+  maxpW.u16(0);  // maxStackElements
+  maxpW.u16(0);  // maxSizeOfInstructions
+  maxpW.u16(0);  // maxComponentElements
+  maxpW.u16(0);  // maxComponentDepth
+  const maxpBytes = maxpW.toUint8Array();
+
+  // ---- hhea ----
+  const hheaW = new BinWriter();
+  hheaW.u32(0x00010000);
+  hheaW.i16(ascent); hheaW.i16(descent); hheaW.i16(0);
+  hheaW.u16(advanceWidthMax);
+  hheaW.i16(0); hheaW.i16(0); // minLSB/minRSB (not tracked precisely; 0 is a safe default)
+  hheaW.i16(advanceWidthMax); // xMaxExtent
+  hheaW.i16(1); hheaW.i16(0); // caretSlopeRise/Run
+  hheaW.i16(0); // caretOffset
+  hheaW.i16(0); hheaW.i16(0); hheaW.i16(0); hheaW.i16(0); // reserved
+  hheaW.i16(0); // metricDataFormat
+  hheaW.u16(numGlyphs); // numberOfHMetrics
+  const hheaBytes = hheaW.toUint8Array();
+
+  // ---- head ----
+  const headW = new BinWriter();
+  headW.u32(0x00010000); // version
+  headW.u32(0x00010000); // fontRevision
+  headW.u32(0);           // checkSumAdjustment (filled in later)
+  headW.u32(0x5F0F3CF5); // magicNumber
+  headW.u16(0x000B);      // flags
+  headW.u16(upm);         // unitsPerEm
+  headW.i32(0); headW.i32(0); // created (2x u32, using i32 pair as 0 for simplicity)
+  headW.i32(0); headW.i32(0); // modified
+  headW.i16(globalXMin); headW.i16(globalYMin); headW.i16(globalXMax); headW.i16(globalYMax);
+  headW.u16(0);   // macStyle
+  headW.u16(8);   // lowestRecPPEM
+  headW.i16(2);   // fontDirectionHint (deprecated, set to 2)
+  headW.i16(useLongLoca ? 1 : 0); // indexToLocFormat
+  headW.i16(0);   // glyphDataFormat
+  const headBytes = headW.toUint8Array();
+
+  // ---- assemble sfnt ----
+  const tables = [
+    ['OS/2', os2Bytes],
+    ['cmap', cmapBytes],
+    ['glyf', glyfBytes],
+    ['head', headBytes],
+    ['hhea', hheaBytes],
+    ['hmtx', hmtxBytes],
+    ['loca', locaBytes],
+    ['maxp', maxpBytes],
+    ['name', nameBytes],
+    ['post', postBytes],
+  ].sort((a, b) => a[0] < b[0] ? -1 : 1);
+
+  const numTables = tables.length;
+  let searchRange = 1, entrySelector = 0;
+  while (searchRange * 2 <= numTables) { searchRange *= 2; entrySelector++; }
+  searchRange *= 16;
+  const rangeShift = numTables * 16 - searchRange;
+
+  const directory = new BinWriter();
+  directory.u32(0x00010000); // sfntVersion
+  directory.u16(numTables);
+  directory.u16(searchRange);
+  directory.u16(entrySelector);
+  directory.u16(rangeShift);
+
+  let offset = 12 + numTables * 16;
+  const tableRecords = [];
+  for (const [tag, bytes] of tables) {
+    const padded = Math.ceil(bytes.length / 4) * 4;
+    tableRecords.push({ tag, bytes, offset, checksum: tableChecksum(bytes) });
+    offset += padded;
+  }
+  for (const rec of tableRecords) {
+    directory.tag(rec.tag);
+    directory.u32(rec.checksum);
+    directory.u32(rec.offset);
+    directory.u32(rec.bytes.length);
+  }
+
+  const totalLength = offset;
+  const out = new Uint8Array(totalLength);
+  out.set(directory.toUint8Array(), 0);
+  for (const rec of tableRecords) {
+    out.set(rec.bytes, rec.offset);
+  }
+
+  // checkSumAdjustment: 0xB1B0AFBA - (checksum of whole font with this field zeroed)
+  const fullChecksum = tableChecksum(out);
+  const headRecord = tableRecords.find(r => r.tag === 'head');
+  const adjustment = (0xB1B0AFBA - fullChecksum) >>> 0;
+  new DataView(out.buffer).setUint32(headRecord.offset + 8, adjustment, false);
+
+  return out;
+}
+
+function trace1bppRects(glyph, height) {
+  // Convert the packed 1bpp bitmap into the same [row, colStart, colEnd) rect
+  // form used for 8bpp, so buildSimpleGlyph can stay format-agnostic.
+  const rects = [];
+  if (!glyph.pixelData || glyph.width === 0) return rects;
+  const w = glyph.width;
+  const stride = Math.ceil(w / 8);
+  for (let row = 0; row < height; row++) {
+    let col = 0;
+    while (col < w) {
+      const byteOff = row * stride + Math.floor(col / 8);
+      const bitOff = 7 - (col % 8);
+      const bit = byteOff < glyph.pixelData.length ? (glyph.pixelData[byteOff] >> bitOff) & 1 : 0;
+      if (bit) {
+        const start = col;
+        while (col < w) {
+          const bo2 = row * stride + Math.floor(col / 8);
+          const bf2 = 7 - (col % 8);
+          const b2 = bo2 < glyph.pixelData.length ? (glyph.pixelData[bo2] >> bf2) & 1 : 0;
+          if (!b2) break;
+          col++;
+        }
+        rects.push([row, start, col]);
+      } else {
+        col++;
+      }
+    }
+  }
+  return rects;
+}
+
+function exportCurrentFontAsTTF() {
+  if (!currentFNX || currentFNX.errors?.length) return;
+  const familyName = (document.getElementById('familyNameInput').value || 'FNX Converted').trim() || 'FNX Converted';
+  const ttfBytes = buildTTF(currentFNX, shadingMode, familyName, 64, 1024);
+  const blob = new Blob([ttfBytes], { type: 'font/ttf' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = familyName.replace(/\s+/g, '_') + '.ttf';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+// ─── Bitmap sheet (.png) export ────────────────────────────────────
+// Lays out every glyph in the font onto one image, grid-packed, using
+// whatever Scale / BG / Ink / Shading is currently selected — "export
+// what you're looking at" — with a small code label under each glyph
+// so the sheet is self-documenting as a reference/specimen sheet.
+function buildBitmapSheet(fnx, scale, bgColor, inkColor, shadingMode) {
+  const cols = 16;
+  const rows = Math.ceil(fnx.glyphs.length / cols);
+  const maxGlyphW = Math.max(1, ...fnx.glyphs.map(g => g.width));
+  const labelH = 12;
+  const padX = 6, padY = 6;
+  const cellW = maxGlyphW * scale + padX;
+  const cellH = fnx.glyphHeight * scale + labelH + padY;
+
+  const sheet = document.createElement('canvas');
+  sheet.width = cols * cellW;
+  sheet.height = rows * cellH;
+  const ctx = sheet.getContext('2d');
+  ctx.fillStyle = bgColor;
+  ctx.fillRect(0, 0, sheet.width, sheet.height);
+  ctx.font = '10px monospace';
+  ctx.textAlign = 'center';
+
+  fnx.glyphs.forEach((glyph, i) => {
+    const col = i % cols, row = Math.floor(i / cols);
+    const x = col * cellW, y = row * cellH;
+
+    const glyphCanvas = renderGlyph(glyph, fnx.fontMode, fnx.glyphHeight, scale, bgColor, inkColor, shadingMode);
+    ctx.drawImage(glyphCanvas, x + (cellW - glyphCanvas.width) / 2, y + padY / 2);
+
+    ctx.fillStyle = '#888888';
+    const label = '0x' + glyph.code.toString(16).toUpperCase().padStart(2, '0');
+    ctx.fillText(label, x + cellW / 2, y + fnx.glyphHeight * scale + padY / 2 + 10);
+  });
+
+  return sheet;
+}
+
+function exportCurrentFontAsBitmap() {
+  if (!currentFNX || currentFNX.errors?.length) return;
+  const sheet = buildBitmapSheet(currentFNX, currentScale, bgColor, inkColor, shadingMode);
+  const familyName = (document.getElementById('familyNameInput')?.value || 'fnx_export').trim() || 'fnx_export';
+  sheet.toBlob(blob => {
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = familyName.replace(/\s+/g, '_') + '_atlas.png';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }, 'image/png');
+}
+
+// ─── Controls ────────────────────────────────────────────────────
+document.getElementById('scaleSlider').addEventListener('input', e => {
+  currentScale = +e.target.value;
+  document.getElementById('scaleVal').textContent = currentScale + '×';
+  renderGrid();
+});
+
+document.getElementById('bgSelect').addEventListener('change', e => {
+  bgColor = e.target.value;
+  renderGrid();
+});
+
+document.getElementById('shadingSelect').addEventListener('change', e => {
+  shadingMode = e.target.value;
+  renderGrid();
+});
+
+document.getElementById('inkSelect').addEventListener('change', e => {
+  inkColor = e.target.value;
+  renderGrid();
+});
+
+document.getElementById('exportTtfBtn').addEventListener('click', exportCurrentFontAsTTF);
+
+document.getElementById('exportBitmapBtn').addEventListener('click', exportCurrentFontAsBitmap);
+
+// ─── Drop zone ────────────────────────────────────────────────────
+const dropZone = document.getElementById('dropZone');
+const fileInput = document.getElementById('fileInput');
+
+fileInput.addEventListener('change', e => {
+  if (e.target.files[0]) handleFile(e.target.files[0]);
+});
+
+dropZone.addEventListener('dragover', e => {
+  e.preventDefault();
+  dropZone.classList.add('drag-over');
+});
+
+dropZone.addEventListener('dragleave', () => {
+  dropZone.classList.remove('drag-over');
+});
+
+dropZone.addEventListener('drop', e => {
+  e.preventDefault();
+  dropZone.classList.remove('drag-over');
+  const f = e.dataTransfer.files[0];
+  if (f) handleFile(f);
+});
+</script>
+</body>
+</html>
