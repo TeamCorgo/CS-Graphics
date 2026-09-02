@@ -7,8 +7,6 @@
 ## Cursors
 Progress: 🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩 100%
 
-The game cursors were extracted using **Resource Hacker**. They were converted from `.cur` format to `.png` for easier viewing and use.
-
 Seven cursor variants have been preserved:
 
 <p align="center">
@@ -24,9 +22,6 @@ Seven cursor variants have been preserved:
 ## Icons
 Progress: 🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩 100%
 
-The original hexagonal game icon was extracted using **Resource Hacker**.  
-In addition, the GOG release includes its own updated icon set, with the raw `.ico` files provided directly in the installation directory, making extraction unnecessary.
-
 Three icon variants have been preserved:
 
 <p align="center">
@@ -39,6 +34,8 @@ Three icon variants have been preserved:
 Progress: 🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩 100%
 
 Fonts are stored in `.FNX` files with a shading, gradient, or shadow effect (fat). Without the gradient applied, the text can be difficult to read. A readable (slim) version is also provided, as modern font formats do not support the gradient effect.
+
+Three fonts six have been preserved.
 
 
 ## Images
@@ -54,5 +51,5 @@ Next step: Each image file needs to be matched with the correct palette informat
 
 Used to render and convert `.fnx` fonts into useable formats (`.png` & `.ttf`). 
 
-
-The game cursors were extracted using **Resource Hacker**. They were converted from `.cur` format to `.png` for easier viewing and use.
+### Resource Hacker (External)
+The game cursors were extracted using **Resource Hacker** and converted from `.cur` format to `.png` and `.ico` for easier viewing and use. The original game icon was a hexagon and was embedded within the `.exe` file. **Resource Hacker** was used to extract the icon and save it as a standalone `.ico` file.
