@@ -43,6 +43,8 @@ Next step: Each image file needs to be matched with the correct palette informat
 .PLX Progress: 🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩 0% 31/31\
 Thirty-one .plx files were exported to the modern `.gpl` **GIMP Palette** format, which is also the palette format used by **Aseprite**.
 
+CS1 `.PLX` are primairly named in "S2P3.plx" format. This represents the second star system `S2` and the third planet `p31`. There is expected to be a large amount of pixel color overlap between files since the palette also controls Unitech & Cybrid unit colors. (This could have been used to tint the color of units depending on the planets atmosphere).
+
 ## Tools
 ### FNX Converter
 <img src="./overhead/FNX Converter.png" alt="FNX Converter" width="264">
