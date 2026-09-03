@@ -56,5 +56,10 @@ Used to render and convert `.fnx` fonts into useable formats (`.png` & `.ttf`).
 
 Used to render and convert `.art` fonts into a modern `.png` format. There is a single `.art` assest in the game being `SEQUEL.ART` used to promote Cyberstorm 2 when the player closes the game. This format is unique as it includes palete information where the common `.anx` & `.bmx` require external `.plx` palete files.
 
+### PLX Converter
+<img src="./overhead/PLX Converter.png" alt="PLX Converter" width="264">
+
+Used to render and convert `.plx` palettes into the modern `.gpl` **GIMP Palette** format. 
+
 ### Resource Hacker (External)
 The game cursors were extracted using **Resource Hacker** and converted from `.cur` format to `.png` and `.ico` for easier viewing and use. The original game icon was a hexagon and was embedded within the `.exe` file. **Resource Hacker** was used to extract the icon and save it as a standalone `.ico` file.

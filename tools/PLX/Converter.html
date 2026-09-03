@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>PLX Palette Viewer / GPL Exporter</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root{
+    --bg:#15181c;
+    --panel:#1b1f24;
+    --panel-2:#20242a;
+    --line:#33393f;
+    --text:#dcdcd4;
+    --text-dim:#8b9198;
+    --amber:#e8a33d;
+    --amber-dim:#7a5a24;
+    --cyan:#6fb8bd;
+    --bad:#d9695f;
+    --good:#7fae6f;
+    font-family: 'IBM Plex Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+  }
+  @media (prefers-color-scheme: light){
+    :root:not([data-theme="dark"]){
+      --bg:#f0efe9; --panel:#ffffff; --panel-2:#f5f4ee; --line:#d6d3c8;
+      --text:#242220; --text-dim:#6b6862; --amber:#a3670f; --amber-dim:#e8cfa0;
+      --cyan:#1f7278; --bad:#b7392f; --good:#3f7a30;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#15181c; --panel:#1b1f24; --panel-2:#20242a; --line:#33393f;
+    --text:#dcdcd4; --text-dim:#8b9198; --amber:#e8a33d; --amber-dim:#7a5a24;
+    --cyan:#6fb8bd; --bad:#d9695f; --good:#7fae6f;
+  }
+
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--text);}
+  body{min-height:100vh; padding:28px 20px 60px; line-height:1.5; font-size:13px;}
+  .wrap{max-width:920px;margin:0 auto;}
+
+  header{
+    display:flex; align-items:baseline; justify-content:space-between;
+    border-bottom:1px solid var(--line); padding-bottom:16px; margin-bottom:22px;
+    flex-wrap:wrap; gap:10px;
+  }
+  h1{font-size:15px; font-weight:600; letter-spacing:.02em; margin:0; color:var(--text);}
+  h1 .dim{color:var(--text-dim); font-weight:400;}
+  .byline{color:var(--text-dim); font-size:11.5px;}
+
+  .panel{
+    background:var(--panel); border:1px solid var(--line); border-radius:3px;
+    padding:16px;
+  }
+  .panel + .panel{margin-top:18px;}
+
+  .section-label{
+    font-size:10.5px; letter-spacing:.08em; color:var(--text-dim);
+    margin:0 0 10px; text-transform:uppercase;
+  }
+
+  .drop{
+    border:1px dashed var(--line); border-radius:3px; padding:26px 14px;
+    text-align:center; cursor:pointer; transition:border-color .15s, background .15s;
+    color:var(--text-dim); font-size:12.5px;
+  }
+  .drop:hover, .drop.drag{ border-color:var(--amber); color:var(--text); background:var(--panel-2); }
+  .drop b{color:var(--text); font-weight:600;}
+  input[type=file]{display:none;}
+
+  textarea{
+    width:100%; min-height:90px; margin-top:10px; resize:vertical;
+    background:var(--panel-2); border:1px solid var(--line); color:var(--text);
+    font-family:inherit; font-size:11.5px; padding:8px; border-radius:3px;
+  }
+  .paste-row{display:flex; gap:8px; margin-top:8px; align-items:center;}
+  .paste-row .hint{font-size:10.5px; color:var(--text-dim); flex:1;}
+
+  button{
+    font-family:inherit; font-size:11.5px; cursor:pointer;
+    background:var(--panel-2); color:var(--text); border:1px solid var(--line);
+    padding:8px 14px; border-radius:3px; transition:border-color .15s, color .15s;
+  }
+  button:hover{border-color:var(--amber); color:var(--amber);}
+  button.primary{ background:var(--amber-dim); border-color:var(--amber); color:var(--text); font-weight:600; }
+  button.primary:hover{ color:var(--amber); }
+  button:disabled{opacity:.4; cursor:default;}
+  button:disabled:hover{border-color:var(--line); color:var(--text);}
+
+  .kv{display:grid; grid-template-columns: auto 1fr; gap:3px 10px; font-size:12px;}
+  .kv dt{color:var(--text-dim);}
+  .kv dd{margin:0; text-align:right; font-variant-numeric:tabular-nums;}
+  .kv .ok{color:var(--good);}
+
+  .status-line{display:flex; align-items:center; gap:7px; font-size:12px; margin-bottom:12px;}
+  .dot{width:7px;height:7px;border-radius:50%; background:var(--line); flex:none;}
+  .dot.ok{background:var(--good);}
+  .dot.err{background:var(--bad);}
+  .dot.wait{background:var(--amber);}
+
+  .errbox{
+    border:1px solid var(--bad); background:rgba(217,105,95,.08); color:var(--bad);
+    padding:10px 12px; border-radius:3px; font-size:12px; white-space:pre-wrap;
+    margin-top:10px;
+  }
+
+  .swatch-grid{
+    display:grid; grid-template-columns:repeat(16, 1fr); gap:1px;
+    border:1px solid var(--line); background:var(--line); border-radius:2px;
+    overflow:hidden;
+  }
+  .swatch{ aspect-ratio:1; background:#000; position:relative; cursor:pointer; }
+  .swatch.reserved{
+    opacity:.35;
+    outline:1px dotted rgba(255,255,255,.4);
+    outline-offset:-1px;
+  }
+  .swatch:hover::after{
+    content: attr(data-tip);
+    position:absolute; bottom:100%; left:50%; transform:translateX(-50%);
+    background:#000; color:#fff; font-size:9px; padding:2px 5px;
+    white-space:nowrap; border-radius:2px; z-index:5; pointer-events:none;
+    margin-bottom:3px;
+  }
+
+  .legend{display:flex; gap:16px; margin-top:10px; font-size:10.5px; color:var(--text-dim); flex-wrap:wrap;}
+  .legend .sw{display:inline-block; width:10px; height:10px; border-radius:2px; margin-right:5px; vertical-align:-1px;}
+
+  .export-row{display:flex; gap:14px; align-items:flex-end; flex-wrap:wrap; margin-top:14px;}
+  .field{display:flex; flex-direction:column; gap:5px;}
+  .field label{font-size:10.5px; color:var(--text-dim); letter-spacing:.03em;}
+  .field input[type=text], .field input[type=number]{
+    background:var(--panel-2); border:1px solid var(--line); color:var(--text);
+    font-family:inherit; font-size:12px; padding:7px 9px; border-radius:3px;
+    width:160px;
+  }
+  .field.checkbox{flex-direction:row; align-items:center; gap:7px;}
+  .field.checkbox label{font-size:11.5px; color:var(--text);}
+  .spacer{flex:1;}
+
+  footer{margin-top:36px; color:var(--text-dim); font-size:10.5px; text-align:center;}
+  code.tag{
+    background:var(--panel-2); border:1px solid var(--line); border-radius:2px;
+    padding:1px 5px; font-size:10.5px;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <h1>PLX Palette Viewer <span class="dim">/ GPL exporter</span></h1>
+    <div class="byline">container → payload → 256 swatches → .gpl</div>
+  </header>
+
+  <div class="panel">
+    <p class="section-label">Load a file</p>
+    <div class="drop" id="dropZone">
+      Drop a <b>.PLX</b> file here<br>or click to browse
+    </div>
+    <input type="file" id="fileInput" accept=".plx,*">
+
+    <div class="paste-row">
+      <span class="hint">or paste a C byte array (<code class="tag">ucDataBlock[...] = { 0x.. }</code>)</span>
+    </div>
+    <textarea id="pasteArea" placeholder="0x50, 0x4B, 0x58, 0x3A, ..."></textarea>
+    <div class="paste-row">
+      <button id="parseBtn">Parse pasted bytes</button>
+      <span class="hint" id="pasteCount"></span>
+    </div>
+  </div>
+
+  <div class="panel" id="headerPanel" style="display:none;">
+    <p class="section-label">Container</p>
+    <div class="status-line">
+      <span class="dot" id="statusDot"></span>
+      <span id="statusText">—</span>
+    </div>
+    <dl class="kv" id="headerKv"></dl>
+    <div id="errBoxHost"></div>
+  </div>
+
+  <div class="panel" id="previewPanel" style="display:none;">
+    <p class="section-label">Preview — 256 entries</p>
+    <div class="swatch-grid" id="swatchHost"></div>
+    <div class="legend">
+      <div><span class="sw" style="background:#888"></span>usable (slots 10–245, from the file)</div>
+      <div><span class="sw" style="background:#888;opacity:.35;outline:1px dotted rgba(255,255,255,.6)"></span>reserved (slots 0–9, 246–255 — Windows system palette, not from the file)</div>
+    </div>
+
+    <div class="export-row">
+      <div class="field">
+        <label for="paletteName">Palette name</label>
+        <input type="text" id="paletteName" placeholder="my_palette">
+      </div>
+      <div class="field">
+        <label for="columns">Columns</label>
+        <input type="number" id="columns" value="16" min="1" max="256">
+      </div>
+      <div class="field checkbox">
+        <input type="checkbox" id="includeReserved" checked>
+        <label for="includeReserved">include reserved slots (0–9, 246–255)</label>
+      </div>
+      <div class="spacer"></div>
+      <button class="primary" id="exportBtn">Export .gpl</button>
+    </div>
+  </div>
+
+  <footer>Format traced from binary analysis of the engine's palette pipeline — see the companion .PLX specification. Only slots 10–245 come from the file itself; 0–9/246–255 are Windows-reserved in the original engine and are included in the export only for index-alignment, clearly labeled as reserved.</footer>
+</div>
+
+<script>
+(() => {
+  "use strict";
+
+  // ---------- shared decode engine (container + codecs) ----------
+
+  function u32(dv, off){ return dv.getUint32(off, true); }
+
+  class DecodeError extends Error {}
+
+  function lzssDecompress(src, expectedOutSize){
+    let pos = 0;
+    const header = src[pos];
+    let segmentFlag, blockCount;
+    if (header < 8){
+      segmentFlag = header;
+      blockCount = src[pos+1] | (src[pos+2] << 8);
+      pos += 3;
+      if (blockCount === 0xFFFF){
+        blockCount = (src[pos] | (src[pos+1]<<8) | (src[pos+2]<<16) | (src[pos+3]<<24)) >>> 0;
+        pos += 4;
+      }
+    } else {
+      segmentFlag = header & 0x07;
+      blockCount = (header >> 3) - 1;
+      pos += 1;
+    }
+
+    const out = [];
+
+    while (true){
+      let bitBudget = segmentFlag;
+      blockCount -= 1;
+      let flag;
+      if (blockCount < 0){
+        if (segmentFlag === 0) break;
+        segmentFlag = 0;
+        flag = src[pos]; pos += 1;
+      } else {
+        flag = src[pos]; pos += 1;
+        if (flag === 0x00){
+          for (let k=0;k<8;k++) out.push(src[pos+k]);
+          pos += 8;
+          continue;
+        }
+        bitBudget = 8;
+      }
+
+      let bitsDone = 0;
+      while (bitsDone < bitBudget){
+        const bit = (flag >> (7 - bitsDone)) & 1;
+        bitsDone += 1;
+        if (bit){
+          const token = src[pos] | (src[pos+1] << 8);
+          pos += 2;
+          const length = (token & 0x0F) + 3;
+          const distance = (token >> 4) + 1;
+          let start = out.length - distance;
+          for (let i=0;i<length;i++) out.push(out[start+i]);
+        } else {
+          out.push(src[pos]); pos += 1;
+        }
+      }
+    }
+    const data = Uint8Array.from(out);
+    if (expectedOutSize !== undefined && expectedOutSize !== null && data.length !== expectedOutSize){
+      throw new DecodeError(`LZSS size mismatch: got ${data.length}, expected ${expectedOutSize}`);
+    }
+    return { data, consumed: pos };
+  }
+
+  function rleDecompressCodec1(src, maxLen){
+    const out = [];
+    let pos = 0;
+    while (true){
+      if (pos >= src.length) throw new DecodeError("codec1: ran off end of buffer");
+      const c = src[pos]; pos += 1;
+      if ((c & 0x7F) === 0) break;
+      if (c & 0x80){
+        const count = c & 0x7F;
+        const f = src[pos]; pos += 1;
+        for (let i=0;i<count;i++) out.push(f);
+      } else {
+        for (let i=0;i<c;i++) out.push(src[pos+i]);
+        pos += c;
+      }
+      if (maxLen && out.length > maxLen + 4096) throw new DecodeError("codec1: runaway decode");
+    }
+    return { data: Uint8Array.from(out), consumed: pos };
+  }
+
+  function rleDecompressCodec12(src, maxLen){
+    const out = [];
+    let pos = 0;
+    while (true){
+      if (pos >= src.length) throw new DecodeError("codec12: ran off end of buffer");
+      const c = src[pos]; pos += 1;
+      if (c >= 0x01 && c <= 0x7F){
+        for (let i=0;i<c;i++) out.push(src[pos+i]);
+        pos += c;
+      } else if (c === 0x00){
+        const k = src[pos]; const f = src[pos+1]; pos += 2;
+        for (let i=0;i<k;i++) out.push(f);
+      } else if (c === 0x80){
+        const raw16 = src[pos] | (src[pos+1] << 8); pos += 2;
+        if (raw16 === 0x0000){
+          break;
+        } else if (raw16 <= 0x7FFF){
+          for (let i=0;i<raw16;i++) out.push(0);
+        } else if (raw16 <= 0xBFFF){
+          const n = raw16 - 0x8000;
+          for (let i=0;i<n;i++) out.push(src[pos+i]);
+          pos += n;
+        } else {
+          const n = raw16 - 0xC000;
+          const f = src[pos]; pos += 1;
+          for (let i=0;i<n;i++) out.push(f);
+        }
+      } else {
+        const skip = c & 0x7F;
+        for (let i=0;i<skip;i++) out.push(0);
+      }
+      if (maxLen && out.length > maxLen + 4096) throw new DecodeError("codec12: runaway decode");
+    }
+    return { data: Uint8Array.from(out), consumed: pos };
+  }
+
+  function decompress(codecId, src, expectedSize){
+    if (codecId === 14) return lzssDecompress(src, expectedSize);
+    if (codecId === 1)  return rleDecompressCodec1(src, expectedSize);
+    if (codecId === 12) return rleDecompressCodec12(src, expectedSize);
+    if (codecId === 0)  return { data: src.slice(0, expectedSize), consumed: expectedSize };
+    throw new DecodeError(`unsupported/unimplemented codec ${codecId}`);
+  }
+
+  const MAGIC1 = 0x3A584B50, MAGIC2 = 0x10011966, MAGIC3 = 0x9BAEBACF;
+
+  // ---------- .PLX decode (see the companion .PLX specification) ----------
+
+  function decodePlx(bytes){
+    const dv = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
+    let payload, container = null;
+
+    if (bytes.length >= 0x18 &&
+        u32(dv,0) === MAGIC1 && u32(dv,4) === MAGIC2 && u32(dv,8) === MAGIC3){
+      const codecId = u32(dv, 0x0C);
+      const compressedSize = u32(dv, 0x10);
+      const decompressedSize = u32(dv, 0x14);
+      container = { codecId, compressedSize, decompressedSize, fileSize: bytes.length };
+      if (compressedSize !== bytes.length - 0x18){
+        throw new DecodeError(`compressedSize (${compressedSize}) != fileSize-0x18 (${bytes.length-0x18})`);
+      }
+      if (!(decompressedSize >= 1 && decompressedSize <= 9999999)){
+        throw new DecodeError(`decompressedSize out of range: ${decompressedSize}`);
+      }
+      const compData = bytes.subarray(0x18);
+      const res = decompress(codecId, compData, decompressedSize);
+      if (res.data.length !== decompressedSize){
+        throw new DecodeError(`decompressed length ${res.data.length} != header ${decompressedSize}`);
+      }
+      payload = res.data;
+    } else {
+      payload = bytes;
+    }
+
+    if (payload.length < 1024){
+      throw new DecodeError(`payload too short for a 256-entry palette: ${payload.length} bytes (need >= 1024)`);
+    }
+
+    const entries = [];
+    for (let i=0;i<256;i++){
+      const off = i*4;
+      entries.push({
+        r: payload[off+0],
+        g: payload[off+1],
+        b: payload[off+2],
+        flags: payload[off+3],
+        reserved: (i < 10 || i > 245),
+      });
+    }
+
+    return { container, payloadSize: payload.length, entries };
+  }
+
+  // ---------- byte-array text parsing (C-style ucDataBlock paste) ----------
+
+  function parseByteArrayText(text){
+    const matches = text.match(/0x[0-9A-Fa-f]{1,2}/g);
+    if (!matches || matches.length === 0) return null;
+    const out = new Uint8Array(matches.length);
+    for (let i=0;i<matches.length;i++) out[i] = parseInt(matches[i], 16);
+    return out;
+  }
+
+  // ---------- GPL export ----------
+
+  function buildGpl(entries, name, columns, includeReserved){
+    const lines = [];
+    lines.push("GIMP Palette");
+    lines.push(`Name: ${name || "palette"}`);
+    lines.push(`Columns: ${columns || 16}`);
+    lines.push("#");
+    entries.forEach((e, i) => {
+      if (e.reserved && !includeReserved) return;
+      const r = String(e.r).padStart(3, ' ');
+      const g = String(e.g).padStart(3, ' ');
+      const b = String(e.b).padStart(3, ' ');
+      const label = e.reserved ? `index_${String(i).padStart(3,'0')} (reserved)` : `index_${String(i).padStart(3,'0')}`;
+      lines.push(`${r} ${g} ${b}\t${label}`);
+    });
+    return lines.join("\n") + "\n";
+  }
+
+  function triggerBrowserDownload(blob, filename){
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(url), 2000);
+  }
+
+  // ---------- UI wiring ----------
+
+  const dropZone = document.getElementById('dropZone');
+  const fileInput = document.getElementById('fileInput');
+  const pasteArea = document.getElementById('pasteArea');
+  const parseBtn = document.getElementById('parseBtn');
+  const pasteCount = document.getElementById('pasteCount');
+  const headerPanel = document.getElementById('headerPanel');
+  const headerKv = document.getElementById('headerKv');
+  const statusDot = document.getElementById('statusDot');
+  const statusText = document.getElementById('statusText');
+  const errBoxHost = document.getElementById('errBoxHost');
+  const previewPanel = document.getElementById('previewPanel');
+  const swatchHost = document.getElementById('swatchHost');
+  const paletteNameInput = document.getElementById('paletteName');
+  const columnsInput = document.getElementById('columns');
+  const includeReservedInput = document.getElementById('includeReserved');
+  const exportBtn = document.getElementById('exportBtn');
+
+  let currentEntries = null;
+  let currentName = 'palette';
+
+  dropZone.addEventListener('click', () => fileInput.click());
+  dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('drag'); });
+  dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag'));
+  dropZone.addEventListener('drop', e => {
+    e.preventDefault(); dropZone.classList.remove('drag');
+    if (e.dataTransfer.files && e.dataTransfer.files[0]) loadFile(e.dataTransfer.files[0]);
+  });
+  fileInput.addEventListener('change', () => {
+    if (fileInput.files[0]) loadFile(fileInput.files[0]);
+  });
+
+  function loadFile(file){
+    const reader = new FileReader();
+    reader.onload = () => {
+      const bytes = new Uint8Array(reader.result);
+      const name = file.name.replace(/\.[^/.]+$/, '') || 'palette';
+      runDecode(bytes, file.name, name);
+    };
+    reader.readAsArrayBuffer(file);
+  }
+
+  parseBtn.addEventListener('click', () => {
+    const bytes = parseByteArrayText(pasteArea.value);
+    if (!bytes){
+      pasteCount.textContent = 'no hex bytes found';
+      pasteCount.style.color = 'var(--bad)';
+      return;
+    }
+    pasteCount.textContent = `${bytes.length} bytes parsed`;
+    pasteCount.style.color = 'var(--text-dim)';
+    runDecode(bytes, 'pasted-array.plx', 'palette');
+  });
+
+  function setStatus(kind, text){
+    statusDot.className = 'dot ' + kind;
+    statusText.textContent = text;
+  }
+
+  function runDecode(bytes, displayName, baseName){
+    headerPanel.style.display = 'block';
+    errBoxHost.innerHTML = '';
+    headerKv.innerHTML = '';
+    setStatus('wait', 'parsing…');
+
+    let result;
+    try{
+      result = decodePlx(bytes);
+    } catch(err){
+      setStatus('err', 'decode failed');
+      const box = document.createElement('div');
+      box.className = 'errbox';
+      box.textContent = err.message || String(err);
+      errBoxHost.appendChild(box);
+      previewPanel.style.display = 'none';
+      currentEntries = null;
+      return;
+    }
+
+    setStatus('ok', `parsed OK — ${displayName}`);
+    currentEntries = result.entries;
+    currentName = baseName;
+    paletteNameInput.value = baseName;
+    renderHeader(result, bytes.length);
+    renderSwatches(result.entries);
+    previewPanel.style.display = 'block';
+  }
+
+  function renderHeader(result, fileSize){
+    const rows = [];
+    rows.push(['file size', fileSize + ' bytes']);
+    if (result.container){
+      const c = result.container;
+      const codecName = {1:'RLE (zero-run)', 12:'RLE (standard)', 14:'LZSS', 0:'raw'}[c.codecId] || ('unknown ('+c.codecId+')');
+      rows.push(['container', '<span class="ok">PKX: detected</span>']);
+      rows.push(['codec', codecName]);
+      rows.push(['decompressed', c.decompressedSize + ' bytes']);
+    } else {
+      rows.push(['container', 'none (raw payload)']);
+    }
+    rows.push(['entries', '256 (10–245 usable)']);
+    headerKv.innerHTML = rows.map(([k,v]) => `<dt>${k}</dt><dd>${v}</dd>`).join('');
+  }
+
+  function renderSwatches(entries){
+    swatchHost.innerHTML = '';
+    entries.forEach((e, i) => {
+      const sw = document.createElement('div');
+      sw.className = 'swatch' + (e.reserved ? ' reserved' : '');
+      sw.style.background = `rgb(${e.r},${e.g},${e.b})`;
+      sw.setAttribute('data-tip', `#${i}: ${e.r},${e.g},${e.b}${e.reserved ? ' (reserved)' : ''}`);
+      swatchHost.appendChild(sw);
+    });
+  }
+
+  exportBtn.addEventListener('click', () => {
+    if (!currentEntries) return;
+    const name = (paletteNameInput.value || currentName || 'palette').trim();
+    const columns = parseInt(columnsInput.value, 10) || 16;
+    const includeReserved = includeReservedInput.checked;
+    const gpl = buildGpl(currentEntries, name, columns, includeReserved);
+    const blob = new Blob([gpl], { type: 'text/plain' });
+    const filename = (name.replace(/[^a-z0-9_\-]+/gi, '_') || 'palette') + '.gpl';
+    triggerBrowserDownload(blob, filename);
+  });
+
+})();
+</script>
+</body>
+</html>
