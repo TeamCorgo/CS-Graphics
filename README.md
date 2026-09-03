@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./images/web_header.gif" alt="MissionForce: CyberStorm Logo">
+  <img src="./overhead/web_header.gif" alt="MissionForce: CyberStorm Logo">
 </p>
 
 # Graphics
@@ -47,9 +47,16 @@ Next step: Each image file needs to be matched with the correct palette informat
 
 ## Tools
 ### FNX Converter
-<img src="./images/FNX Converter.png" alt="FNX Converter" width="264">
+<img src="./overhead/FNX Converter.png" alt="FNX Converter" width="264">
 
 Used to render and convert `.fnx` fonts into useable formats (`.png` & `.ttf`). 
+
+### ART Converter
+<img src="./overhead/ART Converter.png" alt="ART Converter" width="264">
+
+Used to render and convert `.art` fonts into a modern `.png` format. There is a single `.art` assest in the game being `SEQUEL.ART` used to promote Cyberstorm 2 when the player closes the game. This format is unique as it includes palete information where the common `.anx` & `.bmx` require external `.plx` palete files.
+
+One ART image has been preserved.
 
 ### Resource Hacker (External)
 The game cursors were extracted using **Resource Hacker** and converted from `.cur` format to `.png` and `.ico` for easier viewing and use. The original game icon was a hexagon and was embedded within the `.exe` file. **Resource Hacker** was used to extract the icon and save it as a standalone `.ico` file.

@@ -1,0 +1,1031 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><!-- frame-runtime --><script>window.__FRAME_PREAMBLE={"v":1,"capabilities":{"artifact":"artifact.C12lZ9DL.js","assets":"assets.8Gk803W0.js","comments":"comments.vw5vQdGA.js","db":"db.h-3sndFg.js","downloads":"downloads.Cqv48mdo.js","embed":"embed.eqL6deQM.js","endpoints":"endpoints.CfzSv5nM.js","mcp":"mcp.Bvma3qD7.js","network":"network.B5UA9Su4.js","permissions":"permissions.BNySkLV5.js","room":"room.VSdFwTE9.js","sample":"sample.BW2Uysoh.js","self":"artifact.C12lZ9DL.js","user":"user.BpKav-Rf.js"},"transforms":"_transforms.DSB5x63f.js","comments":"_comments.lsIZQbAK.js","translate":"_translate.5HCW4BJh.js"}</script><script>(function(){"use strict";var te=["light","dark","system"],re=/^[A-Za-z0-9_-]{1,64}$/,$=/^[a-zA-Z_:][a-zA-Z0-9_:.-]{0,127}$/,ne=new Set(["class","hidden","value","checked","style","title","alt","placeholder","lang","dir","role","tabindex","disabled","readonly","contenteditable","open","colspan","rowspan"]);function oe(e){const t=e.toLowerCase();return t.startsWith("data-")||t.startsWith("aria-")||ne.has(t)}var Be="http://www.w3.org/1999/xhtml",se="http://www.w3.org/2000/svg",ae=new Set(["script","style","iframe","noscript","noframes","noembed","xmp","plaintext","template","title","textarea","object","embed"]),ie=new Set(["script","style"]);function ce(e){const t=e.localName.toLowerCase();return e.namespaceURI==="http://www.w3.org/1999/xhtml"?!ae.has(t):e.namespaceURI===se?!ie.has(t):!1}function M(e,t){return e===t||(e===160||e===32)&&(t===160||t===32)}function le(e,t){const r=e.length,n=t.length;let s=0;for(;s<r&&s<n&&M(e.charCodeAt(s),t.charCodeAt(s));)s++;let o=0;for(;o<r-s&&o<n-s&&M(e.charCodeAt(r-1-o),t.charCodeAt(n-1-o));)o++;return{p:s,s:o}}function ue(e,t){const r=e.firstChild;if(e.childNodes.length!==1||r===null||r.nodeType!==Node.TEXT_NODE){e.textContent=t;return}const n=r.data,s=n.length,o=t.length,{p:i,s:c}=le(n,t);i===s&&c===0&&s===o||r.replaceData(i,s-i-c,t.slice(i,o-c));const h=r.data,p=e.ownerDocument.getSelection?.()??null,w=p!==null&&p.rangeCount>0&&(p.anchorNode===r||p.focusNode===r)?{anchor:p.anchorNode,anchorOffset:p.anchorOffset,focus:p.focusNode,focusOffset:p.focusOffset}:null;let m=-1,g=-1;for(let f=0;f<h.length&&f<t.length;f++){const v=h.charCodeAt(f),b=t.charCodeAt(f);v!==b&&M(v,b)&&(m<0&&(m=f),g=f)}const a=m>=0;if(a&&r.replaceData(m,g-m+1,t.slice(m,g+1)),a&&w!==null&&w.anchor!==null&&w.focus!==null)try{p.setBaseAndExtent(w.anchor,w.anchorOffset,w.focus,w.focusOffset)}catch{}}var fe=new Set(["html","head","body","frameset"]);function de(e){return e.namespaceURI==="http://www.w3.org/1999/xhtml"&&fe.has(e.localName)}function pe(e){if(e===null||typeof e!="object")return!1;const t=e;if(typeof t.target!="string"||!re.test(t.target)||t.text!==void 0&&typeof t.text!="string")return!1;if(t.attrsSet!==void 0){if(t.attrsSet===null||typeof t.attrsSet!="object")return!1;for(const[r,n]of Object.entries(t.attrsSet))if(!$.test(r)||typeof n!="string")return!1}if(t.attrsRemoved!==void 0){if(!Array.isArray(t.attrsRemoved))return!1;for(const r of t.attrsRemoved)if(typeof r!="string"||!$.test(r))return!1}return!0}function me(e,t){if(e===null||typeof e!="object")return!1;const{seq:r,elements:n}=e;if(typeof r!="number"||!Number.isSafeInteger(r)||!Array.isArray(n)||n.length===0||n.length>64)return!1;for(let s=0;s<n.length;s++)if(!t(n[s]))return!1;return!0}function he(e){return e===null||typeof e!="object"?!1:me(e.__frame_patch,pe)}function _e(e){if(e===null||typeof e!="object")return!1;const t=e.__frame_init;return t!==null&&typeof t=="object"}function ve(e){return e!==null&&typeof e=="object"&&e.__frame_size_poke===!0}function ye(e){if(e===null||typeof e!="object")return!1;const t=e.__frame_theme;if(t===null||typeof t!="object")return!1;const r=t.theme;return typeof r=="string"&&te.includes(r)}var A=/^[\w.-]+\.js$/;function we(e,t,r){return r?"inert":typeof t=="string"&&A.test(t)?e?[t]:"inert":e?"inert":"framed"}function ge(){return{post(e,t){parent.postMessage(e,t)},on(e){const t=r=>{r.source===parent&&e(r.data,r.origin,r.isTrusted)};return addEventListener("message",t),()=>removeEventListener("message",t)}}}function be(){return{post:()=>{},on:()=>()=>{}}}var j="__frame_scroll",Ee=150,Ae=310,Se=160,Te=3e4;function ke(){let e=0,t=!1,r=!1,n=!1,s=0,o=null;const i=l=>{try{sessionStorage.setItem(j,JSON.stringify({y:l}))}catch{}},c=()=>{if(clearTimeout(e),o===null)return;const l=o;o=null,i(l)},h=()=>{if(t){t=!1;return}r=!0,o=scrollY,clearTimeout(e),e=setTimeout(c,Ee)};try{addEventListener("scroll",h,{passive:!0}),addEventListener("pagehide",c)}catch{}const p=()=>{let l;try{l=sessionStorage.getItem(j)}catch{return null}if(l===null)return null;let _;try{_=JSON.parse(l)}catch{_=null}const d=_?.y;if(!(typeof d=="number"&&Number.isFinite(d)&&d>=0)){try{sessionStorage.removeItem(j)}catch{}return null}return d};let w=!1;const m=l=>{try{const _=scrollY;scrollTo({top:l,left:0,behavior:"instant"}),s=l,n=!0,clearTimeout(e),o=null,i(l);const d=scrollY;d!==_&&(t=!0),d!==l&&!w&&(w=!0,addEventListener("load",()=>{try{if(scrollY===d){const T=p();m(T!==null?T:s)}}catch{}},{once:!0}))}catch{}},g=()=>{try{return!!location.hash}catch{return!0}};let a=!1;const f=()=>{try{if(a||innerWidth>Ae||innerHeight>Se)return;a=!0;const l=Date.now(),_=()=>{try{removeEventListener("resize",_)}catch{}if(Date.now()-l>Te||r||g())return;const d=p();m(d!==null?d:s)};addEventListener("resize",_)}catch{}};let v=!1,b=!1;return{restore(){if(v||(v=!0,g()))return;const l=p();l!==null&&(m(l),f())},promoted(){if(b||(b=!0,g()))return;const l=p();l!==null?(m(l),f()):n&&m(s)}}}function Re(e,t,r,n){let s=null;try{s=window.trustedTypes?.createPolicy("frame-runtime",{createScriptURL:h=>h})??null}catch{}const o=window.Worker,i=o?.prototype,c=Object.freeze({Worker:o,workerOn:i?.addEventListener,workerPost:i?.postMessage,workerTerminate:i?.terminate,fetch:window.fetch.bind(window),preventDefault:Event.prototype.preventDefault,policy:s,origins:t});r(e).then(h=>h?.bootTopLevel?h.bootTopLevel(c,n):n.settle()).catch(()=>n.settle())}var De="modulepreload",Ie=function(e){return"/"+e},Ue={},Le=function(t,r,n){let s=Promise.resolve();function o(i){const c=new Event("vite:preloadError",{cancelable:!0});if(c.payload=i,window.dispatchEvent(c),!c.defaultPrevented)throw i}return s.then(i=>{for(const c of i||[])c.status==="rejected"&&o(c.reason);return t().catch(o)})},Oe=window===top,q=Object.getOwnPropertyDescriptor(window,"claude"),k=we(Oe,window.__FRAME_PREAMBLE?.topLevel,q?.writable===!1),N=typeof k=="object"&&k[0],y=N?be():ge();(function(){const e=Object.defineProperty,t=globalThis,r=["RTCPeerConnection","webkitRTCPeerConnection","RTCDataChannel","RTCIceCandidate","RTCSessionDescription","RTCRtpSender","RTCRtpReceiver"];let n=0;for(let s=0;s<r.length;s++){const o=r[s];try{e(t,o,{value:void 0,writable:!1,configurable:!1})}catch{try{delete t[o]}catch{}try{e(t,o,{value:void 0,writable:!1,configurable:!0})}catch{}}typeof t[o]=="function"&&n++}if(n&&k==="framed")try{y.post({__frame_rtc_lockdown_failed:n},"*")}catch{}})();var Pe=1e4,Y=Object.freeze([...window.__FRAME_PREAMBLE?.origins??["https://claude.ai","https://preview.claude.ai"]]);function X(e){for(const t of Y)if(t.endsWith(":*"))try{const r=new URL(e);if(`${r.protocol}//${r.hostname}:*`===t)return!0}catch{}else if(e===t)return!0;return!1}var R=Object.freeze({...window.__FRAME_PREAMBLE?.capabilities}),B=window.__FRAME_PREAMBLE?.transforms,D=window.__FRAME_PREAMBLE?.comments,I=window.__FRAME_PREAMBLE?.translate;function S(e){return Le(()=>import("/_runtime/"+e),void 0)}function G(e,t){return{contract:e.contract,changes:new Set(e.changes??[]),flags:new Set(e.flags??[]),capabilities:e.capabilities??{},capBudgets:e.capBudgets??{},transforms:new Map,shellOrigin:t,mount:x,hooks:O,pipe:()=>({wrap:(r,n)=>(...s)=>{try{return n(...s)}catch(o){return Promise.reject(o)}}})}}var L=null,E=null;function V(e,t,r){try{Object.defineProperty(e,t,{value:r,writable:!1,configurable:!1,enumerable:!0})}catch{try{Object.defineProperty(e,t,{value:r,writable:!1,configurable:!0,enumerable:!0})}catch{}}}var U=!1,O={editBefore:null,edit:null};function Ce(e,t,r=!1){const n=[];let s;if(r)try{O.editBefore?.(e)}catch{}for(const o of e.elements){const i=document.querySelector(`[data-id="${o.target}"]`);if(!i){s=o.target;break}if([...Object.keys(o.attrsSet??{}),...o.attrsRemoved??[]].some(c=>!oe(c))){s=o.target;break}if(o.text!==void 0&&(!ce(i)||de(i))){s=o.target;break}for(const[c,h]of Object.entries(o.attrsSet??{}))if(!J(i,c)){try{i.setAttribute(c,h)}catch{}Z(i,c,h)}for(const c of o.attrsRemoved??[])J(i,c)||(i.removeAttribute(c),Z(i,c,null));typeof o.text=="string"&&ue(i,o.text),n.push(o.target)}if(r)try{O.edit?.(e.seq,n,s)}catch{}if(s!==void 0){y.post({__frame_patch_miss:{seq:e.seq}},t);return}try{document.dispatchEvent(new CustomEvent("claude:edit",{detail:{seq:e.seq,targets:n}}))}catch{}}function Z(e,t,r){if(!(e instanceof HTMLInputElement))return;const n=t.toLowerCase();n==="checked"?e.checked=r!==null:n==="value"&&e.type!=="file"&&(e.value=r??"")}function J(e,t){const r=t.toLowerCase(),n=e;return r==="data-id"||(r==="value"||r==="checked")&&(n.__artifactSecret===!0||/^(password|hidden|file)$/.test(n.type??"")||/(^|\s)(cc-|one-time-code|current-password|new-password)/i.test(`${e.getAttribute("autocomplete")??""} ${n.autocomplete??""}`))}function Q(e){const t=document.documentElement;e==="light"||e==="dark"?(t.dataset.theme=e,t.style.colorScheme=e,U=!0):U&&(delete t.dataset.theme,t.style.colorScheme="",U=!1)}var P=new Map;function Me(){let e;const t={u:new Promise(r=>{e=r}),r:r=>{t.done=!0,e(r)},done:!1,nulled:!1};return t}function F(){for(const e of P.values())e.done||(e.nulled=!0,e.r(null))}var je=Object.freeze(Object.assign(Object.create(null),{call:Function.prototype.call,apply:Function.prototype.apply,bind:Function.prototype.bind})),x=(e,t)=>{const r=P.get(e);if(!r||r.done){r?.nulled&&E&&y.post({__frame_cap_telemetry:{kind:"cap-load-error",cap:e}},E);return}const n=typeof t=="function"?Object.setPrototypeOf(t,je):Object.assign(Object.create(null),t);typeof n.then=="function"&&delete n.then,r.r(Object.freeze(n))};function ee(){const e=q?.value??{};V(window,"claude",e);for(const t of Object.keys(R)){if(e[t]!==void 0){V(e,t,e[t]);continue}P.set(t,Me())}if(e.use===void 0){const t=r=>{if(typeof r!="string"||!Object.hasOwn(R,r))return Promise.resolve(null);const n=P.get(r);return n?n.u:Promise.resolve(e[r]??null)};try{Object.defineProperty(e,"use",{value:t,writable:!0,configurable:!0,enumerable:!1})}catch{}}}if(k==="framed"){const e=B&&A.test(B)?S(B).catch(()=>{}):Promise.resolve(void 0),t=a=>{if(a.type==="auxclick"&&a.button!==1)return;const f=a.target,v=f&&f.closest?f.closest("a[href],area[href]"):null;if(!v)return;const b=v.getAttribute("href");if(!b)return;let l;try{l=new URL(b,document.baseURI)}catch{return}if((l.protocol==="http:"||l.protocol==="https:")&&l.origin!==location.origin){a.preventDefault();const _=(v.getAttribute("target")??"").toLowerCase(),d=a.type==="auxclick"||a.metaKey||a.ctrlKey||a.shiftKey||a.altKey||!["","_self","_top","_parent"].includes(_);y.post({__frame_nav:!0,url:l.href,newTab:d},"*")}};addEventListener("click",t,!0),addEventListener("auxclick",t,!0);const r={},n=a=>{a.isTrusted&&(r.pointer=!0)},s=a=>{a.isTrusted&&(r.click=!0)};addEventListener("pointermove",n,{capture:!0,passive:!0}),addEventListener("click",s,{capture:!0,passive:!0}),e.then(a=>{a?.wireNav&&(a.wireNav(),removeEventListener("click",t,!0),removeEventListener("auxclick",t,!0),removeEventListener("pointermove",n,!0),removeEventListener("click",s,!0),a.wireEngagement?.(r))});let o=null;try{o=ke()}catch{}ee();let i=null,c=null,h=0;const p=y.on((a,f)=>{X(f)&&_e(a)&&(i=a.__frame_init,E=f,p(),clearTimeout(h),c?.())});y.post({__frame_connect:!0},"*");const w=new Promise(a=>{c=a,h=setTimeout(()=>{p(),a()},Pe)}),m=document.readyState==="loading"?new Promise(a=>document.addEventListener("DOMContentLoaded",()=>a(),{once:!0})):Promise.resolve();m.then(()=>{try{o?.restore()}catch{}});const g={cb:null};y.on((a,f)=>{if(X(f)&&ve(a)){try{o?.promoted()}catch{}g.cb?.()}}),w.then(async()=>{if(!i||!E){F();return}Q(i.theme);const a=E;let f=!1,v=!1;y.on((u,z,C)=>{if(z!==a)return;ye(u)&&Q(u.__frame_theme.theme),he(u)&&Ce(u.__frame_patch,a,C);const H=u?.__fc_mode;H&&typeof H=="object"&&!f&&D&&A.test(D)&&(f=!0,S(D).then(K=>K.install?.(a,H.on===!0)).catch(()=>{}));const W=u?.__ft_cmd;W&&typeof W=="object"&&!v&&I&&A.test(I)&&(v=!0,S(I).then(K=>K.install?.(a,W)).catch(()=>{}))});const b=Object.keys(i.capabilities??{}).filter(u=>Object.hasOwn(R,u)).map(u=>[u,R[u]]).filter(u=>typeof u[1]=="string"&&A.test(u[1])),l=await Promise.allSettled(b.map(([,u])=>S(u))),_=await e,d=E;if(_?.buildBoot||y.post({__frame_cap_telemetry:{kind:"cap-load-error",cap:"_transforms"}},d),_?.buildBoot)try{L=_.buildBoot(i,_.TRANSFORMS??{},{shellOrigin:d,mount:x,hooks:O},u=>y.post({__frame_cap_telemetry:u},d))}catch{y.post({__frame_cap_telemetry:{kind:"cap-load-error",cap:"_transforms"}},d),L=G(i,d)}else L=G(i,d);const T=u=>y.post({__frame_cap_telemetry:{kind:"cap-load-error",cap:u}},d),Ne=L;l.forEach((u,z)=>{const C=b[z][0];if(u.status!=="fulfilled"){T(C);return}try{u.value?.install?.(Ne)}catch{T(C)}}),F(),await m,y.post({__frame_ready:!0},E),e.then(u=>u?.installSizeReporter?.(d,g))})}else N&&(ee(),Re(N,Y,S,{settle:F,mount:x}))})();</script><!-- /frame-runtime -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PKX / ART Viewer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:      #090c12;
+  --surface: #0e1420;
+  --panel:   #111824;
+  --border:  #1c2840;
+  --border2: #253354;
+  --accent:  #3a7fff;
+  --accent2: #5a9fff;
+  --text:    #8aabcf;
+  --bright:  #c8def5;
+  --dim:     #334d6e;
+  --ok:      #3abf7a;
+  --err:     #e05050;
+  --amber:   #c8a040;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'IBM Plex Mono', 'Courier New', monospace;
+  font-size: 12px;
+  font-weight: 300;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* ── Header ─────────────────────────────────────────────────────────────── */
+header {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 10px 20px;
+  border-bottom: 1px solid var(--border);
+  background: var(--panel);
+  flex-shrink: 0;
+}
+.logo {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--accent2);
+  letter-spacing: 0.04em;
+}
+.logo span { color: var(--dim); }
+.header-meta {
+  margin-left: auto;
+  color: var(--dim);
+  font-size: 11px;
+}
+.btn {
+  padding: 5px 12px;
+  background: transparent;
+  border: 1px solid var(--border2);
+  color: var(--text);
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 400;
+  transition: border-color 0.15s, color 0.15s;
+}
+.btn:hover { border-color: var(--accent); color: var(--accent2); }
+.btn.active { border-color: var(--accent); color: var(--accent); }
+
+/* ── Drop zone ──────────────────────────────────────────────────────────── */
+#drop-zone {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 1px dashed var(--border2);
+  margin: 24px;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+  user-select: none;
+}
+#drop-zone.over {
+  border-color: var(--accent);
+  background: rgba(58,127,255,0.04);
+}
+#drop-zone .big {
+  font-size: 13px;
+  color: var(--bright);
+  font-weight: 400;
+  margin-bottom: 10px;
+}
+#drop-zone .sub {
+  color: var(--dim);
+  font-size: 11px;
+  line-height: 1.8;
+  text-align: center;
+}
+#drop-zone .icon {
+  font-size: 32px;
+  margin-bottom: 16px;
+  opacity: 0.4;
+}
+
+/* ── Main layout ─────────────────────────────────────────────────────────── */
+#main {
+  display: none;
+  flex: 1;
+  overflow: hidden;
+}
+#main.visible { display: flex; }
+
+/* ── Sidebar ─────────────────────────────────────────────────────────────── */
+#sidebar {
+  width: 230px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid var(--border);
+  overflow-y: auto;
+}
+.section {
+  border-bottom: 1px solid var(--border);
+  padding: 12px 14px;
+}
+.section-title {
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--dim);
+  letter-spacing: 0.1em;
+  margin-bottom: 10px;
+}
+.row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 5px;
+  gap: 8px;
+}
+.row .k { color: var(--dim); flex-shrink: 0; }
+.row .v { color: var(--bright); text-align: right; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.row .v.ok  { color: var(--ok); }
+.row .v.err { color: var(--err); }
+.row .v.amber { color: var(--amber); }
+
+/* ── Palette grid ────────────────────────────────────────────────────────── */
+#palette-grid {
+  display: grid;
+  grid-template-columns: repeat(16, 1fr);
+  gap: 1px;
+  margin-top: 4px;
+}
+.pc {
+  aspect-ratio: 1;
+  cursor: crosshair;
+  position: relative;
+}
+.pc:hover::after {
+  content: attr(data-tip);
+  position: absolute;
+  left: 100%;
+  top: 0;
+  background: var(--panel);
+  border: 1px solid var(--border2);
+  color: var(--bright);
+  padding: 3px 6px;
+  font-size: 10px;
+  white-space: nowrap;
+  z-index: 10;
+  pointer-events: none;
+}
+
+/* ── Canvas area ─────────────────────────────────────────────────────────── */
+#canvas-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--bg);
+}
+#canvas-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 14px;
+  border-bottom: 1px solid var(--border);
+  background: var(--panel);
+  flex-shrink: 0;
+}
+#canvas-toolbar .label { color: var(--dim); font-size: 11px; }
+#zoom-val { color: var(--accent2); min-width: 28px; text-align: center; font-size: 12px; }
+.sep { width: 1px; height: 14px; background: var(--border); margin: 0 4px; }
+#status-bar {
+  padding: 4px 14px;
+  font-size: 11px;
+  color: var(--dim);
+  background: var(--panel);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+  min-height: 22px;
+}
+#status-bar.ok  { color: var(--ok); }
+#status-bar.err { color: var(--err); }
+
+#canvas-scroll {
+  flex: 1;
+  overflow: auto;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 20px;
+  background:
+    linear-gradient(rgba(255,255,255,0.015) 50%, transparent 50%),
+    var(--bg);
+  background-size: 100% 4px;
+}
+#canvas-frame {
+  position: relative;
+  display: inline-block;
+  border: 1px solid var(--border2);
+  box-shadow:
+    0 0 0 4px var(--bg),
+    0 0 0 5px var(--border),
+    0 8px 32px rgba(0,0,0,0.6);
+  flex-shrink: 0;
+}
+#canvas-frame::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 1px,
+    rgba(0,0,0,0.06) 1px,
+    rgba(0,0,0,0.06) 2px
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+canvas {
+  display: block;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+/* ── Toggle ──────────────────────────────────────────────────────────────── */
+.toggle-wrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+}
+.toggle-wrap input { display: none; }
+.toggle-knob {
+  width: 28px; height: 14px;
+  background: var(--border2);
+  border-radius: 7px;
+  position: relative;
+  transition: background 0.15s;
+}
+.toggle-knob::after {
+  content: '';
+  position: absolute;
+  width: 10px; height: 10px;
+  background: var(--dim);
+  border-radius: 50%;
+  top: 2px; left: 2px;
+  transition: left 0.15s, background 0.15s;
+}
+.toggle-wrap input:checked + .toggle-knob { background: rgba(58,127,255,0.3); }
+.toggle-wrap input:checked + .toggle-knob::after { left: 16px; background: var(--accent); }
+
+/* ── Export dropdown ─────────────────────────────────────────────────────── */
+.export-wrap { position: relative; }
+.export-menu {
+  display: none;
+  position: absolute;
+  top: calc(100% + 5px);
+  right: 0;
+  background: var(--panel);
+  border: 1px solid var(--border2);
+  min-width: 196px;
+  z-index: 200;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.5);
+}
+.export-menu.open { display: block; }
+.menu-item {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  width: 100%;
+  padding: 7px 12px;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--border);
+  color: var(--text);
+  cursor: pointer;
+  font-family: 'IBM Plex Mono', 'Courier New', monospace;
+  font-size: 11px;
+  font-weight: 300;
+  text-align: left;
+  transition: background 0.1s, color 0.1s;
+}
+.menu-item:last-child { border-bottom: none; }
+.menu-item:hover { background: var(--surface); color: var(--bright); }
+.menu-item .ext { color: var(--amber); font-weight: 500; min-width: 36px; }
+.menu-item .desc { color: var(--dim); font-size: 10px; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">PKX<span>/</span>ART <span>Viewer</span></div>
+  <button class="btn" id="openBtn">Open file</button>
+  <button class="btn" id="resetBtn" style="display:none">← Load another</button>
+  <input type="file" id="fileInput" style="display:none">
+  <div class="header-meta">Dark Reign PKX bitmap viewer</div>
+</header>
+
+<div id="drop-zone">
+  <div class="icon">⬡</div>
+  <div class="big">Drop .ART or .BMX file here</div>
+  <div class="sub">
+    PKX-compressed bitmap format<br>
+    magic: 50 4B 58 3A · 66 19 01 10 · CF BA AE 9B<br>
+    compression: LZSS (0x0E) · RLE (0x0C) · ZRL (0x01)
+  </div>
+</div>
+
+<div id="main">
+  <div id="sidebar">
+    <div class="section">
+      <div class="section-title">PKX header</div>
+      <div class="row"><span class="k">file</span>     <span class="v" id="i-file">—</span></div>
+      <div class="row"><span class="k">size</span>     <span class="v" id="i-fsz">—</span></div>
+      <div class="row"><span class="k">magic</span>    <span class="v ok">50 4B 58 3A</span></div>
+      <div class="row"><span class="k">comp</span>     <span class="v amber" id="i-comp">—</span></div>
+      <div class="row"><span class="k">packed</span>   <span class="v" id="i-csz">—</span></div>
+      <div class="row"><span class="k">unpacked</span> <span class="v" id="i-usz">—</span></div>
+      <div class="row"><span class="k">ratio</span>    <span class="v" id="i-ratio">—</span></div>
+    </div>
+    <div class="section">
+      <div class="section-title">Frame 0 — bitmap</div>
+      <div class="row"><span class="k">frames</span>   <span class="v" id="i-fcount">—</span></div>
+      <div class="row"><span class="k">width</span>    <span class="v" id="i-w">—</span></div>
+      <div class="row"><span class="k">height</span>   <span class="v" id="i-h">—</span></div>
+      <div class="row"><span class="k">format</span>   <span class="v amber" id="i-fmt">—</span></div>
+      <div class="row"><span class="k">data off</span> <span class="v" id="i-doff">—</span></div>
+    </div>
+    <div class="section">
+      <div class="section-title">Frame 1 — palette</div>
+      <div class="row"><span class="k">start</span>   <span class="v" id="i-pstart">—</span></div>
+      <div class="row"><span class="k">count</span>   <span class="v" id="i-pcount">—</span></div>
+      <div class="row"><span class="k">total</span>   <span class="v" id="i-ptotal">—</span></div>
+    </div>
+    <div class="section" style="flex:1">
+      <div class="section-title">Palette</div>
+      <div id="palette-grid"></div>
+    </div>
+  </div>
+
+  <div id="canvas-area">
+    <div id="canvas-toolbar">
+      <span class="label">zoom</span>
+      <button class="btn" id="zoomOut">−</button>
+      <span id="zoom-val">1×</span>
+      <button class="btn" id="zoomIn">+</button>
+      <div class="sep"></div>
+      <label class="toggle-wrap">
+        <input type="checkbox" id="swapRB">
+        <span class="toggle-knob"></span>
+        <span class="label">swap R/B</span>
+      </label>
+      <div class="sep"></div>
+      <label class="toggle-wrap">
+        <input type="checkbox" id="scanlines" checked>
+        <span class="toggle-knob"></span>
+        <span class="label">scanlines</span>
+      </label>
+      <div class="sep"></div>
+      <div class="export-wrap">
+        <button class="btn" id="exportBtn" disabled>Export ▾</button>
+        <div class="export-menu" id="exportMenu">
+          <button class="menu-item" id="exp-png">
+            <span class="ext">.PNG</span><span>native 1× image</span>
+          </button>
+          <button class="menu-item" id="exp-bmp">
+            <span class="ext">.BMP</span><span>24-bit uncompressed</span>
+          </button>
+          <button class="menu-item" id="exp-act">
+            <span class="ext">.ACT</span><span>Adobe Color Table</span>
+          </button>
+          <button class="menu-item" id="exp-bin">
+            <span class="ext">.BIN</span><span>raw palette indices</span>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div id="status-bar">Ready.</div>
+    <div id="canvas-scroll">
+      <div id="canvas-frame">
+        <canvas id="canvas"></canvas>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════════════
+// File input
+// ═══════════════════════════════════════════════════════════════════
+const fileInput = document.getElementById('fileInput');
+document.getElementById('openBtn').onclick = () => fileInput.click();
+document.getElementById('drop-zone').onclick = () => fileInput.click();
+fileInput.onchange = e => { if (e.target.files[0]) { loadFile(e.target.files[0]); fileInput.value = ''; } };
+
+document.getElementById('resetBtn').onclick = () => {
+  state = null;
+  document.getElementById('main').classList.remove('visible');
+  document.getElementById('drop-zone').style.display = '';
+  document.getElementById('resetBtn').style.display = 'none';
+  document.getElementById('exportBtn').disabled = true;
+  setStatus('Ready.');
+};
+
+const dz = document.getElementById('drop-zone');
+dz.addEventListener('dragover', e => { e.preventDefault(); dz.classList.add('over'); });
+dz.addEventListener('dragleave', () => dz.classList.remove('over'));
+dz.addEventListener('drop', e => {
+  e.preventDefault(); dz.classList.remove('over');
+  e.dataTransfer.files[0] && loadFile(e.dataTransfer.files[0]);
+});
+
+// ═══════════════════════════════════════════════════════════════════
+// Zoom + display controls
+// ═══════════════════════════════════════════════════════════════════
+let zoom = 1;
+let state = null; // { pixels, width, height, palette }
+
+document.getElementById('zoomIn').onclick  = () => { zoom = Math.min(zoom * 2, 8); redraw(); };
+document.getElementById('zoomOut').onclick = () => { zoom = Math.max(zoom * 0.5, 0.25); redraw(); };
+document.getElementById('swapRB').onchange  = () => redraw();
+document.getElementById('scanlines').onchange = e => {
+  document.getElementById('canvas-frame').classList.toggle('no-scanlines', !e.target.checked);
+};
+
+// ── Export dropdown ───────────────────────────────────────────────────────
+const exportBtn  = document.getElementById('exportBtn');
+const exportMenu = document.getElementById('exportMenu');
+
+exportBtn.onclick = e => {
+  e.stopPropagation();
+  exportMenu.classList.toggle('open');
+};
+document.addEventListener('click', () => exportMenu.classList.remove('open'));
+
+document.getElementById('exp-png').onclick = () => { exportMenu.classList.remove('open'); exportPNG(); };
+document.getElementById('exp-bmp').onclick = () => { exportMenu.classList.remove('open'); exportBMP(); };
+document.getElementById('exp-act').onclick = () => { exportMenu.classList.remove('open'); exportACT(); };
+document.getElementById('exp-bin').onclick = () => { exportMenu.classList.remove('open'); exportRaw(); };
+
+function redraw() {
+  if (!state) return;
+  document.getElementById('zoom-val').textContent = zoom < 1
+    ? `1/${Math.round(1/zoom)}×`
+    : `${zoom}×`;
+
+  const { pixels, width, height, palette } = state;
+  const swapRB  = document.getElementById('swapRB').checked;
+  const cw = Math.round(width * zoom);
+  const ch = Math.round(height * zoom);
+
+  // Draw at native resolution into tmp, then scale onto main canvas
+  const tmp  = document.createElement('canvas');
+  tmp.width  = width;
+  tmp.height = height;
+  const tctx = tmp.getContext('2d');
+  const id   = tctx.createImageData(width, height);
+  const d    = id.data;
+
+  for (let i = 0; i < pixels.length; i++) {
+    const pi = pixels[i] * 4;
+    const di = i * 4;
+    d[di]   = swapRB ? palette[pi+2] : palette[pi];
+    d[di+1] = palette[pi+1];
+    d[di+2] = swapRB ? palette[pi]   : palette[pi+2];
+    d[di+3] = 255;
+  }
+  tctx.putImageData(id, 0, 0);
+
+  const canvas = document.getElementById('canvas');
+  canvas.width  = cw;
+  canvas.height = ch;
+  const ctx = canvas.getContext('2d');
+  ctx.imageSmoothingEnabled = false;
+  ctx.drawImage(tmp, 0, 0, cw, ch);
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// File loader
+// ═══════════════════════════════════════════════════════════════════
+function loadFile(file) {
+  setStatus(`Loading ${file.name}…`);
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      processBuffer(e.target.result, file.name, file.size);
+    } catch (ex) {
+      setStatus('Error: ' + ex.message, 'err');
+      console.error(ex);
+    }
+  };
+  reader.readAsArrayBuffer(file);
+}
+
+function processBuffer(buf, name, fileSize) {
+  const bytes = new Uint8Array(buf);
+  const view  = new DataView(buf);
+
+  // ── Validate PKX header (24 bytes) ──────────────────────────────
+  if (bytes.length < 24)
+    throw new Error('Too small to be a PKX file');
+
+  const m0 = view.getUint32(0, true);
+  const m1 = view.getUint32(4, true);
+  const m2 = view.getUint32(8, true) >>> 0;
+
+  if (m0 !== 0x3A584B50)
+    throw new Error(`Bad magic[0]: expected 3A584B50, got ${hex32(m0)}`);
+  if (m1 !== 0x10011966)
+    throw new Error(`Bad magic[1]: expected 10011966, got ${hex32(m1)}`);
+  if (m2 !== 0x9BAEBACF)
+    throw new Error(`Bad magic[2]: expected 9BAEBACF, got ${hex32(m2)}`);
+
+  const compType = view.getUint32(12, true);
+  const compSz   = view.getUint32(16, true);
+  const uncompSz = view.getUint32(20, true);
+
+  if (compType < 1 || compType > 14)
+    throw new Error(`Unknown compression type: ${compType}`);
+  if (compSz !== bytes.length - 24)
+    throw new Error(`compSz mismatch: header says ${compSz}, file has ${bytes.length-24}`);
+  if (uncompSz < 1 || uncompSz > 9_999_999)
+    throw new Error(`Suspicious uncompressedSize: ${uncompSz}`);
+
+  set('i-file',  shortName(name));
+  set('i-fsz',   fmtBytes(fileSize));
+  set('i-comp',  compTypeName(compType));
+  set('i-csz',   fmtBytes(compSz));
+  set('i-usz',   fmtBytes(uncompSz));
+  set('i-ratio', ((compSz / uncompSz) * 100).toFixed(1) + '%');
+
+  // ── Decompress payload ──────────────────────────────────────────
+  setStatus('Decompressing…');
+  const payload = bytes.subarray(24, 24 + compSz);
+
+  const loNibble = compType & 0xF;
+  const hiNibble = (compType >> 4) & 0xF;
+  let decompressed;
+
+  if (hiNibble !== 0) {
+    // Two-pass: first decompress with hiNibble, then loNibble
+    const stage1 = decompress(hiNibble, payload, uncompSz * 4);
+    decompressed  = decompress(loNibble, stage1, uncompSz);
+  } else {
+    decompressed = decompress(loNibble, payload, uncompSz);
+  }
+
+  // ── Parse FrameRecord structure ─────────────────────────────────
+  //   Decompressed layout:
+  //     [0]    uint32  frame_count
+  //     [4]    Frame0  (12 bytes) — bitmap frame
+  //     [16]   Frame1  (12 bytes) — palette frame (if frame_count > 1)
+  //     [28+]  pixel data, palette data
+  //
+  //   FrameRecord (12 bytes):
+  //     [+0]  int32   data_offset  — self-relative: pixel data at &frame+data_offset
+  //     [+4]  uint16  width        (or palette_start for palette frames)
+  //     [+6]  uint16  height       (or palette_count for palette frames)
+  //     [+8]  uint8   unknown
+  //     [+9]  uint8   format_flags — lo nibble = type (0xD = RLE12), hi = secondary comp
+
+  const dv = new DataView(decompressed.buffer, decompressed.byteOffset, decompressed.byteLength);
+
+  if (decompressed.length < 16)
+    throw new Error('Decompressed data too short to contain a FrameRecord');
+
+  const frameCount = dv.getUint32(0, true);
+
+  // Frame 0 (bitmap) — at byte offset 4
+  const f0DataOff = dv.getInt32(4, true);         // self-relative
+  const f0Width   = dv.getUint16(8, true);
+  const f0Height  = dv.getUint16(10, true);
+  const f0Flags   = decompressed[13];             // byte +9 of frame0 (4+9=13)
+  const f0FmtType = f0Flags & 0xF;
+  const f0PixSrc  = 4 + f0DataOff;               // absolute index into decompressed
+
+  set('i-fcount', frameCount);
+  set('i-w',      f0Width  + ' px');
+  set('i-h',      f0Height + ' px');
+  set('i-fmt',    fmtTypeName(f0FmtType));
+  set('i-doff',   hex16(f0DataOff));
+
+  // ── Extract palette ─────────────────────────────────────────────
+  //   Palette entries are RGBA, 4 bytes each (256 max).
+  //   Default: greyscale fallback.
+  const palette = new Uint8Array(256 * 4);
+  for (let i = 0; i < 256; i++) {
+    palette[i*4] = palette[i*4+1] = palette[i*4+2] = i;
+    palette[i*4+3] = 255;
+  }
+
+  let palStart = 0, palCount = 0;
+
+  if (frameCount > 1 && decompressed.length >= 28) {
+    // Frame 1 (palette) — at byte offset 16
+    const f1DataOff = dv.getInt32(16, true);       // self-relative
+    palStart        = dv.getUint16(20, true);       // first palette entry index
+    palCount        = dv.getUint16(22, true);       // number of entries
+    const palSrc    = 16 + f1DataOff;              // absolute index into decompressed
+
+    for (let i = 0; i < palCount; i++) {
+      const si = palSrc + i * 4;
+      const di = (palStart + i) * 4;
+      if (di + 3 < palette.length && si + 3 < decompressed.length) {
+        palette[di]   = decompressed[si];
+        palette[di+1] = decompressed[si+1];
+        palette[di+2] = decompressed[si+2];
+        palette[di+3] = 255;
+      }
+    }
+  }
+
+  set('i-pstart', palCount > 0 ? palStart : '—');
+  set('i-pcount', palCount > 0 ? palCount : '—');
+  set('i-ptotal', palCount > 0 ? fmtBytes(palCount * 4) : '—');
+
+  // ── Decode pixels ───────────────────────────────────────────────
+  if (f0Width === 0 || f0Height === 0)
+    throw new Error(`Invalid dimensions: ${f0Width}×${f0Height}`);
+  if (f0FmtType !== 0xD)
+    throw new Error(`Unsupported frame format 0x${f0FmtType.toString(16).toUpperCase()} (only RLE12/0xD is implemented)`);
+
+  setStatus('Decoding pixels…');
+  const pixels = decodeRle12(decompressed, f0PixSrc, f0Width, f0Height);
+
+  // ── Build palette grid ──────────────────────────────────────────
+  const pg = document.getElementById('palette-grid');
+  pg.innerHTML = '';
+  for (let i = 0; i < 256; i++) {
+    const el = document.createElement('div');
+    el.className = 'pc';
+    const r = palette[i*4], g = palette[i*4+1], b = palette[i*4+2];
+    el.style.background = `rgb(${r},${g},${b})`;
+    el.setAttribute('data-tip', `#${i.toString().padStart(3,' ')}: ${r},${g},${b}`);
+    pg.appendChild(el);
+  }
+
+  // ── Show UI ─────────────────────────────────────────────────────
+  dz.style.display = 'none';
+  document.getElementById('main').classList.add('visible');
+  setStatus(`${name}  —  ${f0Width}×${f0Height}  —  ${fmtBytes(fileSize)}`, 'ok');
+
+  state = { pixels, width: f0Width, height: f0Height, palette, name };
+  zoom  = 1;
+  redraw();
+  document.getElementById('exportBtn').disabled = false;
+  document.getElementById('resetBtn').style.display = '';
+}
+
+
+// ═══════════════════════════════════════════════════════════════════
+// Decompression dispatch
+//   Implements the engine's DecompressResourceData_Dispatch logic.
+//   Types confirmed from Ghidra: 0x01=ZRL, 0x0C=RLE, 0x0E=LZSS
+// ═══════════════════════════════════════════════════════════════════
+function decompress(type, src, outSize) {
+  switch (type) {
+    case 0x01: return decompressZRL(src, outSize);
+    case 0x0C: return decompressRLE(src, outSize);
+    case 0x0E: return decompressLZSS(src, outSize);
+    default:
+      throw new Error(`Unsupported compression type 0x${type.toString(16).toUpperCase()}`);
+  }
+}
+
+// ── LZSS decompressor (type 0x0E) ───────────────────────────────────────────
+//   Reconstructed from LZSS_Decompress in Ghidra (0x0047ed10).
+//
+//   Stream layout determined by first byte:
+//     first < 8  → extraBits=first, numChunks=uint16@[1] (uint32 if 0xFFFF), data@[3] or [7]
+//     first >= 8 → extraBits=first&7, numChunks=(first>>3)-1, data@[1]
+//
+//   Each chunk starts with a flag byte (0x00 = raw 8-byte block).
+//   Non-zero flag byte: 8 bits MSB-first, 1=backref, 0=literal.
+//     backref: 2-byte LE token — bits[15:4]=offset-1, bits[3:0]=length-3
+//     literal: 1 raw byte
+//
+//   After numChunks full chunks, one final chunk with extraBits bits.
+function decompressLZSS(src, outSize) {
+  const out = new Uint8Array(outSize);
+  let si = 0, di = 0;
+
+  const first = src[si++];
+  let numChunks, extraBits;
+
+  if (first < 8) {
+    let cnt = src[si] | (src[si+1] << 8); si += 2;
+    if (cnt === 0xFFFF) {
+      cnt = (src[si] | (src[si+1]<<8) | (src[si+2]<<16) | (src[si+3]<<24)) >>> 0;
+      si += 4;
+    }
+    numChunks = cnt;
+    extraBits = first;
+  } else {
+    numChunks = (first >> 3) - 1;
+    extraBits = first & 7;
+  }
+
+  function processBits(fb, nbits) {
+    for (let b = 0; b < nbits; b++) {
+      if (fb & 0x80) {
+        // Back-reference: 12-bit offset (>>4)+1, 4-bit length (&0xF)+3
+        const tok    = src[si] | (src[si+1] << 8); si += 2;
+        const offset = (tok >> 4) + 1;
+        const len    = (tok & 0xF) + 3;
+        for (let j = 0; j < len; j++, di++)
+          out[di] = di >= offset ? out[di - offset] : 0;
+      } else {
+        // Literal byte
+        out[di++] = src[si++];
+      }
+      fb = (fb << 1) & 0xFF;
+    }
+  }
+
+  for (let c = 0; c < numChunks; c++) {
+    const fb = src[si++];
+    if (fb === 0) {
+      // Special: 0x00 flag byte = raw 8-byte block (game optimisation)
+      for (let i = 0; i < 8; i++) out[di++] = src[si++];
+    } else {
+      processBits(fb, 8);
+    }
+  }
+
+  if (extraBits > 0) processBits(src[si++], extraBits);
+
+  return out;
+}
+
+// ── RLE decompressor (type 0x0C) ────────────────────────────────────────────
+//   High bit 1 → run: (count & 0x7F)+1 repeats of next byte
+//   High bit 0 → literal: (byte)+1 raw bytes follow
+function decompressRLE(src, outSize) {
+  const out = new Uint8Array(outSize);
+  let si = 0, di = 0;
+  while (di < outSize && si < src.length) {
+    const b = src[si++];
+    if (b & 0x80) {
+      const count = (b & 0x7F) + 1;
+      const val   = src[si++];
+      for (let i = 0; i < count && di < outSize; i++) out[di++] = val;
+    } else {
+      const count = b + 1;
+      for (let i = 0; i < count && di < outSize; i++) out[di++] = src[si++];
+    }
+  }
+  return out;
+}
+
+// ── Zero-run RLE (type 0x01) ─────────────────────────────────────────────────
+//   0x00 byte → next byte is run-count of zeros (skip output)
+//   non-zero → literal
+function decompressZRL(src, outSize) {
+  const out = new Uint8Array(outSize);
+  let si = 0, di = 0;
+  while (di < outSize && si < src.length) {
+    const b = src[si++];
+    if (b === 0) {
+      di += src[si++]; // skip this many bytes (they stay zero)
+    } else {
+      out[di++] = b;
+    }
+  }
+  return out;
+}
+
+
+// ═══════════════════════════════════════════════════════════════════
+// RLE12 scanline decoder
+//   Reconstructed from DecodeAndBlit_RLE12_Unscaled (0x004071b0).
+//
+//   Each scanline is a stream of tokens ending with a 0x00 byte:
+//     byte & 0x80 == 0  → literal: copy (byte & 0x7F) pixels verbatim
+//     byte & 0x80 == 1  → run:     next byte = color, repeated (byte & 0x7F) times
+//                          if color == 0 → transparent skip (destination advances, no write)
+//   Scanline terminator: any byte where (byte & 0x7F) == 0 (i.e. 0x00 or 0x80)
+// ═══════════════════════════════════════════════════════════════════
+function decodeRle12(data, srcOff, width, height) {
+  const pixels = new Uint8Array(width * height);
+  let si = srcOff;
+
+  for (let row = 0; row < height; row++) {
+    let col = 0;
+    const rowBase = row * width;
+
+    while (true) {
+      const b     = data[si++];
+      const count = b & 0x7F;
+      if (count === 0) break;  // end-of-scanline marker
+
+      if (b & 0x80) {
+        // Run token
+        const color = data[si++];
+        if (color !== 0) {
+          // Solid run — fill pixels
+          const end = Math.min(col + count, width);
+          pixels.fill(color, rowBase + col, rowBase + end);
+        }
+        // color == 0 → transparent skip: dst advances, no write (pixels stay 0)
+        col += count;
+      } else {
+        // Literal token — copy bytes from source
+        for (let i = 0; i < count; i++) {
+          const px = data[si++];
+          if (col < width) pixels[rowBase + col] = px;
+          col++;
+        }
+      }
+    }
+  }
+  return pixels;
+}
+
+
+// ═══════════════════════════════════════════════════════════════════
+// Exporters
+// ═══════════════════════════════════════════════════════════════════
+
+// Build a native-resolution RGBA canvas from current state + settings.
+// Used by PNG and BMP exporters so they share exactly the same pixel logic.
+function buildNativeCanvas() {
+  const { pixels, width, height, palette } = state;
+  const swapRB = document.getElementById('swapRB').checked;
+  const tmp  = document.createElement('canvas');
+  tmp.width  = width;
+  tmp.height = height;
+  const ctx  = tmp.getContext('2d');
+  const id   = ctx.createImageData(width, height);
+  const d    = id.data;
+  for (let i = 0; i < pixels.length; i++) {
+    const pi = pixels[i] * 4;
+    const di = i * 4;
+    d[di]   = swapRB ? palette[pi+2] : palette[pi];
+    d[di+1] = palette[pi+1];
+    d[di+2] = swapRB ? palette[pi]   : palette[pi+2];
+    d[di+3] = 255;
+  }
+  ctx.putImageData(id, 0, 0);
+  return tmp;
+}
+
+// ── PNG export ────────────────────────────────────────────────────────────
+// Native 1× resolution, current swap R/B setting, full 24-bit colour.
+function exportPNG() {
+  if (!state) return;
+  setStatus('Encoding PNG…');
+  buildNativeCanvas().toBlob(blob => {
+    triggerDownload(blob, exportName('.png'));
+    setStatus(`Exported ${exportName('.png')}  (${fmtBytes(blob.size)})`, 'ok');
+  }, 'image/png');
+}
+
+// ── BMP export ────────────────────────────────────────────────────────────
+// Uncompressed 24-bit DIB. Uses a negative height field so rows are stored
+// top-down (same as our pixel buffer), avoiding the need to flip the image.
+// Row stride is padded to a 4-byte boundary as the BMP spec requires.
+function exportBMP() {
+  if (!state) return;
+  const { width, height } = state;
+
+  // Render to canvas to get the same RGBA pixels as PNG/display
+  const tmp  = buildNativeCanvas();
+  const ctx  = tmp.getContext('2d');
+  const id   = ctx.getImageData(0, 0, width, height);
+  const src  = id.data; // RGBA, top-down
+
+  const rowStride     = Math.ceil(width * 3 / 4) * 4; // pad to 4 bytes
+  const pixelDataSize = rowStride * height;
+  const fileSize      = 14 + 40 + pixelDataSize;
+
+  const buf  = new ArrayBuffer(fileSize);
+  const view = new DataView(buf);
+  const out  = new Uint8Array(buf);
+
+  // ── BITMAPFILEHEADER (14 bytes) ──
+  out[0] = 0x42; out[1] = 0x4D;            // 'BM'
+  view.setUint32( 2, fileSize,  true);      // bfSize
+  view.setUint32( 6, 0,         true);      // bfReserved
+  view.setUint32(10, 54,        true);      // bfOffBits (14 + 40)
+
+  // ── BITMAPINFOHEADER (40 bytes) ──
+  view.setUint32(14, 40,        true);      // biSize
+  view.setInt32 (18, width,     true);      // biWidth
+  view.setInt32 (22, -height,   true);      // biHeight — negative = top-down
+  view.setUint16(26, 1,         true);      // biPlanes
+  view.setUint16(28, 24,        true);      // biBitCount
+  view.setUint32(30, 0,         true);      // biCompression (BI_RGB)
+  view.setUint32(34, pixelDataSize, true);  // biSizeImage
+  view.setInt32 (38, 0,         true);      // biXPelsPerMeter
+  view.setInt32 (42, 0,         true);      // biYPelsPerMeter
+  view.setUint32(46, 0,         true);      // biClrUsed
+  view.setUint32(50, 0,         true);      // biClrImportant
+
+  // ── Pixel data — BGR order (BMP convention) ──
+  let off = 54;
+  for (let row = 0; row < height; row++) {
+    for (let col = 0; col < width; col++) {
+      const si  = (row * width + col) * 4;
+      out[off++] = src[si + 2]; // B
+      out[off++] = src[si + 1]; // G
+      out[off++] = src[si + 0]; // R
+    }
+    off += rowStride - width * 3; // row padding (stays 0)
+  }
+
+  triggerDownload(new Blob([out], { type: 'image/bmp' }), exportName('.bmp'));
+  setStatus(`Exported ${exportName('.bmp')}  (${fmtBytes(fileSize)})`, 'ok');
+}
+
+// ── Adobe Color Table (.act) export ──────────────────────────────────────
+// Standard 768-byte file: 256 entries × 3 bytes (R, G, B).
+// Photoshop, GIMP, Aseprite, and most other tools can import this directly.
+// Honours the current swap R/B setting so the colours match what you see.
+function exportACT() {
+  if (!state) return;
+  const { palette } = state;
+  const swapRB = document.getElementById('swapRB').checked;
+  const out = new Uint8Array(768);
+  for (let i = 0; i < 256; i++) {
+    out[i*3]   = swapRB ? palette[i*4+2] : palette[i*4];   // R
+    out[i*3+1] = palette[i*4+1];                            // G
+    out[i*3+2] = swapRB ? palette[i*4]   : palette[i*4+2]; // B
+  }
+  triggerDownload(new Blob([out], { type: 'application/octet-stream' }), exportName('.act'));
+  setStatus(`Exported ${exportName('.act')}  (768 bytes, 256 entries)`, 'ok');
+}
+
+// ── Raw indexed pixel export (.bin) ──────────────────────────────────────
+// One byte per pixel: the raw 8-bit palette index, width×height bytes,
+// row-major, top-down. No header. For scripting and further processing.
+function exportRaw() {
+  if (!state) return;
+  const { pixels, width, height } = state;
+  triggerDownload(
+    new Blob([pixels], { type: 'application/octet-stream' }),
+    exportName('.bin')
+  );
+  setStatus(`Exported ${exportName('.bin')}  (${fmtBytes(pixels.length)}, ${width}×${height})`, 'ok');
+}
+
+// ── Shared helpers ────────────────────────────────────────────────────────
+function exportName(ext) {
+  const base = (state?.name ?? 'export').replace(/\.[^.]+$/, '');
+  return base + ext;
+}
+function triggerDownload(blob, filename) {
+  const url = URL.createObjectURL(blob);
+  const a   = document.createElement('a');
+  a.href     = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  setTimeout(() => URL.revokeObjectURL(url), 5000);
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// Utilities
+// ═══════════════════════════════════════════════════════════════════
+function setStatus(msg, cls = '') {
+  const el = document.getElementById('status-bar');
+  el.textContent = msg;
+  el.className = cls;
+}
+
+function set(id, val) {
+  const el = document.getElementById(id);
+  if (el) el.textContent = val;
+}
+
+function hex32(n) {
+  return (n >>> 0).toString(16).toUpperCase().padStart(8, '0');
+}
+function hex16(n) {
+  return '0x' + (n & 0xFFFF).toString(16).toUpperCase().padStart(4, '0');
+}
+function fmtBytes(n) {
+  if (n < 1024)        return `${n} B`;
+  if (n < 1024 * 1024) return `${(n / 1024).toFixed(1)} KB`;
+  return `${(n / 1024 / 1024).toFixed(2)} MB`;
+}
+function shortName(name) {
+  return name.length > 18 ? '…' + name.slice(-16) : name;
+}
+function compTypeName(t) {
+  const lo = t & 0xF, hi = (t >> 4) & 0xF;
+  const n = { 1: 'ZRL', 0xC: 'RLE', 0xE: 'LZSS' };
+  const loN = n[lo] || `0x${lo.toString(16).toUpperCase()}`;
+  if (hi) return `${n[hi]||'?'}+${loN} (2-pass)`;
+  return loN;
+}
+function fmtTypeName(t) {
+  return t === 0xD ? 'RLE12 (0xD)' : `Unknown (0x${t.toString(16).toUpperCase()})`;
+}
+
+// ── Style: scanlines toggle ───────────────────────────────────────
+const styleEl = document.createElement('style');
+styleEl.textContent = `
+  #canvas-frame.no-scanlines::before { display: none; }
+`;
+document.head.appendChild(styleEl);
+</script>
+</body>
+</html>
