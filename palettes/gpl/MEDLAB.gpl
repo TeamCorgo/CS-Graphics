@@ -1,0 +1,260 @@
+GIMP Palette
+Name: MEDLAB
+Columns: 16
+#
+  0   0   0	index_000 (reserved)
+  0   0   0	index_001 (reserved)
+  0   0   0	index_002 (reserved)
+  0   0   0	index_003 (reserved)
+  0   0   0	index_004 (reserved)
+  0   0   0	index_005 (reserved)
+  0   0   0	index_006 (reserved)
+  0   0   0	index_007 (reserved)
+  0   0   0	index_008 (reserved)
+  0   0   0	index_009 (reserved)
+255   0 255	index_010
+251 247   0	index_011
+207 227  95	index_012
+167 135   7	index_013
+ 55 143 231	index_014
+  0 211   7	index_015
+ 47 115 187	index_016
+  0 163  19	index_017
+135  83  91	index_018
+  0 123 203	index_019
+  0 135  55	index_020
+ 47  95 143	index_021
+ 31 123   7	index_022
+119  59  63	index_023
+247   0   0	index_024
+ 79  83  31	index_025
+ 35  83 135	index_026
+ 43  75 111	index_027
+ 31  75 119	index_028
+  0  75 143	index_029
+ 27  67 107	index_030
+ 27  59  95	index_031
+ 35  43 143	index_032
+ 71  35  71	index_033
+ 47  51  55	index_034
+ 35  47 107	index_035
+ 35  47  75	index_036
+ 39  47  51	index_037
+ 39  43  47	index_038
+ 67  31  47	index_039
+ 39  43  51	index_040
+ 35  43  51	index_041
+ 35  43  47	index_042
+ 39  39  43	index_043
+ 35  43  47	index_044
+ 35  43  47	index_045
+ 35  39  43	index_046
+ 35  39  43	index_047
+107   0  43	index_048
+ 39  39  39	index_049
+  0  47  87	index_050
+ 15  43  67	index_051
+ 35  35  39	index_052
+ 35  35  35	index_053
+  0  43  79	index_054
+ 35  35  35	index_055
+  0  43  67	index_056
+ 35  35  35	index_057
+ 31  31  35	index_058
+ 27  35  39	index_059
+ 23  35  39	index_060
+ 31  31  31	index_061
+ 31  31  31	index_062
+  0  39  67	index_063
+ 31  31  31	index_064
+  0  23 143	index_065
+  0  27 119	index_066
+ 27  27  31	index_067
+ 23  27  31	index_068
+ 27  27  27	index_069
+ 15  31  31	index_070
+ 27  27  27	index_071
+  0  31  55	index_072
+  0  19 127	index_073
+ 23  23  27	index_074
+ 11  31  23	index_075
+ 23  23  23	index_076
+ 23  23  23	index_077
+ 15  23  35	index_078
+  0  31  35	index_079
+ 23  23  23	index_080
+  0  23  71	index_081
+ 19  19  23	index_082
+ 19  19  19	index_083
+ 19  19  11	index_084
+ 11  23  23	index_085
+  0   0 159	index_086
+ 19  19  19	index_087
+ 15  15  15	index_088
+ 15   7  67	index_089
+ 15  15  15	index_090
+ 15  11  31	index_091
+ 15  15  15	index_092
+ 15  15  15	index_093
+ 23   7  39	index_094
+ 11  11  39	index_095
+ 15  15  15	index_096
+  0   0 107	index_097
+ 11  11  15	index_098
+  0   0  87	index_099
+ 11  11  11	index_100
+ 11  11  11	index_101
+ 15   7   7	index_102
+  7   7  11	index_103
+ 11   7   7	index_104
+  0   0   0	index_105
+  0   0   0	index_106
+134 177  25	index_107
+ 95 165  96	index_108
+ 99 165  57	index_109
+ 93 158  70	index_110
+110 156  34	index_111
+ 95 156  54	index_112
+ 82 156  68	index_113
+ 86 148  57	index_114
+ 78 148  73	index_115
+ 81 144  49	index_116
+ 74 144  57	index_117
+ 70 140  75	index_118
+ 66 136  58	index_119
+ 76 128  49	index_120
+ 66 128  49	index_121
+ 85 122  26	index_122
+ 63 123  59	index_123
+ 68 113  49	index_124
+ 51 103 116	index_125
+ 56 109  63	index_126
+ 63 109  41	index_127
+ 51 102 104	index_128
+ 55 109  49	index_129
+ 77 102  16	index_130
+ 49  90 104	index_131
+ 55  96  41	index_132
+ 62  92  16	index_133
+ 42  82  99	index_134
+ 42  79  90	index_135
+ 55  70  78	index_136
+ 49  73  66	index_137
+ 59  78   9	index_138
+ 45  80  36	index_139
+ 37  72  82	index_140
+ 49  76  15	index_141
+ 36  65  74	index_142
+ 44  63  50	index_143
+ 41  70  16	index_144
+ 44  57  66	index_145
+ 45  67   8	index_146
+ 41  62  35	index_147
+ 33  57  66	index_148
+ 45  57   8	index_149
+ 37  57  14	index_150
+ 35  46  52	index_151
+ 39  46  35	index_152
+ 24  49  53	index_153
+ 35  47  11	index_154
+ 33  37  36	index_155
+ 20  41  47	index_156
+ 33  37  24	index_157
+ 33  41   0	index_158
+ 24  43  12	index_159
+ 20  35  37	index_160
+ 24  37   0	index_161
+ 24  30  20	index_162
+ 20  33   8	index_163
+ 24  24  33	index_164
+ 12  24  33	index_165
+ 19  24   4	index_166
+ 13  19  19	index_167
+ 12  16   5	index_168
+  6   8  12	index_169
+  1   4   4	index_170
+195 196 195	index_171
+172 177 171	index_172
+155 171 157	index_173
+151 155 145	index_174
+126 152 128	index_175
+142 140 134	index_176
+110 136 108	index_177
+129 123 118	index_178
+206  94  53	index_179
+126 119 102	index_180
+ 91 132  94	index_181
+189  87  49	index_182
+112 113  98	index_183
+ 82 123  82	index_184
+171  77  42	index_185
+107  99  88	index_186
+ 70 117  66	index_187
+ 96 100  76	index_188
+158  65  34	index_189
+ 53 104  50	index_190
+102  73  57	index_191
+148  44  26	index_192
+133  51  26	index_193
+ 72  68  56	index_194
+ 98  51  31	index_195
+ 82  54  25	index_196
+113  35  16	index_197
+ 98  37  20	index_198
+127  21  13	index_199
+ 72  44  36	index_200
+ 77  41   3	index_201
+ 94  18   5	index_202
+ 54  34  24	index_203
+ 75  18   6	index_204
+ 49  14   3	index_205
+ 23   6   3	index_206
+  5   4   3	index_207
+226   0   0	index_208
+248 246   2	index_209
+ 77  81  76	index_210
+103 109  97	index_211
+154 160 146	index_212
+179 184 172	index_213
+204 207 196	index_214
+123 239 231	index_215
+120 231 219	index_216
+ 93 189 176	index_217
+ 72 148 139	index_218
+ 50 113 105	index_219
+ 38  98  94	index_220
+ 33  82  74	index_221
+ 24  78  74	index_222
+ 16  60  56	index_223
+  8  49  41	index_224
+  8  41  41	index_225
+  8  41  33	index_226
+  0  41  33	index_227
+  0  33  33	index_228
+  0  33  24	index_229
+ 16  16  16	index_230
+  2 220   2	index_231
+  2 204   2	index_232
+  2 182   2	index_233
+  2 179   2	index_234
+  2 169   2	index_235
+  2 143   2	index_236
+  2 116   2	index_237
+  2  94   2	index_238
+  2  79   2	index_239
+  2  73   2	index_240
+  2  62   2	index_241
+  2  55   2	index_242
+  2  45   2	index_243
+  2  40   2	index_244
+  2  30   2	index_245
+  0   0   0	index_246 (reserved)
+  0   0   0	index_247 (reserved)
+  0   0   0	index_248 (reserved)
+  0   0   0	index_249 (reserved)
+  0   0   0	index_250 (reserved)
+  0   0   0	index_251 (reserved)
+  0   0   0	index_252 (reserved)
+  0   0   0	index_253 (reserved)
+  0   0   0	index_254 (reserved)
+  0   0   0	index_255 (reserved)

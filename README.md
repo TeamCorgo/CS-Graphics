@@ -37,13 +37,11 @@ Fonts are stored in `.FNX` files with a shading, gradient, or shadow effect (fat
 
 Progress so far: `.anx` & `.bmx` files contain image information with palette information being stored within `.plx` formats. It apears `.anx` format is for my complex visual information such as herc rotations with `.bmx` being used for more static content. The files are stored compressed complicateing the reading process however the issues have been mostly ironed out. 
 
-Next step: Each image file needs to be matched with the correct palette information, although the two are only loosely tied together. It appears that the game selects the appropriate palette based on the current game screen, with the expectation that any newly loaded image content will inherit that palette. Another complication is that effects such as muzzle flashes and the HERCs' blinking lights appear to dynamically alter their palette colors.
+Next step: Each image file needs to be matched with the correct palette information, although the two are only loosely tied together. It appears that the game selects the appropriate palette based on the current game screen, with the expectation that any newly loaded image content will inherit that palette. Another complication is that effects such as muzzle flashes and the HERCs' blinking lights appear to dynamically alter their palette colors. The image containers can also hold multiple frames of content.
 
 ## Color Palettes
-.PLX Progress: ⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜ 0% 0/31\
-Color information needed for `.anx` & `.bmx` is being read from `.plx`.
-
-Next step: Document the `.plx` format and export to the modern `.gpl` **GIMP Palette** format.
+.PLX Progress: 🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩 0% 31/31\
+Thirty-one .plx files were exported to the modern `.gpl` **GIMP Palette** format, which is also the palette format used by **Aseprite**.
 
 ## Tools
 ### FNX Converter
