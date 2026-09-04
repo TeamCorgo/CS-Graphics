@@ -32,8 +32,12 @@ Fonts are stored in `.FNX` files with a shading, gradient, or shadow effect (fat
 
 ## Images
 .ART Progress: 🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩 100% 1/1\
-.ANX Progress: ⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜ 0%   31/746\
+.ANX Progress: ⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜ 0%   34/746\
 .BMX Progress: ⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜ 0%   0/152
+<p align="center">
+  <img src="./overhead/Bioderm danger idle.gif" alt="Bioderm face gif" width="128">
+</p>
+
 
 Progress so far: `.anx` & `.bmx` files contain image information with palette information being stored within `.plx` formats. It apears `.anx` format is for my complex visual information such as herc rotations with `.bmx` being used for more static content. The files are stored compressed complicateing the reading process however the issues have been mostly ironed out. 
 
@@ -68,6 +72,9 @@ Used to render and convert `.art` fonts into a modern `.png` format. There is a 
 <img src="./overhead/PLX Converter.png" alt="PLX Converter" width="264">
 
 Used to render and convert `.plx` palettes into the modern `.gpl` **GIMP Palette** format. 
+
+### GIF Animator
+Used to convert asset frames into a visual demo. The tool allows users to set the frame rate and specify whether the animation is “stacked.” A stacked animation tracks only the pixel differences from the previous frame, reducing redundant data between frames.
 
 ### Resource Hacker (External)
 The game cursors were extracted using **Resource Hacker** and converted from `.cur` format to `.png` and `.ico` for easier viewing and use. The original game icon was a hexagon and was embedded within the `.exe` file. **Resource Hacker** was used to extract the icon and save it as a standalone `.ico` file.

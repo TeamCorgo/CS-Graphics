@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Frame Animator</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: system-ui, sans-serif; background: #111; color: #e8e8e8; min-height: 100vh; padding: 2rem; }
+  h1 { font-size: 1.25rem; font-weight: 500; margin-bottom: 1.5rem; color: #fff; }
+
+  .drop-zone {
+    border: 1.5px dashed #444; border-radius: 12px; padding: 2.5rem 1rem;
+    text-align: center; cursor: pointer; background: #1a1a1a;
+    transition: background .15s, border-color .15s;
+  }
+  .drop-zone:hover, .drop-zone.drag-over { background: #1a2235; border-color: #4a8af4; }
+  .drop-zone p { margin-top: .5rem; font-size: 14px; color: #888; }
+  .drop-zone code { font-size: 12px; background: #2a2a2a; padding: 1px 5px; border-radius: 4px; color: #aaa; }
+
+  #canvas-preview {
+    display: none; border-radius: 12px; border: 1px solid #2a2a2a;
+    margin: 1rem 0; max-width: 100%;
+  }
+
+  .frame-strip { display: flex; gap: 6px; flex-wrap: wrap; margin: .75rem 0; }
+  .thumb {
+    width: 60px; height: 60px; border-radius: 6px; border: 2px solid #333;
+    cursor: pointer; display: block; transition: border-color .15s;
+  }
+  .thumb.active { border-color: #4a8af4; }
+
+  .controls { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: .75rem; }
+  button {
+    background: #222; border: 1px solid #3a3a3a; border-radius: 8px;
+    padding: 6px 14px; font-size: 14px; cursor: pointer; color: #e8e8e8;
+    display: inline-flex; align-items: center; gap: 6px; transition: background .12s;
+  }
+  button:hover { background: #2e2e2e; border-color: #555; }
+  button:disabled { opacity: .35; cursor: not-allowed; }
+  button.icon-btn { padding: 6px 10px; }
+  button.danger { color: #e07070; border-color: #5a2a2a; }
+  button.danger:hover { background: #2a1a1a; }
+  button.primary { background: #2a4a8a; color: #c8d8ff; border-color: #3a5aaa; }
+  button.primary:hover { background: #3a5aaa; }
+
+  .badge { font-size: 12px; color: #888; background: #1e1e1e; border: 1px solid #333; border-radius: 6px; padding: 3px 9px; white-space: nowrap; }
+  label { font-size: 13px; color: #888; white-space: nowrap; }
+  input[type=range] { flex: 1; min-width: 120px; accent-color: #4a8af4; }
+  #player-ui { display: none; }
+  .divider { border: none; border-top: 1px solid #222; margin: 1rem 0; }
+  .section-label { font-size: 11px; text-transform: uppercase; letter-spacing: .08em; color: #555; margin-bottom: .5rem; margin-top: 1.25rem; }
+
+  #gif-status { font-size: 13px; color: #888; margin-left: 8px; display: none; }
+  #gif-progress { width: 100%; height: 3px; background: #2a2a2a; border-radius: 2px; margin-top: 8px; display: none; overflow: hidden; }
+  #gif-progress-bar { height: 100%; width: 0%; background: #4a8af4; border-radius: 2px; transition: width .1s; }
+
+  .bg-swatches { display: flex; align-items: center; gap: 8px; }
+  .swatch {
+    width: 24px; height: 24px; border-radius: 5px; border: 2px solid #444;
+    cursor: pointer; flex-shrink: 0; transition: border-color .12s;
+    position: relative;
+  }
+  .swatch.selected { border-color: #4a8af4; }
+  .swatch-transparent {
+    background: repeating-conic-gradient(#555 0% 25%, #333 0% 50%) 0 0 / 8px 8px;
+  }
+  input[type=color] { opacity: 0; position: absolute; inset: 0; width: 100%; height: 100%; cursor: pointer; border: none; padding: 0; }
+
+  svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; vertical-align: middle; }
+</style>
+</head>
+<body>
+
+<h1>Frame Animator</h1>
+
+<div id="drop-zone" class="drop-zone"
+  onclick="document.getElementById('file-input').click()"
+  ondragover="onDrag(event,'over')" ondragleave="onDrag(event,'leave')" ondrop="onDrag(event,'drop')">
+  <svg viewBox="0 0 24 24" style="width:32px;height:32px;stroke:#555"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+  <p>Drop frames here or click to upload</p>
+  <p><code>filename_1.png</code>, <code>filename_2.png</code> …</p>
+</div>
+<input id="file-input" type="file" accept="image/*" multiple style="display:none" onchange="loadFiles(this.files)">
+
+<div class="frame-strip" id="frame-strip"></div>
+<canvas id="canvas-preview"></canvas>
+
+<div id="player-ui">
+  <div class="controls">
+    <button id="btn-play" onclick="togglePlay()">
+      <svg id="play-icon" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+      <span id="play-label">Play</span>
+    </button>
+    <button class="icon-btn" onclick="stepFrame(-1)"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></button>
+    <button class="icon-btn" onclick="stepFrame(1)"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></button>
+    <span id="frame-counter" class="badge">Frame 1 / 1</span>
+    <button class="danger" onclick="clearAll()" style="margin-left:auto">
+      <svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+      Clear
+    </button>
+  </div>
+
+  <div class="controls">
+    <label for="fps-slider">FPS</label>
+    <input type="range" id="fps-slider" min="1" max="60" step="1" value="10" oninput="setFps(this.value)">
+    <span id="fps-val" class="badge">10 fps</span>
+    <label for="chk-stacked" style="display:inline-flex;align-items:center;gap:5px;cursor:pointer;margin-left:6px">
+      <input type="checkbox" id="chk-stacked" onchange="onStackedChange()" style="accent-color:#4a8af4;width:14px;height:14px;cursor:pointer">
+      Stacked
+    </label>
+  </div>
+
+  <hr class="divider">
+  <p class="section-label">Background</p>
+
+  <div class="controls" style="margin-bottom:1rem">
+    <div class="bg-swatches">
+      <div class="swatch swatch-transparent selected" id="sw-transparent" title="Transparent" onclick="setBg('transparent', this)"></div>
+      <div class="swatch" id="sw-white" style="background:#ffffff" title="White" onclick="setBg('#ffffff', this)"></div>
+      <div class="swatch" id="sw-black" style="background:#000000" title="Black" onclick="setBg('#000000', this)"></div>
+      <div class="swatch" id="sw-custom" style="background:#00b140" title="Custom colour">
+        <input type="color" id="color-pick" value="#00b140" oninput="setBg(this.value, document.getElementById('sw-custom'))">
+      </div>
+    </div>
+    <span id="bg-label" class="badge">Transparent</span>
+  </div>
+
+  <div class="controls">
+    <button class="primary" id="btn-export" onclick="exportGif()">
+      <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      Save as GIF
+    </button>
+    <span id="gif-status"></span>
+  </div>
+  <div id="gif-progress"><div id="gif-progress-bar"></div></div>
+</div>
+
+<script>
+  (function(){
+    const orig = HTMLCanvasElement.prototype.getContext;
+    HTMLCanvasElement.prototype.getContext = function(type, attrs) {
+      if (type === '2d') attrs = Object.assign({ willReadFrequently: true }, attrs);
+      return orig.call(this, type, attrs);
+    };
+  })();
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gif.js/0.2.0/gif.js"></script>
+<script>
+  let frames = [], cur = 0, timer = null, playing = false, delay = 100, bgColor = 'transparent';
+
+  const canvas = document.getElementById('canvas-preview');
+  const ctx = canvas.getContext('2d');
+
+  // ── drag/drop ──────────────────────────────────────────────────────────────
+  function onDrag(e, type) {
+    e.preventDefault();
+    const dz = document.getElementById('drop-zone');
+    if (type === 'over') dz.classList.add('drag-over');
+    else if (type === 'leave') dz.classList.remove('drag-over');
+    else { dz.classList.remove('drag-over'); loadFiles(e.dataTransfer.files); }
+  }
+
+  // ── load ───────────────────────────────────────────────────────────────────
+  function loadFiles(fileList) {
+    const files = [...fileList].filter(f => f.type.startsWith('image/'));
+    if (!files.length) return;
+    files.sort((a, b) => {
+      const na = a.name.match(/_(\d+)\.[^.]+$/), nb = b.name.match(/_(\d+)\.[^.]+$/);
+      return na && nb ? parseInt(na[1]) - parseInt(nb[1]) : a.name.localeCompare(b.name);
+    });
+    frames = [];
+    let loaded = 0;
+    files.forEach((f, i) => {
+      const img = new Image();
+      const idx = i;
+      const r = new FileReader();
+      r.onload = ev => {
+        img.onload = () => { frames[idx] = { img, name: f.name }; if (++loaded === files.length) init(); };
+        img.src = ev.target.result;
+      };
+      r.readAsDataURL(f);
+    });
+  }
+
+  function init() {
+    // size canvas to largest frame
+    let w = 0, h = 0;
+    frames.forEach(f => {
+      w = Math.max(w, f.img.naturalWidth);
+      h = Math.max(h, f.img.naturalHeight);
+    });
+    canvas.width = w; canvas.height = h;
+    canvas.style.display = 'block';
+    canvas.style.maxWidth = '100%';
+
+    renderStrip();
+    document.getElementById('player-ui').style.display = 'block';
+    cur = 0;
+    drawFrame(cur);
+    startPlay();
+  }
+
+  // ── draw ───────────────────────────────────────────────────────────────────
+  function drawImage(img) {
+    const w = canvas.width, h = canvas.height;
+    const scale = Math.min(w / img.naturalWidth, h / img.naturalHeight, 1);
+    const dx = (w - img.naturalWidth * scale) / 2;
+    const dy = (h - img.naturalHeight * scale) / 2;
+    ctx.drawImage(img, dx, dy, img.naturalWidth * scale, img.naturalHeight * scale);
+  }
+
+  function drawFrame(i) {
+    const w = canvas.width, h = canvas.height;
+    const stacked = document.getElementById('chk-stacked').checked;
+
+    // background — always clear/fill first
+    if (bgColor === 'transparent') {
+      ctx.clearRect(0, 0, w, h);
+    } else {
+      ctx.fillStyle = bgColor;
+      ctx.fillRect(0, 0, w, h);
+    }
+
+    if (stacked) {
+      // paint frames 0 through i on top of each other
+      for (let j = 0; j <= i; j++) drawImage(frames[j].img);
+    } else {
+      drawImage(frames[i].img);
+    }
+
+    // ui
+    document.getElementById('frame-counter').textContent = 'Frame ' + (i + 1) + ' / ' + frames.length;
+    document.querySelectorAll('.thumb').forEach((t, idx) => t.classList.toggle('active', idx === i));
+  }
+
+  function onStackedChange() {
+    if (!playing) drawFrame(cur); // refresh preview immediately when toggled while paused
+  }
+
+  // ── thumbnails (static canvas snapshots, no bg) ────────────────────────────
+  function renderStrip() {
+    const strip = document.getElementById('frame-strip');
+    strip.innerHTML = '';
+    frames.forEach((f, i) => {
+      const tc = document.createElement('canvas');
+      tc.width = 60; tc.height = 60;
+      tc.className = 'thumb';
+      tc.title = f.name;
+      const tctx = tc.getContext('2d');
+      const scale = Math.min(60 / f.img.naturalWidth, 60 / f.img.naturalHeight);
+      const dx = (60 - f.img.naturalWidth * scale) / 2;
+      const dy = (60 - f.img.naturalHeight * scale) / 2;
+      tctx.drawImage(f.img, dx, dy, f.img.naturalWidth * scale, f.img.naturalHeight * scale);
+      tc.onclick = () => { stopPlay(); cur = i; drawFrame(i); };
+      strip.appendChild(tc);
+    });
+  }
+
+  // ── playback ───────────────────────────────────────────────────────────────
+  function togglePlay() { playing ? stopPlay() : startPlay(); }
+
+  function startPlay() {
+    if (frames.length < 2) return;
+    playing = true;
+    document.getElementById('play-icon').innerHTML = '<rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/>';
+    document.getElementById('play-label').textContent = 'Pause';
+    tick();
+  }
+
+  function tick() {
+    if (!playing) return;
+    cur = (cur + 1) % frames.length;
+    drawFrame(cur);
+    timer = setTimeout(tick, delay);
+  }
+
+  function stopPlay() {
+    playing = false; clearTimeout(timer);
+    document.getElementById('play-icon').innerHTML = '<polygon points="5 3 19 12 5 21 5 3"/>';
+    document.getElementById('play-label').textContent = 'Play';
+  }
+
+  function stepFrame(d) { stopPlay(); cur = (cur + d + frames.length) % frames.length; drawFrame(cur); }
+
+  // ── settings ───────────────────────────────────────────────────────────────
+  function setFps(v) {
+    const fps = parseInt(v);
+    delay = Math.round(1000 / fps);
+    document.getElementById('fps-val').textContent = fps + ' fps';
+    // If playing, restart the tick loop with the new delay.
+    // Clear any pending timer and re-kick tick() so it picks up `delay` immediately.
+    if (playing) {
+      clearTimeout(timer);
+      timer = setTimeout(tick, delay);
+    }
+  }
+
+  function setBg(color, swatchEl) {
+    bgColor = color;
+    document.querySelectorAll('.swatch').forEach(s => s.classList.remove('selected'));
+    swatchEl.classList.add('selected');
+    const label = document.getElementById('bg-label');
+    if (color === 'transparent') label.textContent = 'Transparent';
+    else if (color === '#ffffff') label.textContent = 'White';
+    else if (color === '#000000') label.textContent = 'Black';
+    else label.textContent = color.toUpperCase();
+    if (!playing) drawFrame(cur); // redraw immediately if paused
+  }
+
+  function clearAll() {
+    stopPlay(); frames = [];
+    document.getElementById('frame-strip').innerHTML = '';
+    canvas.style.display = 'none';
+    document.getElementById('player-ui').style.display = 'none';
+    setStatus('', false);
+  }
+
+  // ── export ─────────────────────────────────────────────────────────────────
+  function setStatus(msg, showBar) {
+    const s = document.getElementById('gif-status');
+    const p = document.getElementById('gif-progress');
+    s.textContent = msg; s.style.display = msg ? 'inline' : 'none';
+    p.style.display = showBar ? 'block' : 'none';
+    if (!showBar) document.getElementById('gif-progress-bar').style.width = '0%';
+  }
+
+  async function exportGif() {
+    if (!frames.length) return;
+    stopPlay();
+    const btn = document.getElementById('btn-export');
+    btn.disabled = true;
+    setStatus('Fetching encoder…', true);
+
+    let workerScript;
+    try {
+      const res = await fetch('https://cdnjs.cloudflare.com/ajax/libs/gif.js/0.2.0/gif.worker.js');
+      const text = await res.text();
+      workerScript = URL.createObjectURL(new Blob([text], { type: 'application/javascript' }));
+    } catch(e) {
+      setStatus('Failed to load encoder.', false);
+      btn.disabled = false;
+      return;
+    }
+
+    setStatus('Preparing frames…', true);
+    const w = canvas.width, h = canvas.height;
+    const transparent = bgColor === 'transparent';
+
+    const gif = new GIF({
+      workers: 2, quality: 10, width: w, height: h,
+      workerScript,
+      transparent: transparent ? 0x000000 : null
+    });
+
+    // draw each frame onto a fresh offscreen canvas with the chosen background
+    const stacked = document.getElementById('chk-stacked').checked;
+
+    function blitImg(octx, img) {
+      const scale = Math.min(w / img.naturalWidth, h / img.naturalHeight, 1);
+      const dx = (w - img.naturalWidth * scale) / 2;
+      const dy = (h - img.naturalHeight * scale) / 2;
+      octx.drawImage(img, dx, dy, img.naturalWidth * scale, img.naturalHeight * scale);
+    }
+
+    frames.forEach((f, i) => {
+      const off = document.createElement('canvas');
+      off.width = w; off.height = h;
+      const octx = off.getContext('2d', { willReadFrequently: true });
+
+      if (!transparent) {
+        octx.fillStyle = bgColor;
+        octx.fillRect(0, 0, w, h);
+      }
+
+      if (stacked) {
+        for (let j = 0; j <= i; j++) blitImg(octx, frames[j].img);
+      } else {
+        blitImg(octx, f.img);
+      }
+
+      gif.addFrame(off, { copy: true, delay });
+    });
+
+    gif.on('progress', p => {
+      document.getElementById('gif-progress-bar').style.width = Math.round(p * 100) + '%';
+      setStatus('Encoding… ' + Math.round(p * 100) + '%', true);
+    });
+
+    gif.on('finished', blob => {
+      URL.revokeObjectURL(workerScript);
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = 'animation.gif'; a.click();
+      setTimeout(() => URL.revokeObjectURL(url), 5000);
+      btn.disabled = false;
+      setStatus('GIF saved!', false);
+      setTimeout(() => setStatus('', false), 3000);
+    });
+
+    gif.render();
+  }
+</script>
+</body>
+</html>
