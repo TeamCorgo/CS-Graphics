@@ -32,7 +32,7 @@ Fonts are stored in `.FNX` files with a shading, gradient, or shadow effect (fat
 
 ## Images
 .ART Progress: 🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩 100% 1/1\
-.ANX Progress: ⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜ 0%   34/746\
+.ANX Progress: 🟩⬜⬜⬜⬜⬜⬜⬜⬜⬜ 17%  130/746\
 .BMX Progress: ⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜ 0%   0/152
 <p align="center">
   <img src="./overhead/Bioderm danger idle.gif" alt="Bioderm face gif" width="128">
