@@ -32,18 +32,26 @@ Fonts are stored in `.FNX` files with a shading, gradient, or shadow effect (fat
 
 ## Images
 .ART Progress: 🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩 100% 1/1\
-.ANX Progress: ⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜ 0%   0/746\
+.ANX Progress: ⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜ 0%   31/746\
 .BMX Progress: ⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜ 0%   0/152
 
 Progress so far: `.anx` & `.bmx` files contain image information with palette information being stored within `.plx` formats. It apears `.anx` format is for my complex visual information such as herc rotations with `.bmx` being used for more static content. The files are stored compressed complicateing the reading process however the issues have been mostly ironed out. 
 
 Next step: Each image file needs to be matched with the correct palette information, although the two are only loosely tied together. It appears that the game selects the appropriate palette based on the current game screen, with the expectation that any newly loaded image content will inherit that palette. Another complication is that effects such as muzzle flashes and the HERCs' blinking lights appear to dynamically alter their palette colors. The image containers can also hold multiple frames of content.
 
+### HERC Lights (complication)
+<p align="center">
+  <img src="./overhead/HERC lights.gif" alt="HERC Lights" width="256">
+</p>
+Units use placeholder index colors to represent blinking lights in the game. Because units can have multiple colors and varying pulse rates, this adds complexity to the preservation process.
+
+For the first pass, units will be preserved as they appear in the game files rather than their rendered appearance in-game. A second preservation pass can then be used to store the image data in an “all lights off” state, providing a consistent representation independent of the units’ lighting behavior.
+
 ## Color Palettes
 .PLX Progress: 🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩 0% 31/31\
 Thirty-one .plx files were exported to the modern `.gpl` **GIMP Palette** format, which is also the palette format used by **Aseprite**.
 
-CS1 `.PLX` are primairly named in "S2P3.plx" format. This represents the second star system `S2` and the third planet `p31`. There is expected to be a large amount of pixel color overlap between files since the palette also controls Unitech & Cybrid unit colors. (This could have been used to tint the color of units depending on the planets atmosphere).
+CS1 `.PLX` are primarily named in "S2P3.plx" format. This represents the second star system `S2` and the third planet `p3`. There is expected to be a large amount of pixel color overlap between files since the palette also controls Unitech & Cybrid unit colors. (This could have been used to tint the color of units depending on the planets atmosphere).
 
 ## Tools
 ### FNX Converter
