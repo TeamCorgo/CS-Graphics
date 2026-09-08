@@ -5,7 +5,7 @@
 # Graphics
 
 ## Cursors
-Progress: 🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩 100% 7/7\
+Progress: 🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩 100%  7/7\
 Seven cursor variants have been preserved:
 <p align="center">
   <img src="./cursors/Cursor2.png" alt="Cursor 2" width="32">
@@ -18,7 +18,7 @@ Seven cursor variants have been preserved:
 </p>
 
 ## Icons
-Progress: 🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩 100% 3/3\
+Progress: 🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩 100%  3/3\
 Three icon variants have been preserved:
 <p align="center">
   <img src="./icons/gog.png" alt="GOG icon" width="64">
@@ -27,7 +27,7 @@ Three icon variants have been preserved:
 </p>
 
 ## Fonts
-Progress: 🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩 100% 3/3\
+Progress: 🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩 100%  3/3\
 Fonts are stored in `.FNX` files with a shading, gradient, or shadow effect (fat). Without the gradient applied, the text can be difficult to read. A readable (slim) version is also provided, as modern font formats do not support the gradient effect.
 
 ## Images
@@ -42,8 +42,13 @@ Progress so far: `.anx` & `.bmx` files contain image information with palette in
 
 Next step: Each image file needs to be matched with the correct palette information, although the two are only loosely tied together. It appears that the game selects the appropriate palette based on the current game screen, with the expectation that any newly loaded image content will inherit that palette. Another complication is that effects such as muzzle flashes and the HERCs' blinking lights appear to dynamically alter their palette colors. The image containers can also hold multiple frames of content.
 
+## Videos
+.FLX Progress: ⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜ 0%  0/256\
+
+The game uses `.FLX` files to represent video content, commonly for death animations and screen transitions. However, there does not appear to be a clear distinction between when an animated .BMX file is used versus an `.FLX` file. Most files contain and apply their own color palette, while others appear to inherit a palette that has already been applied. Sound and music are not embedded directly within the `.FLX` files. Instead, the game tracks the current playback frame and uses it to trigger the appropriate audio cues. The game uses approximately 14–15 FPS as the playback speed for its videos.
+
 ## Vertex
-.PLY Progress: 🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩 100%   5/5\
+.PLY Progress: 🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩 100%  5/5\
 
 `.ply` files contain vertex information used to generate 2D polygons. These polygons were then used to determine which object the player’s cursor was hovering over.
 
@@ -56,7 +61,7 @@ Units use placeholder index colors to represent blinking lights in the game. Bec
 For the first pass, units will be preserved as they appear in the game files rather than their rendered appearance in-game. A second preservation pass can then be used to store the image data in an “all lights off” state, providing a consistent representation independent of the units’ lighting behavior.
 
 ## Color Palettes
-.PLX Progress: 🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩 100% 31/31\
+.PLX Progress: 🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩 100%  31/31\
 Thirty-one .plx files were exported to the modern `.gpl` **GIMP Palette** format, which is also the palette format used by **Aseprite**.
 
 CS1 `.PLX` are primarily named in "S2P3.plx" format. This represents the second star system `S2` and the third planet `p3`. There is expected to be a large amount of pixel color overlap between files since the palette also controls Unitech & Cybrid unit colors. (This could have been used to tint the color of units depending on the planets atmosphere).
