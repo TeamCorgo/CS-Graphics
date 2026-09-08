@@ -33,7 +33,7 @@ Fonts are stored in `.FNX` files with a shading, gradient, or shadow effect (fat
 ## Images
 .ART Progress: 🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩 100%    1/1\
 .ANX Progress: 🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩 100%  746/746\
-.BMX Progress: 🟩🟩🟩🟩🟩🟩🟩🟩🟩⬜  98%  150/152
+.BMX Progress: 🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩 100%  152/152
 <p align="center">
   <img src="./overhead/Bioderm danger idle.gif" alt="Bioderm face gif" width="128">
 </p>
@@ -43,7 +43,7 @@ Progress so far: `.anx` & `.bmx` files contain image information with palette in
 Next step: Each image file needs to be matched with the correct palette information, although the two are only loosely tied together. It appears that the game selects the appropriate palette based on the current game screen, with the expectation that any newly loaded image content will inherit that palette. Another complication is that effects such as muzzle flashes and the HERCs' blinking lights appear to dynamically alter their palette colors. The image containers can also hold multiple frames of content.
 
 ## Videos
-.FLX Progress: 🟩🟩🟩🟩🟩🟩🟩🟩🟩⬜  96%  248/256\
+.FLX Progress: 🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩  100%  256/256\
 
 The game uses `.FLX` files to represent video content, commonly for death animations and screen transitions. However, there does not appear to be a clear distinction between when an animated .BMX file is used versus an `.FLX` file. Most files contain and apply their own color palette, while others appear to inherit a palette that has already been applied. Sound and music are not embedded directly within the `.FLX` files. Instead, the game tracks the current playback frame and uses it to trigger the appropriate audio cues. The game uses approximately 15 FPS as the playback speed for its videos.
 
