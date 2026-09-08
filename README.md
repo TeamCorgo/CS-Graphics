@@ -43,12 +43,12 @@ Progress so far: `.anx` & `.bmx` files contain image information with palette in
 Next step: Each image file needs to be matched with the correct palette information, although the two are only loosely tied together. It appears that the game selects the appropriate palette based on the current game screen, with the expectation that any newly loaded image content will inherit that palette. Another complication is that effects such as muzzle flashes and the HERCs' blinking lights appear to dynamically alter their palette colors. The image containers can also hold multiple frames of content.
 
 ## Videos
-.FLX Progress: ⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜ 0%  0/256\
+.FLX Progress: 🟩🟩🟩🟩🟩⬜⬜⬜⬜⬜  58%  150/256\
 
 The game uses `.FLX` files to represent video content, commonly for death animations and screen transitions. However, there does not appear to be a clear distinction between when an animated .BMX file is used versus an `.FLX` file. Most files contain and apply their own color palette, while others appear to inherit a palette that has already been applied. Sound and music are not embedded directly within the `.FLX` files. Instead, the game tracks the current playback frame and uses it to trigger the appropriate audio cues. The game uses approximately 14–15 FPS as the playback speed for its videos.
 
 ## Vertex
-.PLY Progress: 🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩 100%  5/5\
+.PLY Progress: 🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩  100%  5/5\
 
 `.ply` files contain vertex information used to generate 2D polygons. These polygons were then used to determine which object the player’s cursor was hovering over.
 
