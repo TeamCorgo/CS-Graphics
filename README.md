@@ -73,6 +73,17 @@ Forty files were exported into `.png` as a visualization.
 `.PLY` files contain vector information used to define more complex shapes than the rectangular `.BOX` files. The game uses these generated 2D polygons to trigger mouse hover events.
 
 # Tools
+
+## ANX & BMX Converter
+<img src="./overhead/ANX & BMX Converter.png" alt="ANX & BMX Converter" width="264">
+
+Used to render and convert `.anx` & `.bmx` all image frames into the modern `.png` format. Lets the user apply a `.plx` color palette of their choice.
+
+## FLX Converter
+<img src="./overhead/FLX Converter.png" alt="FLX Converter" width="264">
+
+Used to render and convert `.flx` image frames into the modern `.png` format. Lets the user apply or export a `.plx` color palette.
+
 ## FNX Converter
 <img src="./overhead/FNX Converter.png" alt="FNX Converter" width="264">
 
@@ -83,13 +94,25 @@ Used to render and convert `.fnx` fonts into useable formats (`.png` & `.ttf`).
 
 Used to render and convert `.art` fonts into a modern `.png` format. There is a single `.art` assest in the game being `SEQUEL.ART` used to promote Cyberstorm 2 when the player closes the game. This format is unique as it includes palete information where the common `.anx` & `.bmx` require external `.plx` palete files.
 
+## BOX Converter
+<img src="./overhead/BOX Converter.png" alt="BOX Converter" width="264">
+
+Used to render `.box` (retangular) UI placements into `.png`. 
+
+## PLY Converter
+<img src="./overhead/PLY Converter.png" alt="PLY Converter" width="264">
+
+Used to render `.ply` (2D polygon) UI zones into `.png`.
+
 ## PLX Converter
 <img src="./overhead/PLX Converter.png" alt="PLX Converter" width="264">
 
 Used to render and convert `.plx` palettes into the modern `.gpl` **GIMP Palette** format. 
 
 ## GIF Animator
-Used to convert asset frames into a visual demo. The tool allows users to set the frame rate and specify whether the animation is “stacked.” A stacked animation tracks only the pixel differences from the previous frame, reducing redundant data between frames.
+<img src="./overhead/GIF Converter.png" alt="GIF Converter" width="264">
+
+Lets the user export sequenced `.png` image frames into an animated `.gif` video.
 
 ## Resource Hacker (External)
 The game cursors were extracted using **Resource Hacker** and converted from `.cur` format to `.png` and `.ico` for easier viewing and use. The original game icon was a hexagon and was embedded within the `.exe` file. **Resource Hacker** was used to extract the icon and save it as a standalone `.ico` file.
