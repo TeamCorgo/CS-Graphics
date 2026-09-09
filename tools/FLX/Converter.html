@@ -1,0 +1,1861 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><!-- frame-runtime --><script>window.__FRAME_PREAMBLE={"v":1,"capabilities":{"artifact":"artifact.B_zN8nKT.js","assets":"assets.8Gk803W0.js","comments":"comments.hEoja5zd.js","db":"db.DoKNwgX8.js","downloads":"downloads.th1YuAIk.js","embed":"embed.eqL6deQM.js","endpoints":"endpoints.CooJFPzL.js","mcp":"mcp.ucFnBqWT.js","network":"network.B5UA9Su4.js","permissions":"permissions.BNySkLV5.js","room":"room.Dc3WDo3b.js","sample":"sample.C2869FGz.js","self":"artifact.B_zN8nKT.js","user":"user.BpKav-Rf.js"},"transforms":"_transforms.-IAc0qoT.js","comments":"_comments.CZkcrrUD.js","translate":"_translate.5HCW4BJh.js","ldx":"_ldx.DycbNc-Q.js"}</script><script>(function(){"use strict";var fe=["light","dark","system"],de=/^[A-Za-z0-9_-]{1,64}$/,te=/^[a-zA-Z_:][a-zA-Z0-9_:.-]{0,127}$/,pe=new Set(["class","hidden","value","checked","style","title","alt","placeholder","lang","dir","role","tabindex","disabled","readonly","contenteditable","open","colspan","rowspan"]);function me(e){const t=e.toLowerCase();return t.startsWith("data-")||t.startsWith("aria-")||pe.has(t)}var $e="http://www.w3.org/1999/xhtml",he="http://www.w3.org/2000/svg",_e=new Set(["script","style","iframe","noscript","noframes","noembed","xmp","plaintext","template","title","textarea","object","embed"]),ve=new Set(["script","style"]);function ye(e){const t=e.localName.toLowerCase();return e.namespaceURI==="http://www.w3.org/1999/xhtml"?!_e.has(t):e.namespaceURI===he?!ve.has(t):!1}function x(e,t){return e===t||(e===160||e===32)&&(t===160||t===32)}function we(e,t){const r=e.length,n=t.length;let a=0;for(;a<r&&a<n&&x(e.charCodeAt(a),t.charCodeAt(a));)a++;let o=0;for(;o<r-a&&o<n-a&&x(e.charCodeAt(r-1-o),t.charCodeAt(n-1-o));)o++;return{p:a,s:o}}function Ee(e,t){const r=e.firstChild;if(e.childNodes.length!==1||r===null||r.nodeType!==Node.TEXT_NODE){e.textContent=t;return}const n=r.data,a=n.length,o=t.length,{p:c,s:i}=we(n,t);c===a&&i===0&&a===o||r.replaceData(c,a-c-i,t.slice(c,o-i));const m=r.data,f=e.ownerDocument.getSelection?.()??null,y=f!==null&&f.rangeCount>0&&(f.anchorNode===r||f.focusNode===r)?{anchor:f.anchorNode,anchorOffset:f.anchorOffset,focus:f.focusNode,focusOffset:f.focusOffset}:null;let d=-1,E=-1;for(let v=0;v<m.length&&v<t.length;v++){const A=m.charCodeAt(v),k=t.charCodeAt(v);A!==k&&x(A,k)&&(d<0&&(d=v),E=v)}const b=d>=0;if(b&&r.replaceData(d,E-d+1,t.slice(d,E+1)),b&&y!==null&&y.anchor!==null&&y.focus!==null)try{f.setBaseAndExtent(y.anchor,y.anchorOffset,y.focus,y.focusOffset)}catch{}}var be=new Set(["html","head","body","frameset"]);function ge(e){return e.namespaceURI==="http://www.w3.org/1999/xhtml"&&be.has(e.localName)}function Ae(e){if(e===null||typeof e!="object")return!1;const t=e;if(typeof t.target!="string"||!de.test(t.target)||t.text!==void 0&&typeof t.text!="string")return!1;if(t.attrsSet!==void 0){if(t.attrsSet===null||typeof t.attrsSet!="object")return!1;for(const[r,n]of Object.entries(t.attrsSet))if(!te.test(r)||typeof n!="string")return!1}if(t.attrsRemoved!==void 0){if(!Array.isArray(t.attrsRemoved))return!1;for(const r of t.attrsRemoved)if(typeof r!="string"||!te.test(r))return!1}return!0}function Le(e,t){if(e===null||typeof e!="object")return!1;const{seq:r,elements:n}=e;if(typeof r!="number"||!Number.isSafeInteger(r)||!Array.isArray(n)||n.length===0||n.length>64)return!1;for(let a=0;a<n.length;a++)if(!t(n[a]))return!1;return!0}function Te(e){return e===null||typeof e!="object"?!1:Le(e.__frame_patch,Ae)}function Se(e){if(e===null||typeof e!="object")return!1;const t=e.__frame_init;return t!==null&&typeof t=="object"}function Re(e){return e!==null&&typeof e=="object"&&e.__frame_size_poke===!0}function ke(e){if(e===null||typeof e!="object")return!1;const t=e.__frame_theme;if(t===null||typeof t!="object")return!1;const r=t.theme;return typeof r=="string"&&fe.includes(r)}var O=/^[\w.-]+\.js$/;function Pe(e,t,r){return r?"inert":typeof t=="string"&&O.test(t)?e?[t]:"inert":e?"inert":"framed"}var Ye="frame_ldx_runtime",Oe="frame_ldx_build",Ge="script#an-form";function Ce(){return{post(e,t){parent.postMessage(e,t)},on(e){const t=r=>{r.source===parent&&e(r.data,r.origin,r.isTrusted)};return addEventListener("message",t),()=>removeEventListener("message",t)}}}function Me(){return{post:()=>{},on:()=>()=>{}}}var F="__frame_scroll",je=150,Ne=310,De=160,Be=3e4;function Ie(){let e=0,t=!1,r=!1,n=!1,a=0,o=null;const c=u=>{try{sessionStorage.setItem(F,JSON.stringify({y:u}))}catch{}},i=()=>{if(clearTimeout(e),o===null)return;const u=o;o=null,c(u)},m=()=>{if(t){t=!1;return}r=!0,o=scrollY,clearTimeout(e),e=setTimeout(i,je)};try{addEventListener("scroll",m,{passive:!0}),addEventListener("pagehide",i)}catch{}const f=()=>{let u;try{u=sessionStorage.getItem(F)}catch{return null}if(u===null)return null;let g;try{g=JSON.parse(u)}catch{g=null}const w=g?.y;if(!(typeof w=="number"&&Number.isFinite(w)&&w>=0)){try{sessionStorage.removeItem(F)}catch{}return null}return w};let y=!1;const d=u=>{try{const g=scrollY;scrollTo({top:u,left:0,behavior:"instant"}),a=u,n=!0,clearTimeout(e),o=null,c(u);const w=scrollY;w!==g&&(t=!0),w!==u&&!y&&(y=!0,addEventListener("load",()=>{try{if(scrollY===w){const M=f();d(M!==null?M:a)}}catch{}},{once:!0}))}catch{}},E=()=>{try{return!!location.hash}catch{return!0}};let b=!1;const v=()=>{try{if(b||innerWidth>Ne||innerHeight>De)return;b=!0;const u=Date.now(),g=()=>{try{removeEventListener("resize",g)}catch{}if(Date.now()-u>Be||r||E())return;const w=f();d(w!==null?w:a)};addEventListener("resize",g)}catch{}};let A=!1,k=!1;return{restore(){if(A||(A=!0,E()))return;const u=f();u!==null&&(d(u),v())},promoted(){if(k||(k=!0,E()))return;const u=f();u!==null?(d(u),v()):n&&d(a)}}}function Ue(e,t,r,n){let a=null;try{a=window.trustedTypes?.createPolicy("frame-runtime",{createScriptURL:m=>m})??null}catch{}const o=window.Worker,c=o?.prototype,i=Object.freeze({Worker:o,workerOn:c?.addEventListener,workerPost:c?.postMessage,workerTerminate:c?.terminate,fetch:window.fetch.bind(window),preventDefault:Event.prototype.preventDefault,policy:a,origins:t});r(e).then(m=>m?.bootTopLevel?m.bootTopLevel(i,n):n.settle()).catch(()=>n.settle())}var Ve="modulepreload",Ze=function(e){return"/"+e},Je={},xe=function(t,r,n){let a=Promise.resolve();function o(c){const i=new Event("vite:preloadError",{cancelable:!0});if(i.payload=c,window.dispatchEvent(i),!i.defaultPrevented)throw c}return a.then(c=>{for(const i of c||[])i.status==="rejected"&&o(i.reason);return t().catch(o)})},Fe=window===top,re=Object.getOwnPropertyDescriptor(window,"claude"),j=Pe(Fe,window.__FRAME_PREAMBLE?.topLevel,re?.writable===!1),H=typeof j=="object"&&j[0],_=H?Me():Ce();(function(){const e=Object.defineProperty,t=globalThis,r=["RTCPeerConnection","webkitRTCPeerConnection","RTCDataChannel","RTCIceCandidate","RTCSessionDescription","RTCRtpSender","RTCRtpReceiver"];let n=0;for(let a=0;a<r.length;a++){const o=r[a];try{e(t,o,{value:void 0,writable:!1,configurable:!1})}catch{try{delete t[o]}catch{}try{e(t,o,{value:void 0,writable:!1,configurable:!0})}catch{}}typeof t[o]=="function"&&n++}if(n&&j==="framed")try{_.post({__frame_rtc_lockdown_failed:n},"*")}catch{}})();var He=1e4,ze=2e3,We=2e3,ne=Object.freeze([...window.__FRAME_PREAMBLE?.origins??["https://claude.ai","https://preview.claude.ai"]]);function oe(e){for(const t of ne)if(t.endsWith(":*"))try{const r=new URL(e);if(`${r.protocol}//${r.hostname}:*`===t)return!0}catch{}else if(e===t)return!0;return!1}var N=Object.freeze({...window.__FRAME_PREAMBLE?.capabilities}),z=window.__FRAME_PREAMBLE?.transforms,W=window.__FRAME_PREAMBLE?.comments,q=window.__FRAME_PREAMBLE?.translate,K=window.__FRAME_PREAMBLE?.ldx;function C(e){return xe(()=>import("/_runtime/"+e),void 0)}function se(e,t){return{contract:e.contract,changes:new Set(e.changes??[]),flags:new Set(e.flags??[]),capabilities:e.capabilities??{},capBudgets:e.capBudgets??{},transforms:new Map,shellOrigin:t,mount:Y,hooks:B,pipe:()=>({wrap:(r,n)=>(...a)=>{try{return n(...a)}catch(o){return Promise.reject(o)}}})}}var D=null,S=null;function ae(e,t,r){try{Object.defineProperty(e,t,{value:r,writable:!1,configurable:!1,enumerable:!0})}catch{try{Object.defineProperty(e,t,{value:r,writable:!1,configurable:!0,enumerable:!0})}catch{}}}var X=!1,B={editBefore:null,edit:null};function qe(e,t,r=!1){const n=[];let a;if(r)try{B.editBefore?.(e)}catch{}for(const o of e.elements){const c=document.querySelector(`[data-id="${o.target}"]`);if(!c){a=o.target;break}if([...Object.keys(o.attrsSet??{}),...o.attrsRemoved??[]].some(i=>!me(i))){a=o.target;break}if(o.text!==void 0&&(!ye(c)||ge(c))){a=o.target;break}for(const[i,m]of Object.entries(o.attrsSet??{}))if(!ce(c,i)){try{c.setAttribute(i,m)}catch{}ie(c,i,m)}for(const i of o.attrsRemoved??[])ce(c,i)||(c.removeAttribute(i),ie(c,i,null));typeof o.text=="string"&&Ee(c,o.text),n.push(o.target)}if(r)try{B.edit?.(e.seq,n,a)}catch{}if(a!==void 0){_.post({__frame_patch_miss:{seq:e.seq}},t);return}try{document.dispatchEvent(new CustomEvent("claude:edit",{detail:{seq:e.seq,targets:n}}))}catch{}}function ie(e,t,r){if(!(e instanceof HTMLInputElement))return;const n=t.toLowerCase();n==="checked"?e.checked=r!==null:n==="value"&&e.type!=="file"&&(e.value=r??"")}function ce(e,t){const r=t.toLowerCase(),n=e;return r==="data-id"||(r==="value"||r==="checked")&&(n.__artifactSecret===!0||/^(password|hidden|file)$/.test(n.type??"")||/(^|\s)(cc-|one-time-code|current-password|new-password)/i.test(`${e.getAttribute("autocomplete")??""} ${n.autocomplete??""}`))}function le(e){const t=document.documentElement;e==="light"||e==="dark"?(t.dataset.theme=e,t.style.colorScheme=e,X=!0):X&&(delete t.dataset.theme,t.style.colorScheme="",X=!1)}var I=new Map;function Ke(){let e;const t={u:new Promise(r=>{e=r}),r:r=>{t.done=!0,e(r)},done:!1,nulled:!1};return t}function $(){for(const e of I.values())e.done||(e.nulled=!0,e.r(null))}var Xe=Object.freeze(Object.assign(Object.create(null),{call:Function.prototype.call,apply:Function.prototype.apply,bind:Function.prototype.bind})),Y=(e,t)=>{const r=I.get(e);if(!r||r.done){r?.nulled&&S&&_.post({__frame_cap_telemetry:{kind:"cap-load-error",cap:e}},S);return}const n=typeof t=="function"?Object.setPrototypeOf(t,Xe):Object.assign(Object.create(null),t);typeof n.then=="function"&&delete n.then,r.r(Object.freeze(n))};function ue(){const e=re?.value??{};ae(window,"claude",e);for(const t of Object.keys(N)){if(e[t]!==void 0){ae(e,t,e[t]);continue}I.set(t,Ke())}if(e.use===void 0){const t=r=>{if(typeof r!="string"||!Object.hasOwn(N,r))return Promise.resolve(null);const n=I.get(r);return n?n.u:Promise.resolve(e[r]??null)};try{Object.defineProperty(e,"use",{value:t,writable:!0,configurable:!0,enumerable:!1})}catch{}}}if(j==="framed"){const e=z&&O.test(z)?C(z).catch(()=>{}):Promise.resolve(void 0),t=s=>{if(s.type==="auxclick"&&s.button!==1)return;const h=s.target,p=h&&h.closest?h.closest("a[href],area[href]"):null;if(!p)return;const P=p.getAttribute("href");if(!P)return;let L;try{L=new URL(P,document.baseURI)}catch{return}if((L.protocol==="http:"||L.protocol==="https:")&&L.origin!==location.origin){s.preventDefault();const R=(p.getAttribute("target")??"").toLowerCase(),T=s.type==="auxclick"||s.metaKey||s.ctrlKey||s.shiftKey||s.altKey||!["","_self","_top","_parent"].includes(R);_.post({__frame_nav:!0,url:L.href,newTab:T},"*")}};addEventListener("click",t,!0),addEventListener("auxclick",t,!0);const r={},n=s=>{s.isTrusted&&(r.pointer=!0)},a=s=>{s.isTrusted&&(r.click=!0)};addEventListener("pointermove",n,{capture:!0,passive:!0}),addEventListener("click",a,{capture:!0,passive:!0});const o={cb:null};addEventListener("keydown",s=>o.cb?.(s),!0),e.then(s=>s?.installEscapeForward?.(o,h=>{S&&_.post(h,S)})),e.then(s=>{s?.wireNav&&(s.wireNav(),removeEventListener("click",t,!0),removeEventListener("auxclick",t,!0),removeEventListener("pointermove",n,!0),removeEventListener("click",a,!0),s.wireEngagement?.(r))});let c=null;try{c=Ie()}catch{}ue();let i=null,m=null,f=0;const y=_.on((s,h)=>{oe(h)&&Se(s)&&(i=s.__frame_init,S=h,y(),clearTimeout(f),m?.())});_.post({__frame_connect:!0},"*");const d=setTimeout,E=clearTimeout;let b=0;const v=()=>{try{_.post({__frame_alive:!0},"*")}catch{}b=d(v,ze)},A=()=>E(b);v(),addEventListener("load",A,{once:!0});const k=new Promise(s=>{m=s,f=setTimeout(()=>{y(),s()},He)}),u=document.readyState==="loading"?new Promise(s=>document.addEventListener("DOMContentLoaded",()=>s(),{once:!0})):Promise.resolve(),g=new WeakSet;addEventListener("error",s=>{s.target&&g.add(s.target)},!0);const w=()=>{let s=[];try{s=[...document.querySelectorAll("link[rel~=stylesheet]:not([rel~=alternate])")].filter(p=>!p.sheet&&!p.disabled&&!g.has(p)&&p.getAttribute("href")&&URL.canParse(p.href)&&(!p.media||matchMedia(p.media).matches))}catch{}let h=s.length;return h===0?Promise.resolve():new Promise(p=>{try{const P=d(p,We),L=()=>{--h===0&&(E(P),p())};for(const R of s)R.addEventListener("load",L,{once:!0}),R.addEventListener("error",L,{once:!0})}catch{p()}})};u.then(()=>{try{c?.restore()}catch{}});const M={cb:null};_.on((s,h)=>{if(oe(h)&&Re(s)){try{c?.promoted()}catch{}M.cb?.()}}),k.then(async()=>{if(!i||!S){$();return}le(i.theme);const s=S;let h=!1,p=!1;_.on((l,Z,U)=>{if(Z!==s)return;ke(l)&&le(l.__frame_theme.theme),Te(l)&&qe(l.__frame_patch,s,U);const J=l?.__fc_mode;J&&typeof J=="object"&&!h&&W&&O.test(W)&&(h=!0,C(W).then(ee=>ee.install?.(s,J.on===!0)).catch(()=>{}));const Q=l?.__ft_cmd;Q&&typeof Q=="object"&&!p&&q&&O.test(q)&&(p=!0,C(q).then(ee=>ee.install?.(s,Q)).catch(()=>{}))});const P=Object.keys(i.capabilities??{}).filter(l=>Object.hasOwn(N,l)).map(l=>[l,N[l]]).filter(l=>typeof l[1]=="string"&&O.test(l[1])),L=await Promise.allSettled(P.map(([,l])=>C(l))),R=await e,T=S;if(R?.buildBoot||_.post({__frame_cap_telemetry:{kind:"cap-load-error",cap:"_transforms"}},T),R?.buildBoot)try{D=R.buildBoot(i,R.TRANSFORMS??{},{shellOrigin:T,mount:Y,hooks:B},l=>_.post({__frame_cap_telemetry:l},T))}catch{_.post({__frame_cap_telemetry:{kind:"cap-load-error",cap:"_transforms"}},T),D=se(i,T)}else D=se(i,T);const G=l=>_.post({__frame_cap_telemetry:{kind:"cap-load-error",cap:l}},T),V=D;L.forEach((l,Z)=>{const U=P[Z][0];if(l.status!=="fulfilled"){G(U);return}try{l.value?.install?.(V)}catch{G(U)}}),$(),await u,await w(),A(),_.post({__frame_ready:!0},S),e.then(l=>l?.installSizeReporter?.(T,M)),V.flags.has("frame_ldx_runtime")&&K&&O.test(K)&&document.querySelector("script#an-form")&&C(K).then(l=>l?.boot?.({shellOrigin:s,build:V.flags.has(Oe)})).catch(()=>!1).then(l=>{l!==!0&&G("_ldx")})})}else H&&(ue(),Ue(H,ne,C,{settle:$,mount:Y}))})();</script><!-- /frame-runtime -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FLX Player v15b</title>
+<style>
+:root{--bg:#0d0f12;--surface:#151820;--panel:#1c2030;--border:#2a3045;--accent:#4d7cff;
+  --accent2:#a259ff;--text:#c8d0e8;--muted:#5a6380;--danger:#ff4d6a;--good:#3ddc84;--warn:#f5a623;
+  --mono:'JetBrains Mono','Fira Mono',monospace;--sans:'Inter',system-ui,sans-serif}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:13px;
+  height:100vh;display:grid;grid-template-rows:auto 1fr auto;overflow:hidden}
+header{background:var(--surface);border-bottom:1px solid var(--border);padding:10px 18px;
+  display:flex;align-items:center;gap:12px}
+header h1{font-family:var(--mono);font-size:14px;font-weight:600;letter-spacing:.04em;color:var(--accent)}
+header h1 span{color:var(--accent2)}
+.badge{font-family:var(--mono);font-size:10px;padding:2px 7px;border-radius:3px;
+  background:var(--panel);border:1px solid var(--border);color:var(--muted)}
+.badge.ok{border-color:var(--good);color:var(--good)}
+.badge.err{border-color:var(--danger);color:var(--danger)}
+.badge.warn{border-color:var(--warn);color:var(--warn)}
+main{display:grid;grid-template-columns:1fr 280px;overflow:hidden}
+#viewport{display:flex;flex-direction:column;align-items:center;justify-content:center;
+  background:#080a0d;position:relative;overflow:hidden}
+#drop-zone{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;
+  justify-content:center;gap:12px;cursor:pointer;transition:background .15s}
+#drop-zone:hover,#drop-zone.drag-over{background:rgba(77,124,255,.07)}
+#drop-zone svg{opacity:.2}
+#drop-zone p{color:var(--muted)}
+#drop-zone strong{color:var(--text)}
+#canvas-wrap{display:none;flex-direction:column;align-items:center;justify-content:center;width:100%;height:100%}
+canvas{image-rendering:pixelated;image-rendering:crisp-edges;max-width:100%;max-height:100%;box-shadow:0 0 0 1px var(--border)}
+aside{background:var(--surface);border-left:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden}
+.tab-bar{display:flex;border-bottom:1px solid var(--border);flex-shrink:0}
+.tab{flex:1;padding:8px 0;text-align:center;font-size:10px;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent}
+.tab.active{color:var(--accent);border-bottom-color:var(--accent)}
+.tab-content{display:none;flex:1;overflow-y:auto;flex-direction:column;min-height:0}
+.tab-content.active{display:flex}
+.sh{padding:7px 14px 4px;font-family:var(--mono);font-size:9px;color:var(--muted);letter-spacing:.09em;
+  border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--surface);z-index:1;flex-shrink:0}
+.ir{display:flex;justify-content:space-between;align-items:baseline;padding:4px 14px;
+  border-bottom:1px solid rgba(42,48,69,.35);gap:8px;flex-shrink:0}
+.il{color:var(--muted);font-size:10px;flex-shrink:0}
+.iv{font-family:var(--mono);font-size:10px;color:var(--text);text-align:right;word-break:break-all}
+.iv.good{color:var(--good)}.iv.warn{color:var(--warn)}.iv.err{color:var(--danger)}
+#chunk-log{flex:1;overflow-y:auto;padding:4px 0}
+.ce{display:flex;gap:6px;padding:3px 14px;font-family:var(--mono);font-size:10px;border-left:2px solid transparent}
+.ce.ok{color:var(--text)}.ce.bad{border-color:var(--danger);color:var(--danger)}
+.ct{width:30px;flex-shrink:0;color:var(--accent2)}.cn{flex:1}.cs{color:var(--muted);font-size:9px}
+#log-panel{flex:1;overflow-y:auto;padding:4px 0;font-family:var(--mono);font-size:10px}
+.ll{padding:3px 14px;border-left:2px solid transparent;word-break:break-all;line-height:1.6}
+.ll.info{color:var(--muted)}.ll.warn{color:var(--warn);border-color:var(--warn)}
+.ll.err{color:var(--danger);border-color:var(--danger)}
+#hex-panel{flex:1;overflow-y:auto;padding:6px 8px;font-family:var(--mono);font-size:9px;line-height:1.7}
+.hr{display:flex;gap:8px}.ho{color:var(--accent2);flex-shrink:0;width:36px}
+.hb{flex:1;letter-spacing:.04em;word-break:break-all}.ha{color:var(--muted)}
+footer{background:var(--surface);border-top:1px solid var(--border);padding:10px 18px;
+  display:flex;flex-direction:column;gap:8px;flex-shrink:0}
+#scrub{width:100%;-webkit-appearance:none;appearance:none;height:3px;border-radius:2px;
+  background:var(--border);outline:none;cursor:pointer}
+#scrub::-webkit-slider-thumb{-webkit-appearance:none;width:13px;height:13px;border-radius:50%;
+  background:var(--accent);cursor:pointer}
+#scrub::-moz-range-thumb{width:13px;height:13px;border-radius:50%;background:var(--accent);cursor:pointer;border:none}
+.controls{display:flex;align-items:center;gap:10px}
+.btn{background:var(--panel);border:1px solid var(--border);color:var(--text);border-radius:5px;
+  padding:5px 13px;cursor:pointer;font-size:12px;font-family:var(--sans);transition:background .1s,border-color .1s}
+.btn:hover{background:var(--border);border-color:var(--accent)}
+.btn.sm{padding:3px 9px;font-size:10px}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn.primary:hover{background:#3a6ce0}
+.fc{font-family:var(--mono);font-size:11px;color:var(--muted);min-width:90px;text-align:center}
+.cr{margin-left:auto;display:flex;align-items:center;gap:8px}
+.sw{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--muted)}
+#sv{width:36px;text-align:center;color:var(--text);font-family:var(--mono)}
+input[type=file]{display:none}
+#et{display:none;position:absolute;bottom:14px;left:50%;transform:translateX(-50%);
+  background:rgba(255,77,106,.15);border:1px solid var(--danger);color:var(--danger);
+  padding:8px 16px;border-radius:6px;font-size:11px;font-family:var(--mono);max-width:90%;text-align:center;z-index:10}
+.flag-row{display:flex;gap:6px;padding:5px 14px;flex-wrap:wrap;flex-shrink:0}
+.flag{font-family:var(--mono);font-size:9px;padding:2px 5px;border-radius:3px;
+  border:1px solid var(--border);color:var(--muted)}
+.flag.on{border-color:var(--accent);color:var(--accent)}
+.cue-row{display:grid;grid-template-columns:52px 52px 40px 40px 50px 1fr;gap:0;
+  padding:3px 14px;border-left:2px solid transparent;align-items:baseline}
+.cue-row.active{border-color:var(--accent2);background:rgba(162,89,255,.07)}
+.cue-row.hdr{color:var(--muted);font-size:9px;border-bottom:1px solid var(--border);
+  padding:4px 14px;position:sticky;top:0;background:var(--surface)}
+.cue-cell{font-size:10px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cue-frame{color:var(--accent2)}.cue-sound{color:var(--good)}.cue-flag{color:var(--warn)}
+</style>
+</head>
+<body>
+<header>
+  <h1>FLX<span>/FLIC</span> Player <span style="font-size:10px;opacity:.5">v15</span></h1>
+  <span class="badge" id="fmt-badge">NO FILE</span>
+  <span id="wb" class="badge warn" style="display:none"></span>
+  <span id="eb" class="badge err"  style="display:none"></span>
+  <span style="margin-left:auto;display:flex;gap:8px;align-items:center">
+    <label for="fi" class="btn">Open file</label>
+    <input type="file" id="fi" accept=".flc,.fli,.flx,.cel,.flic">
+  </span>
+</header>
+<main>
+  <div id="viewport">
+    <div id="drop-zone">
+      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2">
+        <rect x="2" y="2" width="20" height="20" rx="3"/><path d="M8 12l4-4 4 4M12 8v8"/>
+      </svg>
+      <p><strong>Drop a FLI / FLC / FLX file</strong></p>
+      <p>or click <strong>Open file</strong> above</p>
+    </div>
+    <div id="canvas-wrap"><canvas id="cv"></canvas></div>
+    <div id="et"></div>
+  </div>
+  <aside>
+    <div class="tab-bar">
+      <div class="tab active" data-tab="info">Info</div>
+      <div class="tab" data-tab="chunks">Chunks</div>
+      <div class="tab" data-tab="audio">Audio</div>
+      <div class="tab" data-tab="hex">Hex</div>
+      <div class="tab" data-tab="log">Log</div>
+    </div>
+    <div class="tab-content active" id="tab-info">
+      <div class="sh">FILE HEADER (§2)</div>
+      <div class="ir"><span class="il">Format</span><span class="iv" id="ii-fmt">—</span></div>
+      <div class="ir"><span class="il">File size</span><span class="iv" id="ii-sz">—</span></div>
+      <div class="ir"><span class="il">Dimensions</span><span class="iv" id="ii-dims">—</span></div>
+      <div class="ir"><span class="il">Depth (+12)</span><span class="iv" id="ii-depth">—</span></div>
+      <div class="ir"><span class="il">Speed (+16)</span><span class="iv" id="ii-spd">—</span></div>
+      <div class="ir"><span class="il">Flags (+14)</span><span class="iv" id="ii-flags">—</span></div>
+      <div class="ir"><span class="il">Aspect (+38/40)</span><span class="iv" id="ii-aspect">—</span></div>
+      <div class="ir"><span class="il">oframe1 (+80)</span><span class="iv" id="ii-of1">—</span></div>
+      <div class="ir"><span class="il">oframe2 (+84)</span><span class="iv" id="ii-of2">—</span></div>
+      <div class="ir"><span class="il">Loop target</span><span class="iv" id="ii-lf">—</span></div>
+      <div class="ir"><span class="il">frameCount (+6)</span><span class="iv" id="ii-fc">—</span></div>
+      <div class="ir"><span class="il">totalFrames (+46)</span><span class="iv" id="ii-totalf">—</span></div>
+      <div class="ir"><span class="il">keyFrames (+44)</span><span class="iv" id="ii-keyf">—</span></div>
+      <div class="ir"><span class="il">reqMemory (+48)</span><span class="iv" id="ii-reqmem">—</span></div>
+      <div class="ir"><span class="il">creator (+26)</span><span class="iv" id="ii-creator">—</span></div>
+      <div class="ir"><span class="il">created (+22)</span><span class="iv" id="ii-created">—</span></div>
+      <div class="sh">PLAYBACK</div>
+      <div class="ir"><span class="il">Indexed frames</span><span class="iv" id="ii-tf">—</span></div>
+      <div class="ir"><span class="il">Loop count</span><span class="iv" id="ii-lc">—</span></div>
+      <div class="sh">CURRENT FRAME (§3)</div>
+      <div class="ir"><span class="il">Index</span><span class="iv" id="ii-fi">—</span></div>
+      <div class="ir"><span class="il">File offset</span><span class="iv" id="ii-fo">—</span></div>
+      <div class="ir"><span class="iv" id="ii-fs" style="font-size:9px;color:var(--muted);text-align:right;width:100%;padding:0 14px 4px"></span></div>
+      <div class="ir"><span class="il">Chunk count</span><span class="iv" id="ii-cc">—</span></div>
+      <div class="ir"><span class="il">Errors</span><span class="iv" id="ii-ce">—</span></div>
+      <div class="sh">LAST TICK FLAGS (§7)</div>
+      <div class="flag-row" id="flags-row">
+        <span class="flag" id="f01">0x01 NEW</span>
+        <span class="flag" id="f04">0x04 DONE</span>
+        <span class="flag" id="f08">0x08 LOOP</span>
+        <span class="flag" id="f10">0x10 RESET</span>
+        <span class="flag" id="f20">0x20 PAL</span>
+      </div>
+      <div class="sh">PALETTE SAMPLE (§6)</div>
+      <div class="ir"><span class="il">pal[0]</span><span class="iv" id="ii-p0">—</span></div>
+      <div class="ir"><span class="il">pal[1]</span><span class="iv" id="ii-p1">—</span></div>
+      <div class="ir"><span class="il">pal[128]</span><span class="iv" id="ii-p128">—</span></div>
+      <div class="ir"><span class="il">pal[255]</span><span class="iv" id="ii-p255">—</span></div>
+      <div class="ir"><span class="il">pixels[0..7]</span><span class="iv" id="ii-px">—</span></div>
+    </div>
+    <div class="tab-content" id="tab-chunks">
+      <div class="sh">FRAME CHUNKS</div>
+      <div id="chunk-log"></div>
+    </div>
+    <div class="tab-content" id="tab-audio">
+      <div class="sh">AUDIO CUE TABLE</div>
+      <div style="padding:6px 8px 4px;flex-shrink:0;font-family:var(--mono);font-size:9px;color:var(--muted);line-height:1.6">
+        The game attaches cue tables externally via FLX_SetAudioCueTable.<br>
+        Paste a cue table below (CSV: frame,soundId,vol,pan,flags) or load a binary cue table file.
+      </div>
+      <div style="padding:4px 8px;flex-shrink:0;display:flex;gap:4px;flex-wrap:wrap">
+        <button class="btn sm" id="cue-scan-btn">Scan 0xF1FB frames</button>
+        <label class="btn sm" style="cursor:pointer">Load binary<input type="file" id="cue-file" style="display:none" accept="*"></label>
+        <button class="btn sm" id="cue-clear-btn">Clear</button>
+        <button class="btn sm" id="cue-dl-btn">⬇ .txt</button>
+      </div>
+      <div style="padding:4px 8px;flex-shrink:0">
+        <textarea id="cue-input" spellcheck="false"
+          style="width:100%;height:72px;background:var(--panel);border:1px solid var(--border);
+                 color:var(--text);font-family:var(--mono);font-size:10px;padding:6px 8px;
+                 border-radius:4px;resize:none;outline:none;line-height:1.6"
+          placeholder="frame, soundId, volume, pan, flags&#10;1, 42, 100, 0, 0x00&#10;15, 7, 80, 0, 0x20"></textarea>
+        <button class="btn sm" id="cue-apply-btn" style="margin-top:4px;width:100%">Apply cue table</button>
+      </div>
+      <div class="sh" id="cue-list-head">CUE EVENTS — 0 entries</div>
+      <div id="cue-list" style="flex:1;overflow-y:auto;padding:4px 0;font-family:var(--mono);font-size:10px"></div>
+    </div>
+    <div class="tab-content" id="tab-hex">
+      <div class="sh" id="hex-title">HEX DUMP</div>
+      <div style="display:flex;gap:4px;padding:6px 8px;flex-shrink:0;flex-wrap:wrap">
+        <button class="btn sm" onclick="setHexView('header')">File hdr</button>
+        <button class="btn sm" onclick="setHexView('f0')">Frame[0]</button>
+        <button class="btn sm" onclick="setHexView('f1')">Frame[1]</button>
+        <button class="btn sm" onclick="setHexView('cur')">Current</button>
+      </div>
+      <div id="hex-panel"></div>
+    </div>
+    <div class="tab-content" id="tab-log">
+      <div class="sh">PARSE LOG</div>
+      <div style="padding:6px 8px;flex-shrink:0">
+        <button class="btn sm" id="copy-btn" style="width:100%">📋 Copy diagnostic dump</button>
+      </div>
+      <div id="log-panel"></div>
+    </div>
+  </aside>
+</main>
+<footer>
+  <input type="range" id="scrub" min="0" value="0" step="1">
+  <div class="controls">
+    <button class="btn primary" id="play-btn">▶ Play</button>
+    <button class="btn" id="prev-btn">◀◀</button>
+    <button class="btn" id="next-btn">▶▶</button>
+    <span class="fc" id="frame-counter">— / —</span>
+    <div class="cr">
+      <div class="sw">Speed
+        <input type="range" id="ss" min="10" max="400" value="100" style="width:64px">
+        <span id="sv">1.0×</span>
+      </div>
+      <button class="btn" id="flip-h-btn" style="display:none" title="Flip horizontal">↔ H-Flip</button>
+      <button class="btn" id="flip-v-btn" style="display:none" title="Flip vertical">↕ V-Flip</button>
+      <div class="sw" id="loop-ctrl" style="display:none">
+        Loop
+        <select id="loop-select" style="background:var(--panel);border:1px solid var(--border);color:var(--text);
+          font-family:var(--mono);font-size:10px;padding:3px 6px;border-radius:4px;cursor:pointer">
+          <option value="-1">∞ infinite</option>
+          <option value="1">1× once</option>
+          <option value="2">2×</option>
+          <option value="3">3×</option>
+          <option value="5">5×</option>
+          <option value="10">10×</option>
+        </select>
+      </div>
+      <button class="btn" id="export-btn" style="display:none">⬇ PNG</button>
+      <button class="btn" id="plx-btn" style="display:none" title="Download current palette as .PLX (256×RGBA, 1024 bytes raw)">⬇ PLX</button>
+      <label class="btn" id="plx-load-label" style="display:none;cursor:pointer" title="Load a .PLX palette file and apply it to playback">⬆ PLX<input type="file" id="plx-upload" accept=".plx,.PLX" style="display:none"></label>
+      <button class="btn" id="zip-btn" style="display:none">⬇ ZIP all</button>
+    </div>
+  </div>
+  <div id="zip-progress" style="display:none;align-items:center;gap:10px;padding-top:2px">
+    <span style="font-family:var(--mono);font-size:11px;color:var(--muted);flex-shrink:0;min-width:120px" id="zip-label">Exporting…</span>
+    <div style="flex:1;height:4px;background:var(--border);border-radius:2px;overflow:hidden">
+      <div id="zip-bar" style="height:100%;width:0%;background:var(--accent);border-radius:2px"></div>
+    </div>
+    <button class="btn sm" id="zip-cancel">Cancel</button>
+  </div>
+</footer>
+<script>
+'use strict';
+// ═══════════════════════════════════════════════════════════════════════
+//  FLX / FLIC DECODER  v10
+//  Source: exhaustive Ghidra analysis of FLX_Load, FLX_TickFrame,
+//          RLE_Decompress, LZSS_Decompress, FLX_ApplyPaletteChunk,
+//          FLX_FlushPaletteToScreen, and all 40+ caller functions.
+//
+//  Key facts confirmed from binary:
+//
+//  FRAME WALK:   Always starts at byte 128 (in-memory path: param_1[0x15]=0x80)
+//  OFRAME2:      Loop-back offset only — frame[0] is always decoded first
+//  LOOP FRAME:   loopFrame = frame at oframe2 offset; on wrap, re-decode from 0→loopFrame
+//  SPEED:        header+16; FLI = jiffies(÷70→ms); FLC/FLX = ms directly
+//  FLAGS 0x01:   New frame decoded this tick
+//  FLAGS 0x04:   Animation complete (loop count exhausted) — stop playback
+//  FLAGS 0x08:   Just wrapped to loop start
+//  FLAGS 0x20:   Palette chunk applied → must flush palette to screen
+//                (game calls SetPaletteRange_ClampedToUsableSlots; we apply immediately)
+//
+//  RLE (type 100): SIGNED byte comparison: (char)b >= 1 → only 1..127 are literals
+//                  0x80 is NOT a literal — it is the EXTENDED opcode
+//  PALETTE type 4: zeros entry 0 after applying (RTL_MemSet, confirmed in binary)
+//                  type 11 does NOT zero entry 0
+//  LZSS (type 104): groupCount = (b0>>3)-1; loop runs groupCount+1 times
+//                   backref: back=(u16>>4)+1, len=(u16&0xF)+3
+//  TYPE 102:       Dirty-rect metadata only — no pixels, safe to skip
+//  TYPE 0xF1FB:    Audio prefix frame — skip entirely (no pixel chunks)
+// ═══════════════════════════════════════════════════════════════════════
+
+const MAGIC_FLI=0xAF11,MAGIC_FLC=0xAF12,MAGIC_FLX=0xAF20,MAGIC_FLX2=0xAF21;
+const KNOWN=[MAGIC_FLI,MAGIC_FLC,MAGIC_FLX,MAGIC_FLX2];
+
+class FlicDecoder {
+  constructor(buf){
+    this.log=[];this.buf=buf;this.view=new DataView(buf);this.u8=new Uint8Array(buf);
+    this.palette=new Uint8Array(256*4);this.isValid=false;
+    this.frameOffsets=[];this.frameSizes=[];this.allChunkInfo=[];
+    this.loopFrame=0;this.lastFlags=0;
+    this._resetPalette();
+    // Detect common wrong-file cases before parsing the header
+    if(this.buf.byteLength>=4&&this.view.getUint32(0,false)===0x504b583a)
+      this._l('warn','PKX game archive container detected — this file is compressed. For FLX video files extract the raw FLI/FLC first. For PLX palette files use the ⬆ PLX button.');
+    if(this.buf.byteLength===1024)
+      this._l('warn','File is exactly 1024 bytes — this looks like a raw PLX palette file, not an FLX video. Use the ⬆ PLX button to load it.');
+    this._parseHeader();
+    if(this.isValid) this._indexFrames();
+  }
+
+  _resetPalette(){
+    for(let i=0;i<256;i++){this.palette[i*4]=this.palette[i*4+1]=this.palette[i*4+2]=i;this.palette[i*4+3]=255;}
+  }
+
+  _l(lv,msg){
+    const ts=new Date().toISOString().slice(11,23);
+    this.log.push({ts,lv,msg});
+    console[lv==='err'?'error':lv==='warn'?'warn':'log'](`[FLX ${ts}]`,msg);
+  }
+
+  _parseHeader(){
+    const v=this.view,sz=this.buf.byteLength;
+    if(sz<128){this._l('err',`Too small: ${sz}B`);return;}
+
+    // §2 File Header — all fields per FLX spec
+    this.fileSize    = v.getUint32(0,true);
+    this.magic       = v.getUint16(4,true);
+    this.frameCount  = v.getUint16(6,true);   // playable frames, NOT counting ring frame
+    this.width       = v.getUint16(8,true);
+    this.height      = v.getUint16(10,true);
+    this.depth       = v.getUint16(12,true);   // always 8 for indexed
+    this.hdrFlags    = v.getUint16(14,true);   // bit 0: has ring frame; bit 1: has oframe2
+    // Speed at +16: FLI=jiffies(1/70s)→ms; FLC/FLX=ms directly; 0→70ms (§2 Speed Field Notes)
+    this.speedRaw    = v.getUint32(16,true);
+    this.speedMs     = this.magic===MAGIC_FLI
+      ? Math.max(1, this.speedRaw ? Math.round(this.speedRaw*1000/70) : 70)
+      : Math.max(1, this.speedRaw||70);
+    // +22..+37: timestamps and IDs (FLC/FLX only)
+    this.created     = sz>=26 ? v.getUint32(22,true) : 0;
+    this.creator     = sz>=30 ? v.getUint32(26,true) : 0;
+    this.updated     = sz>=34 ? v.getUint32(30,true) : 0;
+    this.updater     = sz>=38 ? v.getUint32(34,true) : 0;
+    this.aspectX     = sz>=40 ? v.getUint16(38,true) : 1;
+    this.aspectY     = sz>=42 ? v.getUint16(40,true) : 1;
+    // +42..+55: extended fields (FLC only)
+    this.extFlags    = sz>=44 ? v.getUint16(42,true) : 0;
+    this.keyFrames   = sz>=46 ? v.getUint16(44,true) : 0;
+    this.totalFrames = sz>=48 ? v.getUint16(46,true) : 0; // includes ring frame
+    this.reqMemory   = sz>=52 ? v.getUint32(48,true) : 0;
+    this.maxRegions  = sz>=54 ? v.getUint16(52,true) : 0;
+    this.transpNum   = sz>=56 ? v.getUint16(54,true) : 0;
+    // +80,+84: oframe1/oframe2 (§2 oframe1/oframe2 Usage)
+    this.oframe1     = sz>=84 ? v.getUint32(80,true) : 128; // file-streaming seek only
+    this.oframe2     = sz>=88 ? v.getUint32(84,true) : 0;   // loop-back target
+    this.palBits     = sz>=90 ? v.getUint16(88,true) : 0;
+    // Frame walk ALWAYS starts at byte 128 for in-memory mode (FLX_Load: param_1[0x15]=0x80)
+    this.walkStart   = 128;
+
+    // Decode hdrFlags bit meanings per spec §2
+    this.hasRingFrame = !!(this.hdrFlags & 0x01);
+    this.hasOframe2   = !!(this.hdrFlags & 0x02);
+
+    if(!KNOWN.includes(this.magic)){
+      // Give specific messages for common wrong-file cases
+      const m=this.magic;
+      if(m===0x1966||m===0x1001){
+        this._l('err',`Bad magic 0x${m.toString(16).toUpperCase()} — this looks like a PKX-compressed container (.plx or .flx wrapped by the game engine). Use the ⬆ PLX button for palette files, or extract the raw FLI/FLC first.`);
+      } else if(sz===1024){
+        this._l('err',`Bad magic 0x${m.toString(16).toUpperCase()} — file is 1024 bytes, which matches a raw PLX palette. Use the ⬆ PLX button to load it.`);
+      } else {
+        this._l('err',`Bad magic 0x${m.toString(16).toUpperCase()} — not a valid FLIC file (expected 0xAF11/AF12/AF20/AF21)`);
+      }
+      return;
+    }
+    if(!this.width||!this.height){this._l('err',`Bad dims ${this.width}×${this.height}`);return;}
+    if(this.fileSize!==sz) this._l('warn',`Header fileSize=${this.fileSize} actual=${sz}`);
+
+    this._l('info',`${this.formatName()} ${this.width}×${this.height} depth=${this.depth} frameCount=${this.frameCount}`);
+    this._l('info',`speed(+16)=${this.speedRaw}raw → ${this.speedMs}ms/frame (${(1000/this.speedMs).toFixed(1)}fps)`);
+    this._l('info',`flags(+14)=0x${this.hdrFlags.toString(16).padStart(4,'0')} → hasRingFrame=${this.hasRingFrame} hasOframe2=${this.hasOframe2}`);
+    this._l('info',`oframe1=0x${this.oframe1.toString(16)} oframe2=0x${this.oframe2.toString(16)}`);
+    if(this.aspectX||this.aspectY) this._l('info',`aspectX=${this.aspectX} aspectY=${this.aspectY}`);
+    if(this.totalFrames) this._l('info',`totalFrames(incl.ring)=${this.totalFrames} keyFrames=${this.keyFrames} reqMemory=${this.reqMemory}`);
+    this.isValid=true;
+  }
+
+  _indexFrames(){
+    const v=this.view,sz=this.buf.byteLength;
+    let pos=this.walkStart,count=0;
+    const max=this.frameCount+8;
+    this._l('info',`Indexing from 0x${pos.toString(16)}, file=0x${sz.toString(16)}`);
+
+    while(pos+16<=sz&&count<max){
+      const fsize =v.getUint32(pos,true);
+      const fmagic=v.getUint16(pos+4,true);
+      const fnchk =v.getUint16(pos+6,true);
+      if(!fsize){this._l('warn',`Zero-size frame at 0x${pos.toString(16)}, stop`);break;}
+      if(fsize>sz-pos){
+        this._l('warn',`Frame[${count}] at 0x${pos.toString(16)}: size ${fsize} > remaining ${sz-pos}`);
+        if(fmagic===0xF1FA){this.frameOffsets.push(pos);this.frameSizes.push(sz-pos);count++;}
+        break;
+      }
+      if(fmagic===0xF1FA){
+        this._l('info',`Frame[${count}] @ 0x${pos.toString(16)}: size=${fsize} chunks=${fnchk}`);
+        this.frameOffsets.push(pos);this.frameSizes.push(fsize);count++;
+      } else if(fmagic===0xF1FB){
+        // Audio/prefix frame — no pixel data, skip entirely (confirmed from spec)
+        this._l('info',`Frame[${count}] @ 0x${pos.toString(16)}: 0xF1FB audio prefix, size=${fsize}, skipping`);
+      } else {
+        this._l('warn',`Frame[${count}] @ 0x${pos.toString(16)}: unknown magic 0x${fmagic.toString(16).padStart(4,'0')}`);
+      }
+      pos+=fsize; count+=(fmagic!==0xF1FA&&fmagic!==0xF1FB)?0:0;
+      // Note: count only incremented for 0xF1FA above
+    }
+
+    if(!this.frameOffsets.length){this._l('err','No valid frames (0xF1FA) found');this.isValid=false;return;}
+
+    // Find loop frame by matching oframe2 to frame offsets
+    // oframe2 = loop-back target; frame[0] is ALWAYS decoded first regardless
+    this.loopFrame=0;
+    if(this.oframe2>128&&this.oframe2<this.buf.byteLength){
+      const idx=this.frameOffsets.indexOf(this.oframe2);
+      if(idx>=0){this.loopFrame=idx;this._l('info',`oframe2 → loopFrame=${idx}`);}
+      else this._l('warn',`oframe2=0x${this.oframe2.toString(16)} not found in frame offsets`);
+    }
+
+    if(this.frameOffsets.length!==this.frameCount)
+      this._l('warn',`Header frameCount=${this.frameCount}, indexed ${this.frameOffsets.length} — ${this.frameOffsets.length>this.frameCount?`extra ring frame at index ${this.frameCount} will be excluded from playback`:'fewer than declared'}`);
+    else
+      this._l('info',`Indexed ${this.frameOffsets.length} frames, loopFrame=${this.loopFrame}`);
+  }
+
+  indexAllChunks(){
+    this.allChunkInfo=[];
+    for(let f=0;f<this.frameOffsets.length;f++) this.allChunkInfo.push(this._readChunkHeaders(f));
+  }
+
+  _readChunkHeaders(fi){
+    const base=this.frameOffsets[fi],fsize=this.frameSizes[fi],v=this.view,chunks=[];
+    const nc=v.getUint16(base+6,true);
+    let pos=base+16;
+    for(let c=0;c<nc&&pos+6<=base+fsize;c++){
+      const cs=v.getUint32(pos,true),ct=v.getUint16(pos+4,true);
+      if(!cs||cs>fsize) break;
+      chunks.push({type:ct,size:cs,offset:pos,ok:true,error:null});
+      pos+=cs;
+    }
+    return chunks;
+  }
+
+  // Returns flags bitfield (mirrors FLX_UpdateAndBlit return):
+  //   0x01 = new frame decoded
+  //   0x04 = animation complete (loop count 0) — not tracked here, caller decides
+  //   0x20 = palette chunk was applied this frame
+  decodeFrame(fi,pixels){
+    if(fi>=this.frameOffsets.length) return [];
+    const base=this.frameOffsets[fi],fsize=this.frameSizes[fi];
+    const v=this.view,W=this.width,H=this.height;
+    const nc=v.getUint16(base+6,true);
+    const info=[];
+    let pos=base+16;
+    let flags=0x01; // 0x01: frame decoded
+
+    for(let c=0;c<nc&&pos+6<=base+fsize;c++){
+      const cs=v.getUint32(pos,true),ct=v.getUint16(pos+4,true);
+      if(!cs||pos+cs>base+fsize+4){
+        info.push({type:ct,name:this.cn(ct),size:cs,ok:false,error:`bad size ${cs} @0x${pos.toString(16)}`});
+        this._l('err',`F${fi}C${c}[${this.cn(ct)}]: bad chunk size ${cs}`);
+        break;
+      }
+      let ok=true,error=null,palApplied=false;
+      try{palApplied=this._applyChunk(ct,pos+6,cs-6,pixels,W,H,fi,c);}
+      catch(e){ok=false;error=e.message;this._l('err',`F${fi}C${c}[${this.cn(ct)}]: ${e.message}`);}
+      if(palApplied) flags|=0x20; // 0x20: palette was updated this frame
+      info.push({type:ct,name:this.cn(ct),size:cs,ok,error});
+      pos+=cs;
+    }
+    this.lastFlags=flags;
+    return info;
+  }
+
+  // Returns true if a palette chunk was applied
+  _applyChunk(type,doff,dlen,pixels,W,H,fi,ci){
+    switch(type){
+      // Standard FLIC types
+      case 4:  this._pal256(doff,dlen,fi,ci,true);  return true;  // 8-bit palette, zeros entry 0
+      case 7:  this._deltaFLI(doff,dlen,pixels,W,H,fi,ci); return false;
+      case 11: this._pal256(doff,dlen,fi,ci,false); return true;  // 6-bit palette, does NOT zero entry 0
+      case 13: pixels.fill(0); return false;  // BLACK: fill with index 0
+      case 15: this._deltaFLC(doff,dlen,pixels,W,H,fi,ci); return false;
+      case 16: this._fullRLE_std(doff,dlen,pixels,W,H,fi,ci); return false;
+      case 18: pixels.set(this.u8.subarray(doff,doff+Math.min(W*H,dlen))); return false; // COPY
+      case 19: return false; // MINI thumbnail — ignore
+
+      // Game-engine-specific types (FLX 0xAF20/21 only)
+      case 100: this._gameRLE(doff,dlen,pixels,W,H,fi,ci); return false;  // full-frame RLE
+      case 101: this._gameRLEdelta(doff,dlen,pixels,W,H,fi,ci); return false; // RLE+blit offset
+      case 102: return false; // DIRTY_RECT: metadata only, no pixels (DirtyRect_MarkRegionFromXYWH)
+      case 104: this._lzssRLE(doff,dlen,pixels,W,H,fi,ci); return false;  // LZSS then RLE
+
+      default: this._l('warn',`F${fi}C${ci}: unknown chunk type ${type} (0x${type.toString(16)})`); return false;
+    }
+  }
+
+  _chk(off,len,ctx){
+    if(off<0||off+len>this.buf.byteLength)
+      throw new Error(`read [0x${off.toString(16)}+${len}) OOB (file=0x${this.buf.byteLength.toString(16)})`);
+  }
+
+  // ── Type 4/11: Palette ───────────────────────────────────────────────
+  // is8bit=true  → Type 4 (FLC/FLX): 8-bit RGB; zeros entry 0 after applying (RTL_MemSet)
+  // is8bit=false → Type 11 (FLI): 6-bit RGB shifted <<2; does NOT zero entry 0
+  _pal256(off,dlen,fi,ci,is8bit){
+    this._chk(off,2,`F${fi}C${ci}`);
+    const v=this.view,u8=this.u8;
+    const np=v.getInt16(off,true); // signed, per game binary
+    let pos=off+2,idx=0;
+    this._l('info',`F${fi}C${ci}[PAL${is8bit?256:64}]: ${np} packets`);
+    for(let p=0;p<np;p++){
+      this._chk(pos,2,`F${fi}C${ci}`);
+      idx+=u8[pos++]; let cnt=u8[pos++]; if(!cnt)cnt=256;
+      this._chk(pos,cnt*3,`F${fi}C${ci}`);
+      for(let i=0;i<cnt;i++){
+        const b=((idx+i)&255)*4;
+        const r=u8[pos++],g=u8[pos++],bv=u8[pos++];
+        this.palette[b]   =is8bit?r:(r<<2);
+        this.palette[b+1] =is8bit?g:(g<<2);
+        this.palette[b+2] =is8bit?bv:(bv<<2);
+        this.palette[b+3] =255;
+      }
+      idx=(idx+cnt)&255;
+    }
+    // Type 4 ONLY: game calls RTL_MemSet(palette_ptr, 0, 4) after applying
+    // This forces palette entry 0 to (0,0,0,0) — confirmed in FLX_ApplyPaletteChunk
+    if(is8bit){this.palette[0]=this.palette[1]=this.palette[2]=0;}
+    this._l('info',`  pal[0]=(${this.palette[0]},${this.palette[1]},${this.palette[2]}) pal[1]=(${this.palette[4]},${this.palette[5]},${this.palette[6]}) pal[255]=(${this.palette[255*4]},${this.palette[255*4+1]},${this.palette[255*4+2]})`);
+  }
+
+  // ── Type 16: Standard FLC full-frame RLE ────────────────────────────
+  // Per-line: skip packet-count prefix byte, then signed-count packets
+  _fullRLE_std(off,dlen,pixels,W,H,fi,ci){
+    this._chk(off,dlen,`F${fi}C${ci}`);
+    const u8=this.u8; let pos=off,end=off+dlen,pixPos=0,written=0;
+    for(let y=0;y<H;y++){
+      if(pos>=end) throw new Error(`EOF row ${y}/${H} (wrote ${written})`);
+      pos++; // skip per-line packet-count byte (FLC convention)
+      let x=0;
+      while(x<W){
+        if(pos>=end) throw new Error(`EOF y=${y} x=${x}`);
+        const cnt=(u8[pos++]<<24)>>24; // sign-extend i8
+        if(cnt>0){const n=Math.min(cnt,W-x);if(pos+cnt>end)throw new Error(`lit OOB y=${y}`);pixels.set(u8.subarray(pos,pos+n),pixPos+x);pos+=cnt;x+=n;written+=n;}
+        else if(cnt<0){const r=Math.min(-cnt,W-x);if(pos>=end)throw new Error(`RLE EOF y=${y}`);pixels.fill(u8[pos++],pixPos+x,pixPos+x+r);x+=r;written+=r;}
+        else break; // cnt==0: end of line
+      }
+      pixPos+=W;
+    }
+    this._l('info',`F${fi}C${ci}[FULL_RLE]: wrote ${written}/${W*H}`);
+  }
+
+  // ── Type 100: Game RLE — confirmed from RLE_Decompress binary trace ──
+  // Continuous stream, NO per-line framing.
+  // CRITICAL: (char)b >= 1 is SIGNED comparison — 0x80 (128 unsigned) is NEGATIVE as signed
+  // and must fall through to the 0x80 EXTENDED branch, not the literal branch.
+  _gameRLE(off,dlen,pixels,W,H,fi,ci){
+    this._chk(off,dlen,`F${fi}C${ci}`);
+    const u8=this.u8; let pos=off,end=off+dlen,out=0,total=W*H;
+    let nLit=0,nRle=0,nSkip=0,nExt=0;
+
+    outer: while(out<total){
+      if(pos>=end) throw new Error(`EOF out=${out}/${total} lit=${nLit} rle=${nRle} skip=${nSkip} ext=${nExt}`);
+      const b=u8[pos];
+      const bSigned=b<128?b:b-256; // interpret as signed byte (C 'char')
+
+      if(bSigned>=1){
+        // LITERAL: b in 1..127 as unsigned (positive as signed char)
+        // count = b & 0x3FFF; then copy count bytes following
+        const count=b&0x3FFF;
+        pos++; // advance past count byte
+        const n=Math.min(count,total-out);
+        if(pos+count>end) throw new Error(`literal OOB out=${out} count=${count}`);
+        pixels.set(u8.subarray(pos,pos+n),out);
+        pos+=count; out+=n; nLit++;
+
+      } else if(b===0){
+        // RLE FILL: count=nextByte&0x3FFF, value=byte after that
+        if(pos+2>=end) throw new Error(`RLE EOF out=${out}`);
+        const count=u8[pos+1]&0x3FFF;
+        const val=u8[pos+2];
+        pos+=3;
+        const n=Math.min(count,total-out);
+        pixels.fill(val,out,out+n); out+=n; nRle++;
+
+      } else if(b===0x80){
+        // EXTENDED: read signed i16 from next 2 bytes
+        // pbVar3 = pos+1 (next byte ptr in binary); pbVar3 = param2+3 after reading
+        if(pos+3>end) throw new Error(`ext i16 EOF out=${out}`);
+        const v_raw=u8[pos+1]|(u8[pos+2]<<8);
+        const v_signed=(v_raw<<16)>>16; // sign-extend 16-bit to 32-bit
+        pos+=3; // advance past 0x80 and the 2 i16 bytes
+        nExt++;
+
+        if(v_signed===0){
+          break outer; // END OF FRAME (return in binary)
+        } else if(v_signed>=1){
+          // SKIP v_signed output pixels (transparent delta)
+          out+=Math.min(v_signed,total-out); nSkip++;
+        } else {
+          // v_signed < 0: uMasked = (uint16)v & 0x7FFF
+          const uMasked=v_raw&0x7FFF;
+          if(uMasked<0x4000){
+            // LITERAL run of uMasked bytes
+            const n=Math.min(uMasked,total-out);
+            if(pos+uMasked>end) throw new Error(`ext-lit OOB out=${out}`);
+            pixels.set(u8.subarray(pos,pos+n),out);
+            pos+=uMasked; out+=n; nLit++;
+          } else {
+            // RLE FILL: count=(uMasked&0x3FFF), value=next byte
+            const count=uMasked&0x3FFF;
+            if(pos>=end) throw new Error(`ext-rle val EOF out=${out}`);
+            const val=u8[pos++];
+            const n=Math.min(count,total-out);
+            pixels.fill(val,out,out+n); out+=n; nRle++;
+          }
+        }
+
+      } else {
+        // SKIP: b in 0x81..0xFF (129..255 unsigned; -127..-1 signed)
+        // Advance output by (b & 0x7F) pixels; consume only the opcode byte
+        const skip=b&0x7F;
+        pos++; // advance past the skip byte only (no data bytes follow)
+        out+=Math.min(skip,total-out); nSkip++;
+      }
+    }
+    this._l('info',`F${fi}C${ci}[GAME_RLE]: out=${out}/${total} lit=${nLit} rle=${nRle} skip=${nSkip} ext=${nExt}`);
+    if(out<total) this._l('warn',`F${fi}C${ci}[GAME_RLE]: wrote only ${out}/${total} — delta frame (expected if early END)`);
+  }
+
+  // ── Type 101: Game RLE with XY blit offset ────────────────────────────
+  // first 8 bytes: u32 destX, u32 destY; then game RLE stream
+  // The blit is a composite onto the surface at (destX,destY).
+  // For a standalone player decoding into a single pixel buffer, we decode
+  // the RLE stream directly into pixels (same surface = same result, since
+  // SKIP opcodes preserve existing pixels and the blit would overwrite anyway).
+  _gameRLEdelta(off,dlen,pixels,W,H,fi,ci){
+    this._chk(off,8,`F${fi}C${ci}`);
+    const v=this.view;
+    const dx=v.getUint32(off,true),dy=v.getUint32(off+4,true);
+    this._l('info',`F${fi}C${ci}[GAME_RLE_DELTA]: dest=(${dx},${dy}), decoding into full surface`);
+    // Decode RLE at offset into the pixel buffer
+    // In the original engine this decodes to a temp buffer then blits at (dx,dy).
+    // For our purposes (single surface), decode directly — SKIP ops leave existing pixels intact.
+    if(dlen>8) this._gameRLE(off+8,dlen-8,pixels,W,H,fi,ci);
+  }
+
+  // ── Type 104: LZSS then Game RLE ─────────────────────────────────────
+  // Stage 1: LZSS_Decompress → scratch buffer
+  // Stage 2: RLE_Decompress(pixel_surface, scratch)
+  // LZSS scratch buffer size confirmed: FLX_AllocGlobalScratchBuffers allocates
+  // 64000 bytes in most contexts. For 640×480 frames we need 307200 bytes.
+  _lzssRLE(off,dlen,pixels,W,H,fi,ci){
+    this._chk(off,dlen,`F${fi}C${ci}`);
+    const scratch=this._lzssDecode(off,dlen,fi,ci);
+    this._l('info',`F${fi}C${ci}[LZSS_RLE]: LZSS expanded ${dlen}→${scratch.length}B, feeding gameRLE`);
+    const savedBuf=this.buf,savedU8=this.u8;
+    this.buf=scratch.buffer; this.u8=scratch;
+    try{this._gameRLE(0,scratch.length,pixels,W,H,fi,ci);}
+    finally{this.buf=savedBuf;this.u8=savedU8;}
+  }
+
+  // ── LZSS_Decompress — exact trace from binary ─────────────────────────
+  // Header byte b0:
+  //   b0 >= 8: groupCount=(b0>>3)-1; data starts at src[1]
+  //   b0 < 8:  cnt16=u16le(src[1..2]); if 0xFFFF use u32le; data at src[3] or src[7]
+  // Loop runs groupCount+1 times. Each iteration:
+  //   ctrl==0: raw copy 8 bytes
+  //   else: 8 bits MSB-first: 0=literal, 1=backref(u16: back=(>>4)+1, len=(&0xF)+3)
+  _lzssDecode(off,dlen,fi,ci){
+    const u8=this.u8,end=off+dlen;
+    const out=[];
+    let p=off;
+    const b0=u8[p++];
+    let groupCount,dataStart;
+    if(b0>=8){
+      groupCount=(b0>>3)-1;
+      dataStart=p;
+    } else {
+      const cnt16=u8[p]|(u8[p+1]<<8); p+=2;
+      if(cnt16===0xFFFF){
+        groupCount=u8[p]|(u8[p+1]<<8)|(u8[p+2]<<16)|(u8[p+3]<<24); p+=4;
+      } else {groupCount=cnt16;}
+      dataStart=p;
+    }
+    p=dataStart;
+
+    for(let g=0;g<=groupCount&&p<end;g++){
+      const ctrl=u8[p++];
+      if(ctrl===0){
+        // Raw copy 8 bytes
+        for(let i=0;i<8&&p<end;i++) out.push(u8[p++]);
+        continue;
+      }
+      let bits=ctrl;
+      for(let b=0;b<8&&p<end;b++){
+        const bit=(bits&0x80)!==0; bits<<=1;
+        if(bit){
+          // BACKREF: u16le, back=(u16>>4)+1, len=(u16&0xF)+3
+          if(p+2>end) break;
+          const u16=u8[p]|(u8[p+1]<<8); p+=2;
+          const back=(u16>>4)+1,len=(u16&0xF)+3;
+          for(let i=0;i<len;i++) out.push(out.length>=back?out[out.length-back]:0);
+        } else {
+          // LITERAL
+          if(p<end) out.push(u8[p++]);
+        }
+      }
+    }
+    this._l('info',`F${fi}C${ci}[LZSS]: groups=${groupCount+1} decoded ${out.length}B from ${dlen}B compressed`);
+    return new Uint8Array(out);
+  }
+
+  // ── Type 15: FLC byte-run delta ───────────────────────────────────────
+  _deltaFLC(off,dlen,pixels,W,H,fi,ci){
+    this._chk(off,4,`F${fi}C${ci}`);
+    const v=this.view,u8=this.u8,end=off+dlen;
+    let pos=off;
+    const lc=v.getUint16(pos,true);pos+=2;
+    let y=v.getUint16(pos,true);pos+=2;
+    for(let l=0;l<lc&&y<H;l++,y++){
+      if(pos>=end) throw new Error(`EOF line ${l}`);
+      const pc=u8[pos++],rb=y*W;let x=0;
+      for(let p=0;p<pc;p++){
+        if(pos+2>end) throw new Error(`pkt OOB l=${l}`);
+        x+=u8[pos++];const cnt=(u8[pos++]<<24)>>24;
+        if(cnt>0){const n=Math.min(cnt,W-x);if(pos+cnt>end)throw new Error(`lit OOB`);pixels.set(u8.subarray(pos,pos+n),rb+x);pos+=cnt;x+=n;}
+        else if(cnt<0){const r=Math.min(-cnt,W-x);if(pos>=end)throw new Error(`RLE EOF`);pixels.fill(u8[pos++],rb+x,rb+x+r);x+=r;}
+      }
+    }
+  }
+
+  // ── Type 7: FLI word-delta ────────────────────────────────────────────
+  _deltaFLI(off,dlen,pixels,W,H,fi,ci){
+    this._chk(off,2,`F${fi}C${ci}`);
+    const v=this.view,u8=this.u8,end=off+dlen;
+    let pos=off;const lc=v.getUint16(pos,true);pos+=2;let y=0;
+    for(let l=0;l<lc&&y<H;){
+      if(pos+2>end) throw new Error(`EOF l=${l}`);
+      let word=v.getInt16(pos,true);pos+=2;
+      while(word<0){
+        const t=(word>>14)&3;
+        if(t===2)y+=(-word)&0x3FFF;
+        else if(t===3&&y<H)pixels[y*W+W-1]=word&0xFF;
+        if(pos+2>end){word=0;break;}word=v.getInt16(pos,true);pos+=2;
+      }
+      const pc=word,rb=y*W;let x=0;
+      for(let p=0;p<pc;p++){
+        if(pos+2>end) throw new Error(`pkt OOB`);
+        x+=u8[pos++];const cnt=(u8[pos++]<<24)>>24;
+        if(cnt>0){for(let i=0;i<cnt;i++){if(pos+2>end)throw new Error('lit OOB');if(x<W)pixels[rb+x++]=u8[pos++];else pos++;if(x<W)pixels[rb+x++]=u8[pos++];else pos++;}}
+        else if(cnt<0){if(pos+2>end)throw new Error('RLE OOB');const lo=u8[pos++],hi=u8[pos++];for(let i=0;i<-cnt;i++){if(x<W)pixels[rb+x++]=lo;if(x<W)pixels[rb+x++]=hi;}}
+      }
+      y++;l++;
+    }
+  }
+
+  // ── Indexed → RGBA ────────────────────────────────────────────────────
+  // The game renders via WinG (Windows Graphics library), which uses bottom-up
+  // DIB pixel buffers — a fundamental property of Windows DIBs confirmed from
+  // FUN_004806a0 calling WinGRecommendDIBFormat. The RLE decoder writes pixels
+  // top-to-bottom into memory (row 0 = first byte), but WinG displays the buffer
+  // with row 0 at the BOTTOM of the screen. So the FLX pixel data is stored
+  // with the visual top of the image at the END of the buffer, not the start.
+  // We must reverse the row order when converting to canvas ImageData (which
+  // is always top-down) to produce the correct orientation.
+  // flipH: mirror left-right; flipV: mirror top-bottom (on top of the WinG bottom-up flip)
+  toRGBA(pixels,rgba,flipH=false,flipV=false){
+    const p=this.palette,W=this.width,H=this.height;
+    for(let y=0;y<H;y++){
+      // WinG bottom-up: read last row first, unless flipV overrides that
+      const srcY = flipV ? y : (H-1-y);
+      const srcRow = srcY*W;
+      const dstRow = y*W;
+      for(let x=0;x<W;x++){
+        const srcX = flipH ? (W-1-x) : x;
+        const b=pixels[srcRow+srcX]*4, o=(dstRow+x)*4;
+        rgba[o]=p[b]; rgba[o+1]=p[b+1]; rgba[o+2]=p[b+2]; rgba[o+3]=255;
+      }
+    }
+  }
+
+  hexDump(off,len){
+    const u8=this.u8,rows=[];
+    const end=Math.min(off+len,this.buf.byteLength);
+    for(let i=off;i<end;i+=16){
+      const bs=Array.from(u8.subarray(i,Math.min(i+16,end)));
+      rows.push({off:i,hex:bs.map(b=>b.toString(16).padStart(2,'0')).join(' ').padEnd(47,' '),
+                 asc:bs.map(b=>(b>=32&&b<127)?String.fromCharCode(b):'.').join('')});
+    }
+    return rows;
+  }
+
+  diagnosticDump(){
+    const L=['=== FLX PLAYER v12 DIAGNOSTIC DUMP ===',
+      `File: ${this.buf.byteLength}B (0x${this.buf.byteLength.toString(16)})`,
+      `Magic: 0x${this.magic?.toString(16).toUpperCase()} → ${this.formatName?.()??'?'}`,
+      `Dims: ${this.width}×${this.height} depth=${this.depth}`,
+      `frameCount(+6): ${this.frameCount}  totalFrames(+46): ${this.totalFrames}`,
+      `keyFrames(+44): ${this.keyFrames}  reqMemory(+48): ${this.reqMemory}`,
+      `hdrFlags(+14): 0x${this.hdrFlags?.toString(16).padStart(4,'0')} → hasRingFrame=${this.hasRingFrame} hasOframe2=${this.hasOframe2}`,
+      `speedRaw(+16): ${this.speedRaw} → ${this.speedMs}ms/frame`,
+      `aspectX(+38): ${this.aspectX}  aspectY(+40): ${this.aspectY}`,
+      `oframe1(+80): 0x${this.oframe1?.toString(16)}  oframe2(+84): 0x${this.oframe2?.toString(16)}`,
+      `creator(+26): 0x${this.creator?.toString(16).toUpperCase()}  created(+22): ${this.created}`,
+      `walkStart: 0x${this.walkStart?.toString(16)} (always 128)`,
+      `Indexed: ${this.frameOffsets.length} frames, loopFrame=${this.loopFrame}`,
+      '--- File header hex (bytes 0-127) ---'];
+    this.hexDump(0,128).forEach(r=>L.push(`${r.off.toString(16).padStart(4,'0')}: ${r.hex} |${r.asc}|`));
+    for(let i=0;i<Math.min(3,this.frameOffsets.length);i++){
+      L.push(`--- Frame[${i}] @ 0x${this.frameOffsets[i].toString(16)} (bytes 0-63) ---`);
+      this.hexDump(this.frameOffsets[i],64).forEach(r=>L.push(`${r.off.toString(16).padStart(4,'0')}: ${r.hex} |${r.asc}|`));
+    }
+    L.push('--- Frame offsets ---');
+    L.push(this.frameOffsets.map((o,i)=>`[${i}]=0x${o.toString(16)}`).join(' '));
+    L.push('--- Parse log ---');
+    this.log.forEach(({ts,lv,msg})=>L.push(`[${ts}] ${lv.toUpperCase()}: ${msg}`));
+    L.push('=== END DUMP ===');
+    return L.join('\n');
+  }
+
+  formatName(){return{[MAGIC_FLI]:'FLI (Animator)',[MAGIC_FLC]:'FLC (Animator Pro)',[MAGIC_FLX]:'FLX (Game A)',[MAGIC_FLX2]:'FLX2 (Game B)'}[this.magic]||`0x${this.magic?.toString(16)??'?'}`;}
+  cn(t){return{4:'COLOR_256',7:'DELTA_FLI',11:'COLOR_64',13:'BLACK',15:'DELTA_FLC',16:'FULL_RLE',18:'COPY',19:'MINI',100:'GAME_RLE',101:'GAME_RLE_DELTA',102:'DIRTY_RECT',104:'LZSS→RLE'}[t]||`TYPE_${t}`;}
+}
+
+// ═══════════════════════════════════════════════════════════════════════
+//  PLAYER UI
+// ═══════════════════════════════════════════════════════════════════════
+const $=id=>document.getElementById(id);
+const canvas=$('cv'),ctx2d=canvas.getContext('2d');
+const dz=$('drop-zone'),cw=$('canvas-wrap');
+const scrub=$('scrub'),fc=$('frame-counter'),pb=$('play-btn');
+const cl=$('chunk-log'),lp=$('log-panel'),hp=$('hex-panel');
+const et=$('et'),fb=$('fmt-badge'),wb=$('wb'),eb=$('eb'),xb=$('export-btn');
+
+let dec=null,pixels=null,idata=null;
+let srcFileName='flx';  // base name of the loaded file, used for all exports
+let cur=0,playing=false,rafId=null,lastT=0,spd=1.0;
+let curChunks=[],hexView='header';
+let flipH=false,flipV=false;  // user-controlled flip overrides
+let zipCancelled=false;
+let uploadedPlxPalette=null;  // Uint8Array[1024] when a PLX has been loaded, null otherwise
+// Loop count per spec §7: -1=infinite, 0=play once, N=play N times total
+let loopCount=-1;      // setting (what user chose)
+let loopsRemaining=-1; // runtime counter (-1=infinite)
+
+document.querySelectorAll('.tab').forEach(t=>{
+  t.addEventListener('click',()=>{
+    document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(x=>x.classList.remove('active'));
+    t.classList.add('active');$('tab-'+t.dataset.tab).classList.add('active');
+    if(t.dataset.tab==='log')renderLog();
+    if(t.dataset.tab==='hex')renderHex();
+    if(t.dataset.tab==='audio')renderCueList();
+  });
+});
+
+function toast(msg,ms=5000){et.textContent=msg;et.style.display='block';clearTimeout(toast._t);toast._t=setTimeout(()=>et.style.display='none',ms);}
+
+function loadFile(f){
+  // Store the filename stem (no extension) for use in all exports
+  srcFileName = f.name.replace(/\.[^.]+$/, '') || 'flx';
+  const r=new FileReader();
+  r.onload=e=>{
+    try{
+      let buf=e.target.result;
+      const u8=new Uint8Array(buf);
+      // Auto-detect and decompress PKX container
+      // PKX magic: 0x3A584B50 'PKX:' at byte 0 (little-endian u32)
+      if(u8.length>=24 && u8[0]===0x50&&u8[1]===0x4b&&u8[2]===0x58&&u8[3]===0x3a){
+        const dv=new DataView(buf);
+        const compType=dv.getUint32(12,true);
+        const rawSize =dv.getUint32(20,true);
+        const payload =u8.subarray(24);
+        console.log(`[PKX] compType=0x${compType.toString(16)} rawSize=${rawSize} payloadSize=${payload.length}`);
+        const decompressed=pkxDecompress(compType,payload,rawSize);
+        if(!decompressed||decompressed.length!==rawSize){
+          toast(`PKX decompression failed: got ${decompressed?.length??0} bytes, expected ${rawSize}`);
+          return;
+        }
+        buf=decompressed.buffer;
+        toast(`PKX decompressed: ${u8.length.toLocaleString()} → ${rawSize.toLocaleString()} bytes`);
+      }
+      init(buf);
+    }catch(err){toast('Fatal: '+err.message);console.error(err);}
+  };
+  r.readAsArrayBuffer(f);
+}
+
+// PKX decompressor matching DecompressResourceData_Dispatch in binary.
+// compType: 0xE=LZSS, 0xC=game RLE, two-pass: (hi nibble first, lo nibble second)
+// magic3 variants: 0x9BAEB0CF and 0x9BAEBACF both valid (seen in the wild).
+function pkxDecompress(compType, payload, rawSize){
+  const comp_hi=(compType>>4)&0xF;
+  const comp_lo=compType&0xF;
+  try{
+    if(comp_hi===0&&comp_lo===0xE) return pkxLZSS(payload);           // 0xE: LZSS only
+    if(comp_hi===0&&comp_lo===0xC) return pkxRLE(payload, rawSize);    // 0xC: RLE only
+    if(comp_hi&&comp_lo){                                               // two-pass
+      const first = comp_hi===0xE ? pkxLZSS(payload) : pkxRLE(payload, rawSize*4);
+      if(!first){console.error('PKX two-pass first stage failed');return null;}
+      console.log(`[PKX] two-pass: after first stage ${first.length} bytes`);
+      return comp_lo===0xC ? pkxRLE(first, rawSize) : pkxLZSS(first);
+    }
+    // Fallback: try LZSS then RLE
+    console.warn(`[PKX] unknown compType 0x${compType.toString(16)}, trying LZSS`);
+    return pkxLZSS(payload);
+  }catch(e){console.error('[PKX] decompression error:',e);return null;}
+}
+
+// LZSS decompressor — matches _lzssDecode in FlicDecoder exactly
+function pkxLZSS(src){
+  const b0=src[0];
+  let groupCount, p;
+  if(b0>=8){groupCount=(b0>>3)-1;p=1;}
+  else{
+    const cnt16=src[1]|(src[2]<<8);
+    if(cnt16===0xFFFF){groupCount=src[3]|(src[4]<<8)|(src[5]<<16)|(src[6]<<24);p=7;}
+    else{groupCount=cnt16;p=3;}
+  }
+  const out=[];
+  for(let g=0;g<=groupCount&&p<src.length;g++){
+    const ctrl=src[p++];
+    if(ctrl===0){for(let i=0;i<8&&p<src.length;i++)out.push(src[p++]);continue;}
+    let bits=ctrl;
+    for(let b=0;b<8&&p<src.length;b++){
+      const bit=(bits&0x80)!==0;bits<<=1;
+      if(bit){
+        if(p+2>src.length)break;
+        const u16=src[p]|(src[p+1]<<8);p+=2;
+        const back=(u16>>4)+1,len=(u16&0xF)+3;
+        for(let i=0;i<len;i++)out.push(out.length>=back?out[out.length-back]:0);
+      }else{out.push(src[p++]);}
+    }
+  }
+  return new Uint8Array(out);
+}
+
+// Game RLE decompressor — matches RLE_Decompress binary
+function pkxRLE(src, rawSize){
+  const out=new Uint8Array(rawSize);
+  let p=0,o=0;
+  while(o<rawSize&&p<src.length){
+    const b=src[p];
+    const bs=b<128?b:b-256;
+    if(bs>=1){const n=Math.min(b&0x3FFF,rawSize-o);p++;out.set(src.subarray(p,p+n),o);p+=b&0x3FFF;o+=n;}
+    else if(b===0){if(p+2>=src.length)break;const c=Math.min(src[p+1]&0x3FFF,rawSize-o);out.fill(src[p+2],o,o+c);p+=3;o+=c;}
+    else if(b===0x80){if(p+3>src.length)break;const vr=src[p+1]|(src[p+2]<<8);const vs=(vr<<16)>>16;p+=3;
+      if(vs===0)break;
+      else if(vs>=1){o+=Math.min(vs,rawSize-o);}
+      else{const uM=vr&0x7FFF;if(uM<0x4000){const n=Math.min(uM,rawSize-o);out.set(src.subarray(p,p+n),o);p+=uM;o+=n;}
+        else{const c=Math.min(uM&0x3FFF,rawSize-o);if(p<src.length)out.fill(src[p++],o,o+c);o+=c;}}}
+    else{o+=Math.min(b&0x7F,rawSize-o);p++;}
+  }
+  return out;
+}
+
+function init(buf){
+  const d=new FlicDecoder(buf);
+  const errs=d.log.filter(l=>l.lv==='err').length;
+  const warns=d.log.filter(l=>l.lv==='warn').length;
+  wb.style.display=warns?'':'none';eb.style.display=errs?'':'none';
+  wb.textContent=`${warns}w`;eb.textContent=`${errs}e`;
+
+  if(!d.isValid){
+    fb.className='badge err';fb.textContent='INVALID';
+    toast(d.log.filter(l=>l.lv==='err').pop()?.msg||'Invalid file');
+    dec=d;renderLog();document.querySelector('[data-tab="log"]').click();return;
+  }
+
+  dec=d;
+  cueEntries=[];
+  uploadedPlxPalette=null;
+  $('plx-load-label').style.borderColor='';
+  $('plx-load-label').style.color='';
+  $('plx-load-label').title='Load a .PLX palette file and apply it to playback';
+  pixels=new Uint8Array(d.width*d.height);
+  idata=new ImageData(d.width,d.height);
+  canvas.width=d.width;canvas.height=d.height;
+  d.indexAllChunks();
+
+  scrub.min=0;scrub.max=Math.max(0,d.frameOffsets.length-1);scrub.value=0;
+  cur=0;
+
+  fb.className='badge ok';
+  fb.textContent={[MAGIC_FLI]:'FLI',[MAGIC_FLC]:'FLC',[MAGIC_FLX]:'FLX',[MAGIC_FLX2]:'FLX2'}[d.magic]||'FLIC';
+
+  dz.style.display='none';cw.style.display='flex';
+  xb.style.display='';
+  $('plx-btn').style.display='';
+  $('plx-load-label').style.display='';
+  $('flip-h-btn').style.display='';
+  $('flip-v-btn').style.display='';
+  $('zip-btn').style.display='';
+  $('loop-ctrl').style.display='';
+
+  // Always start from frame 0 (confirmed: in-memory path starts at byte 128, decodes frame[0] first)
+  resetPalette();pixels.fill(0);
+  curChunks=d.decodeFrame(0,pixels);
+  applyPlxOverride();
+  renderFrame();updateInfo();updateChunkLog();renderLog();
+  fc.textContent=`1 / ${d.frameOffsets.length}`;
+  console.log(d.diagnosticDump());
+}
+
+// Per spec §7 and FLX_TickFrame binary: the game plays exactly frameCount frames
+// (param_1[0x1e] = header[6] = frameCount), then wraps. The ring frame and any
+// frames indexed beyond frameCount are NOT displayed. P() must reflect this.
+function P(){
+  if(!dec) return 0;
+  // frameCount from header = number of playable frames (NOT counting ring frame)
+  // Use the lesser of indexed frames and declared frameCount to avoid showing
+  // the ring frame as a duplicate last frame.
+  return Math.min(dec.frameOffsets.length, dec.frameCount||dec.frameOffsets.length);
+}
+
+function renderFrame(){if(!dec)return;dec.toRGBA(pixels,idata.data,flipH,flipV);ctx2d.putImageData(idata,0,0);}
+
+// Reset palette then overlay any uploaded PLX on top.
+// Matches the game's load sequence: PLX is applied first, then FLX chunk-4
+// palette updates overwrite specific slots during frame decode.
+function resetPalette(){
+  dec._resetPalette();
+  if(uploadedPlxPalette){
+    for(let i=0;i<256;i++){
+      dec.palette[i*4]  =uploadedPlxPalette[i*4];
+      dec.palette[i*4+1]=uploadedPlxPalette[i*4+1];
+      dec.palette[i*4+2]=uploadedPlxPalette[i*4+2];
+      dec.palette[i*4+3]=255;
+    }
+  }
+}
+
+function updateFlipButtons(){
+  $('flip-h-btn').classList.toggle('primary',flipH);
+  $('flip-v-btn').classList.toggle('primary',flipV);
+}
+
+function updateFlags(){
+  // Mirror FLX_UpdateAndBlit return flags in the UI
+  const f=dec?.lastFlags||0;
+  const flags=[['f01',0x01,'0x01 NEW'],[['f04',0x04,'0x04 DONE']],['f08',0x08,'0x08 LOOP'],['f10',0x10,'0x10 RESET'],['f20',0x20,'0x20 PAL']];
+  [['f01',0x01],['f04',0x04],['f08',0x08],['f10',0x10],['f20',0x20]].forEach(([id,bit])=>{
+    const el=$(id);if(el)el.className='flag'+(f&bit?' on':'');
+  });
+}
+
+function updateInfo(){
+  if(!dec)return;
+  const d=dec;
+
+  // §2 File Header fields
+  $('ii-fmt').textContent=d.formatName();$('ii-fmt').className='iv good';
+  $('ii-sz').textContent=`${(d.buf.byteLength/1024).toFixed(1)} KB  (${d.buf.byteLength.toLocaleString()} B)`;
+  $('ii-dims').textContent=`${d.width} × ${d.height}`;
+  $('ii-depth').textContent=`${d.depth}-bit indexed`;
+  $('ii-spd').textContent=`${d.speedMs} ms  (${(1000/d.speedMs).toFixed(1)} fps)  raw=${d.speedRaw}`;
+
+  // flags (+14): bit 0 = has ring frame, bit 1 = has oframe2
+  const fBits=[];
+  if(d.hasRingFrame) fBits.push('bit0:ring_frame');
+  if(d.hasOframe2)   fBits.push('bit1:has_oframe2');
+  $('ii-flags').textContent=`0x${d.hdrFlags.toString(16).padStart(4,'0')}${fBits.length?' → '+fBits.join(' '):''}`;
+
+  // aspect ratio
+  const ax=d.aspectX||1, ay=d.aspectY||1;
+  const gcd=(a,b)=>b?gcd(b,a%b):a, g=gcd(ax,ay);
+  $('ii-aspect').textContent=`${ax/g}:${ay/g}  (raw ${ax}/${ay})`;
+
+  $('ii-of1').textContent=`0x${d.oframe1.toString(16).toUpperCase()}  ${d.oframe1===128?'(=128, standard)':'(non-standard)'}`;
+  $('ii-of2').textContent=`0x${d.oframe2.toString(16).toUpperCase()}`;
+  $('ii-lf').textContent=`frame[${d.loopFrame}] @ 0x${(d.frameOffsets[d.loopFrame]||0).toString(16).toUpperCase()}`;
+  $('ii-fc').textContent=`${d.frameCount}  (playable, excl. ring)`;
+  $('ii-totalf').textContent=d.totalFrames?`${d.totalFrames}  (incl. ring frame)`:'—';
+  $('ii-keyf').textContent=d.keyFrames||'—';
+  $('ii-reqmem').textContent=d.reqMemory?`${(d.reqMemory/1024).toFixed(1)} KB`:'—';
+  $('ii-creator').textContent=d.creator?`0x${d.creator.toString(16).toUpperCase()}`:'—';
+  $('ii-created').textContent=d.created?new Date(d.created*1000).toISOString().slice(0,19).replace('T',' '):'—';
+
+  // Playback
+  $('ii-tf').textContent=`${d.frameOffsets.length}  (indexed)`;
+  $('ii-lc').textContent=loopCount===-1?'∞ infinite':`${loopsRemaining} of ${loopCount} remain`;
+
+  // Current frame (§3)
+  $('ii-fi').textContent=`${cur+1} / ${P()}  (raw idx ${cur})`;
+  $('ii-fo').textContent=`0x${d.frameOffsets[cur].toString(16).toUpperCase()}`;
+  $('ii-fs').textContent=`${d.frameSizes[cur].toLocaleString()} B`;
+  $('ii-cc').textContent=(d.allChunkInfo[cur]||[]).length;
+  const bad=curChunks.filter(c=>!c.ok).length;
+  $('ii-ce').textContent=bad||'none';$('ii-ce').className='iv '+(bad?'err':'good');
+
+  // Palette sample (§6)
+  const p=d.palette;
+  $('ii-p0').textContent=`rgb(${p[0]},${p[1]},${p[2]})`;
+  $('ii-p1').textContent=`rgb(${p[4]},${p[5]},${p[6]})`;
+  $('ii-p128').textContent=`rgb(${p[512]},${p[513]},${p[514]})`;
+  $('ii-p255').textContent=`rgb(${p[1020]},${p[1021]},${p[1022]})`;
+  $('ii-px').textContent=Array.from(pixels.subarray(0,8)).join(',');
+  updateFlags();
+}
+
+function updateChunkLog(){
+  cl.innerHTML='';
+  const chunks=dec.allChunkInfo[cur]||[];
+  const live=curChunks;
+  if(!chunks.length){cl.innerHTML='<div class="ce" style="padding:8px 14px;color:var(--muted)">No chunks</div>';return;}
+  chunks.forEach((c,i)=>{
+    const lc=live[i]||c;
+    const el=document.createElement('div');el.className='ce '+(lc.ok?'ok':'bad');
+    el.innerHTML=`<span class="ct">${c.type}</span><span class="cn">${c.name}${lc.error?` — ${lc.error}`:''}</span><span class="cs">${(c.size/1024).toFixed(1)}K</span>`;
+    cl.appendChild(el);
+  });
+}
+
+function setHexView(v){hexView=v;renderHex();}
+function renderHex(){
+  if(!dec)return;
+  let off,len,label;
+  if(hexView==='header'){off=0;len=128;label='File header (0–127)';}
+  else if(hexView==='f0'&&dec.frameOffsets.length>0){off=dec.frameOffsets[0];len=64;label=`Frame[0] @0x${off.toString(16)}`;}
+  else if(hexView==='f1'&&dec.frameOffsets.length>1){off=dec.frameOffsets[1];len=64;label=`Frame[1] @0x${off.toString(16)}`;}
+  else{off=dec.frameOffsets[cur]||0;len=64;label=`Frame[${cur}] @0x${off.toString(16)}`;}
+  $('hex-title').textContent=`HEX — ${label}`;
+  hp.innerHTML='';
+  dec.hexDump(off,len).forEach(r=>{
+    const el=document.createElement('div');el.className='hr';
+    el.innerHTML=`<span class="ho">${r.off.toString(16).padStart(4,'0')}</span><span class="hb">${r.hex}</span><span class="ha">|${r.asc}|</span>`;
+    hp.appendChild(el);
+  });
+}
+
+function renderLog(){
+  if(!dec)return;
+  lp.innerHTML='';
+  dec.log.forEach(({ts,lv,msg})=>{
+    const el=document.createElement('div');el.className='ll '+lv;
+    el.textContent=`[${ts}] ${lv==='err'?'✖':lv==='warn'?'⚠':' '} ${msg}`;
+    lp.appendChild(el);
+  });
+  lp.scrollTop=lp.scrollHeight;
+}
+
+// ═══════════════════════════════════════════════════════════════════════
+//  AUDIO CUE TABLE SYSTEM
+//  From binary: FLX_SetAudioCueTable / FLX_OnFrameAdvance
+//  Cue entry structure (8 bytes, confirmed from binary):
+//    u16 soundId    — sound asset ID to fire
+//    u16 frameIndex — 1-based frame counter value to match (param_1[0x44])
+//    u8  volume     — 0–127
+//    u8  pan        — signed pan encoded as unsigned
+//    u8  flagsLo    — bit 6: loop
+//    u8  flagsHi    — bit 7: preload; bit 5: use QueueAndPlay; bit 6: loop
+//  Table is null-terminated (entry with soundId==0 ends the list)
+// ═══════════════════════════════════════════════════════════════════════
+
+let cueEntries = []; // [{frame, soundId, volume, pan, flagsLo, flagsHi, flags_str, source}]
+
+function flagsToStr(flagsLo, flagsHi) {
+  const bits = [];
+  if (flagsHi & 0x80) bits.push('PRELOAD');
+  if (flagsHi & 0x20) bits.push('QUEUE');
+  if (flagsHi & 0x40) bits.push('LOOP');
+  if (flagsLo & 0x40) bits.push('LOOP_LO');
+  return bits.join('|') || '—';
+}
+
+// Parse binary cue table (8-byte entries, null-terminated on soundId=0)
+function parseBinaryCueTable(u8arr, source='binary') {
+  const entries = [];
+  const v = new DataView(u8arr.buffer, u8arr.byteOffset, u8arr.byteLength);
+  let pos = 0;
+  while (pos + 8 <= u8arr.length) {
+    const soundId   = v.getUint16(pos,   true);
+    const frameIdx  = v.getUint16(pos+2, true);
+    const volume    = u8arr[pos+4];
+    const pan       = u8arr[pos+5];
+    const flagsLo   = u8arr[pos+6];
+    const flagsHi   = u8arr[pos+7];
+    if (soundId === 0) break; // null terminator
+    entries.push({ frame: frameIdx, soundId, volume, pan, flagsLo, flagsHi,
+                   flags_str: flagsToStr(flagsLo, flagsHi), source });
+    pos += 8;
+  }
+  return entries;
+}
+
+// Parse CSV/text cue table: frame, soundId, volume, pan, flags
+function parseTextCueTable(text) {
+  const entries = [];
+  const lines = text.split('\n');
+  for (const raw of lines) {
+    const line = raw.trim();
+    if (!line || line.startsWith('#') || line.startsWith('//')) continue;
+    const parts = line.split(',').map(s => s.trim());
+    if (parts.length < 2) continue;
+    const frame   = parseInt(parts[0]);
+    const soundId = parseInt(parts[1]);
+    if (isNaN(frame) || isNaN(soundId) || soundId === 0) continue;
+    const volume  = parts[2] !== undefined ? parseInt(parts[2]) || 100 : 100;
+    const pan     = parts[3] !== undefined ? parseInt(parts[3]) || 0   : 0;
+    const rawFlag = parts[4] !== undefined ? parts[4] : '0';
+    const flagsHi = rawFlag.startsWith('0x') ? parseInt(rawFlag,16) : parseInt(rawFlag)||0;
+    const flagsLo = 0;
+    entries.push({ frame, soundId, volume, pan, flagsLo, flagsHi,
+                   flags_str: flagsToStr(flagsLo, flagsHi), source: 'manual' });
+  }
+  return entries;
+}
+
+// Scan 0xF1FB prefix frames for any embedded cue/audio data
+function scanPrefixFrames() {
+  if (!dec) return [];
+  const v = dec.view, u8 = dec.u8, sz = dec.buf.byteLength;
+  const found = [];
+  let pos = dec.walkStart;
+  let frameNum = 0;
+  while (pos + 16 <= sz) {
+    const fsize  = v.getUint32(pos, true);
+    const fmagic = v.getUint16(pos+4, true);
+    if (!fsize || fsize > sz - pos) break;
+    if (fmagic === 0xF1FB) {
+      // Walk chunks inside prefix frame
+      const nc = v.getUint16(pos+6, true);
+      let cpos = pos + 16;
+      for (let c = 0; c < nc && cpos + 6 <= pos + fsize; c++) {
+        const cs = v.getUint32(cpos, true);
+        const ct = v.getUint16(cpos+4, true);
+        if (!cs || cs > fsize) break;
+        const doff = cpos + 6, dlen = cs - 6;
+        // Chunk type 8 = audio in standard FLIC spec; also try to detect cue table pattern
+        if (dlen > 0) {
+          const chunk_data = u8.subarray(doff, doff + dlen);
+          // Try parsing as binary cue table
+          const parsed = parseBinaryCueTable(chunk_data, `0xF1FB frame@0x${pos.toString(16)} chunk[${c}] type=${ct}`);
+          found.push(...parsed);
+          // Log raw bytes for reference
+          dec._l('info', `0xF1FB @0x${pos.toString(16)} chunk[${c}] type=${ct} size=${cs}: ${Array.from(chunk_data.subarray(0,16)).map(b=>b.toString(16).padStart(2,'0')).join(' ')}${dlen>16?'…':''}`);
+        }
+        cpos += cs;
+      }
+      frameNum++;
+    }
+    pos += fsize;
+  }
+  return found;
+}
+
+function renderCueList() {
+  const list = $('cue-list');
+  const head = $('cue-list-head');
+  list.innerHTML = '';
+
+  if (!cueEntries.length) {
+    head.textContent = 'CUE EVENTS — 0 entries';
+    list.innerHTML = `<div style="padding:12px 14px;color:var(--muted);font-size:11px">
+      No cue table loaded.<br><br>
+      Options:<br>
+      • Paste CSV into the box above and click Apply<br>
+      • Load a binary cue table file (8-byte entries)<br>
+      • Click "Scan 0xF1FB frames" to check for embedded audio metadata<br><br>
+      <span style="opacity:.6">CSV format: frame, soundId, volume, pan, flagsHi<br>
+      e.g. 1, 42, 100, 0, 0x00</span>
+    </div>`;
+    return;
+  }
+
+  const sorted = [...cueEntries].sort((a,b) => a.frame - b.frame);
+  head.textContent = `CUE EVENTS — ${sorted.length} entr${sorted.length===1?'y':'ies'}`;
+
+  // Header row
+  const hdr = document.createElement('div');
+  hdr.className = 'cue-row hdr';
+  hdr.innerHTML = `<span class="cue-cell">FRAME</span><span class="cue-cell">SOUND</span><span class="cue-cell">VOL</span><span class="cue-cell">PAN</span><span class="cue-cell">FLAGS</span><span class="cue-cell">SOURCE</span>`;
+  list.appendChild(hdr);
+
+  const speedMs = dec ? dec.speedMs : 70;
+  sorted.forEach(e => {
+    const timeSec = ((e.frame - 1) * speedMs / 1000).toFixed(2);
+    const el = document.createElement('div');
+    el.className = 'cue-row' + (dec && e.frame === cur + 1 ? ' active' : '');
+    el.dataset.frame = e.frame;
+    el.title = `Time: ~${timeSec}s (frame ${e.frame} @ ${speedMs}ms/frame)`;
+    // pan: spec §8 says "-64 to +63 encoded as unsigned" — sign-extend from 7-bit
+    const panSigned = e.pan < 64 ? e.pan : e.pan - 128;
+    el.innerHTML =
+      `<span class="cue-cell cue-frame">${e.frame}</span>` +
+      `<span class="cue-cell cue-sound">${e.soundId}</span>` +
+      `<span class="cue-cell">${e.volume}</span>` +
+      `<span class="cue-cell">${panSigned >= 0 ? '+' : ''}${panSigned}</span>` +
+      `<span class="cue-cell cue-flag">${e.flags_str}</span>` +
+      `<span class="cue-cell" style="color:var(--muted);font-size:9px">${e.source}</span>`;
+    // Click to seek to that frame
+    el.style.cursor = 'pointer';
+    el.addEventListener('click', () => { stopPlay(); seekTo(e.frame - 1); });
+    list.appendChild(el);
+  });
+}
+
+// Highlight the cue row matching the current frame during playback
+function updateCueHighlight() {
+  if (!$('tab-audio').classList.contains('active')) return;
+  document.querySelectorAll('.cue-row[data-frame]').forEach(el => {
+    el.classList.toggle('active', parseInt(el.dataset.frame) === cur + 1);
+  });
+}
+
+function cueTableToText() {
+  const sorted = [...cueEntries].sort((a,b) => a.frame - b.frame);
+  const speedMs = dec ? dec.speedMs : 70;
+  const lines = [
+    '# FLX Audio Cue Table',
+    `# File: ${dec ? `${dec.width}×${dec.height} ${dec.frameOffsets.length} frames @ ${speedMs}ms` : 'unknown'}`,
+    `# Generated: ${new Date().toISOString()}`,
+    `# Columns: frame (1-based), soundId, volume (0-127), pan, flagsHi (hex), approx_time_sec`,
+    '#',
+    '# Flag bits (flagsHi): 0x80=PRELOAD  0x20=QUEUE_AND_PLAY  0x40=LOOP',
+    '#',
+    'frame, soundId, volume, pan, flagsHi, time_sec',
+  ];
+  for (const e of sorted) {
+    const t = ((e.frame-1)*speedMs/1000).toFixed(3);
+    const panSigned = e.pan < 64 ? e.pan : e.pan - 128; // §8: -64..+63 encoded as unsigned
+    lines.push(`${e.frame}, ${e.soundId}, ${e.volume}, ${panSigned}, 0x${e.flagsHi.toString(16).padStart(2,'0')}, ${t}`);
+  }
+  return lines.join('\n');
+}
+
+// ── Cue table controls ───────────────────────────────────────────────
+$('cue-apply-btn').addEventListener('click', () => {
+  const text = $('cue-input').value.trim();
+  if (!text) return;
+  const parsed = parseTextCueTable(text);
+  if (!parsed.length) { toast('No valid cue entries found — check CSV format'); return; }
+  // Merge: replace any manual entries, keep binary/scan entries
+  cueEntries = cueEntries.filter(e => e.source !== 'manual');
+  cueEntries.push(...parsed);
+  renderCueList();
+  toast(`Applied ${parsed.length} cue entr${parsed.length===1?'y':'ies'}`);
+});
+
+$('cue-scan-btn').addEventListener('click', () => {
+  if (!dec) { toast('Load a file first'); return; }
+  const found = scanPrefixFrames();
+  cueEntries = cueEntries.filter(e => !e.source.startsWith('0xF1FB'));
+  cueEntries.push(...found);
+  renderCueList();
+  if (found.length)
+    toast(`Found ${found.length} cue entr${found.length===1?'y':'ies'} in 0xF1FB prefix frames`);
+  else
+    toast('No audio cue data found in 0xF1FB frames — cue table is attached externally by game code');
+});
+
+$('cue-clear-btn').addEventListener('click', () => {
+  cueEntries = [];
+  $('cue-input').value = '';
+  renderCueList();
+});
+
+$('cue-dl-btn').addEventListener('click', () => {
+  if (!cueEntries.length) { toast('No cue entries to export'); return; }
+  const text = cueTableToText();
+  const fname = `${srcFileName}_audio_cues.txt`;
+  const blob = new Blob([text], {type: 'text/plain'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = fname; a.click();
+  setTimeout(() => URL.revokeObjectURL(url), 3000);
+});
+
+$('cue-file').addEventListener('change', async e => {
+  const f = e.target.files[0];
+  if (!f) return;
+  const buf = await f.arrayBuffer();
+  const u8 = new Uint8Array(buf);
+  // Try binary parse first (multiples of 8, starts with non-zero u16)
+  let parsed = [];
+  if (u8.length % 8 === 0 && u8.length >= 8) {
+    parsed = parseBinaryCueTable(u8, `file:${f.name}`);
+  }
+  // Fall back to text parse
+  if (!parsed.length) {
+    parsed = parseTextCueTable(new TextDecoder().decode(buf));
+    parsed.forEach(e => e.source = `file:${f.name}`);
+  }
+  if (!parsed.length) { toast(`Could not parse ${f.name} as binary or CSV cue table`); return; }
+  cueEntries = cueEntries.filter(e => !e.source.startsWith('file:'));
+  cueEntries.push(...parsed);
+  renderCueList();
+  toast(`Loaded ${parsed.length} cue entr${parsed.length===1?'y':'ies'} from ${f.name}`);
+  e.target.value = '';
+});
+
+// ── end audio cue section ────────────────────────────────────────────
+
+$('copy-btn').addEventListener('click',()=>{
+  if(!dec)return;
+  navigator.clipboard.writeText(dec.diagnosticDump()).then(()=>{
+    $('copy-btn').textContent='✓ Copied!';
+    setTimeout(()=>$('copy-btn').textContent='📋 Copy diagnostic dump',2000);
+  }).catch(()=>{toast('Clipboard failed — see console');console.log(dec.diagnosticDump());});
+});
+
+// Re-apply the uploaded PLX on top of whatever palette decoding just set.
+// Called after every decodeFrame() when a PLX is loaded, so the PLX
+// always wins over FLX type-4 palette chunks.
+function applyPlxOverride(){
+  if(!uploadedPlxPalette||!dec) return;
+  for(let i=0;i<256;i++){
+    dec.palette[i*4]  =uploadedPlxPalette[i*4];
+    dec.palette[i*4+1]=uploadedPlxPalette[i*4+1];
+    dec.palette[i*4+2]=uploadedPlxPalette[i*4+2];
+    dec.palette[i*4+3]=255;
+  }
+}
+
+function seekTo(target){
+  if(!dec)return;
+  const raw=Math.max(0,Math.min(target,P()-1));
+  // Must re-decode from frame 0 (FLIC is delta encoded; state accumulates)
+  resetPalette();pixels.fill(0);
+  for(let f=0;f<=raw;f++) curChunks=dec.decodeFrame(f,pixels);
+  applyPlxOverride(); // PLX wins over any type-4 chunks from above frames
+  cur=raw;
+  renderFrame();scrub.value=cur;fc.textContent=`${cur+1} / ${P()}`;
+  updateInfo();updateChunkLog();
+  if($('tab-hex').classList.contains('active'))renderHex();
+  if($('tab-log').classList.contains('active'))renderLog();
+  updateCueHighlight();
+}
+
+function advance(){
+  if(!dec)return;
+  const isLastFrame = cur+1 >= P();
+  const next = isLastFrame ? dec.loopFrame : cur+1;
+  const wrapping = next <= cur;
+
+  // On wrap: check loop count per spec §7
+  // loopCount: -1=infinite, 0=play once (stop after last frame), N=play N times
+  if(wrapping){
+    if(loopCount === 0){
+      // Play once — stop on last frame, signal 0x04 COMPLETE
+      stopPlay();
+      dec.lastFlags = (dec.lastFlags||0) | 0x04;
+      updateFlags();
+      return;
+    }
+    if(loopsRemaining > 1){
+      loopsRemaining--;
+    } else if(loopsRemaining === 1){
+      // Final loop completed
+      loopsRemaining = 0;
+      stopPlay();
+      dec.lastFlags = (dec.lastFlags||0) | 0x04;
+      if($('tab-info').classList.contains('active'))updateInfo();
+      updateFlags();
+      return;
+    }
+    // loopsRemaining === -1: infinite, keep going
+    // Re-accumulate delta state from frame 0 to loopFrame (§7 oframe2 loop target)
+    resetPalette(); pixels.fill(0);
+    for(let f=0; f<next; f++) dec.decodeFrame(f,pixels);
+    dec.lastFlags = (dec.lastFlags||0) | 0x08; // 0x08 = LOOPED
+  }
+
+  curChunks=dec.decodeFrame(next,pixels);
+  applyPlxOverride(); // PLX wins over any type-4 chunk that just fired
+  cur=next;
+  renderFrame(); scrub.value=cur; fc.textContent=`${cur+1} / ${P()}`;
+  if($('tab-info').classList.contains('active'))updateInfo();
+  if($('tab-chunks').classList.contains('active'))updateChunkLog();
+  updateCueHighlight();
+}
+
+function startPlay(){
+  if(!dec)return;
+  // Initialise loopsRemaining from loopCount setting
+  loopsRemaining = loopCount;
+  playing=true; pb.textContent='⏸ Pause'; lastT=performance.now();
+  function L(n){
+    if(!playing)return;
+    if(n-lastT>=dec.speedMs/spd){lastT=n; advance();}
+    rafId=requestAnimationFrame(L);
+  }
+  rafId=requestAnimationFrame(L);
+}
+function stopPlay(){playing=false;pb.textContent='▶ Play';if(rafId)cancelAnimationFrame(rafId);}
+
+pb.addEventListener('click',()=>{if(!dec)return;playing?stopPlay():startPlay();});
+$('prev-btn').addEventListener('click',()=>{stopPlay();seekTo(cur-1);});
+$('next-btn').addEventListener('click',()=>{stopPlay();seekTo(cur+1);});
+scrub.addEventListener('input',()=>{stopPlay();seekTo(parseInt(scrub.value));});
+$('ss').addEventListener('input',function(){spd=parseInt(this.value)/100;$('sv').textContent=spd.toFixed(1)+'×';});
+
+// ── Flip controls ────────────────────────────────────────────────────
+$('flip-h-btn').addEventListener('click',()=>{
+  flipH=!flipH; updateFlipButtons(); renderFrame();
+});
+$('flip-v-btn').addEventListener('click',()=>{
+  flipV=!flipV; updateFlipButtons(); renderFrame();
+});
+
+// Loop count selector per spec §7: -1=infinite, 0=once, N=N times
+$('loop-select').addEventListener('change',function(){
+  loopCount=parseInt(this.value);
+  loopsRemaining=loopCount;
+  if($('tab-info').classList.contains('active'))updateInfo();
+});
+
+// ── Single-frame PNG export ──────────────────────────────────────────
+xb.addEventListener('click',async()=>{
+  if(!canvas)return;
+  const fname=`${srcFileName}_${String(cur+1).padStart(4,'0')}.png`;
+  try{const dl=await claude.use('downloads');if(dl){canvas.toBlob(async b=>{await dl.save({filename:fname,data:await b.arrayBuffer()});},'image/png');return;}}catch{}
+  const a=document.createElement('a');a.download=fname;a.href=canvas.toDataURL();a.click();
+});
+
+// ── PLX palette export ───────────────────────────────────────────────
+// PLX format (from LoadPaletteFile_PLX + LoadResourceFile_WithDecompression):
+//   Raw binary: 256 entries × 4 bytes each = 1024 bytes
+//   Each entry: R, G, B, 0x00  (RGBA, alpha always 0 in game)
+//   Stored in the same RGBA layout as param_1[0x3c] in the player state.
+//   Files on disk are typically PKX/LZSS compressed, but the raw uncompressed
+//   1024-byte form is valid and can be read by any PLX-aware tool.
+//   Note: game forces palette[0] = (0,0,0,0) after type-4 chunks (RTL_MemSet).
+$('plx-btn').addEventListener('click', async () => {
+  if(!dec) return;
+  // Build raw PLX: 256 × 4 bytes, R/G/B/0x00 per entry
+  const plx = new Uint8Array(1024);
+  const p = dec.palette;
+  for(let i = 0; i < 256; i++){
+    plx[i*4]   = p[i*4];     // R
+    plx[i*4+1] = p[i*4+1];   // G
+    plx[i*4+2] = p[i*4+2];   // B
+    plx[i*4+3] = 0x00;        // A always 0 in game (confirmed from FLX_ApplyPaletteChunk)
+  }
+  const fname = `${srcFileName}_${String(cur+1).padStart(4,'0')}.plx`;
+  try{
+    const dl = await claude.use('downloads');
+    if(dl){ await dl.save({filename:fname, data:plx.buffer}); return; }
+  }catch{}
+  // Fallback anchor download
+  const blob = new Blob([plx], {type:'application/octet-stream'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href=url; a.download=fname; a.click();
+  setTimeout(()=>URL.revokeObjectURL(url), 3000);
+});
+
+// ── PLX palette upload ───────────────────────────────────────────────
+// Accepts raw PLX (1024 bytes = 256×RGBA) or PKX-wrapped PLX.
+// PKX container: magic 0x504b583a 'PKX:' at byte 0, LZSS-compressed payload.
+// Raw PLX: exactly 1024 bytes, no header — just 256 R/G/B/0x00 entries.
+// After loading, the palette is applied immediately and locked for the session.
+// The FLX file's own palette chunks will still overwrite it frame-by-frame
+// unless the user seeks/plays — use "apply once" mode via the override flag.
+$('plx-upload').addEventListener('change', async e => {
+  const f = e.target.files[0];
+  if(!f || !dec){ e.target.value=''; return; }
+
+  const buf = await f.arrayBuffer();
+  const u8  = new Uint8Array(buf);
+  let raw = null;
+
+  if(u8.length === 1024){
+    // Raw uncompressed PLX — 256 × 4 bytes R/G/B/A
+    raw = u8;
+    dec._l('info', `PLX upload: raw 1024-byte palette from ${f.name}`);
+
+  } else if(u8.length > 24 &&
+      u8[0]===0x50&&u8[1]===0x4b&&u8[2]===0x58&&u8[3]===0x3a && // 'PKX:'
+      u8[4]===0x66&&u8[5]===0x19&&u8[6]===0x01&&u8[7]===0x10){  // 0x10011966
+    // PKX container — decompress LZSS payload
+    // PKX header (24 bytes):
+    //   +0  u32  magic1    0x3a584b50 ('PKX:' LE)
+    //   +4  u32  magic2    0x10011966
+    //   +8  u32  magic3    0x9BAEB0CF (-0x64514531)
+    //   +12 u32  compType  compression type (1..14, matches DecompressResourceData_Dispatch)
+    //   +16 u32  compSize  compressed payload size
+    //   +20 u32  rawSize   uncompressed size (expect 1024 for PLX)
+    const dv = new DataView(buf);
+    const compType = dv.getUint32(12, true);
+    const rawSize  = dv.getUint32(20, true);
+    dec._l('info', `PLX upload: PKX container, compType=${compType} rawSize=${rawSize} from ${f.name}`);
+
+    if(rawSize !== 1024){
+      toast(`Unexpected PLX size after decompression: ${rawSize} bytes (expected 1024)`);
+      e.target.value=''; return;
+    }
+
+    // LZSS decompression (type 0xE = LZSS, same as chunk type 104 stage 1)
+    // Use the decoder's existing _lzssDecode by temporarily swapping the buffer
+    const payload = u8.subarray(24);
+    const savedBuf = dec.buf, savedU8 = dec.u8;
+    dec.buf = payload.buffer.slice(payload.byteOffset, payload.byteOffset + payload.byteLength);
+    dec.u8  = new Uint8Array(dec.buf);
+    try {
+      const decompressed = dec._lzssDecode(0, dec.u8.length, 'PLX', 0);
+      if(decompressed.length !== 1024){
+        toast(`PLX decompression yielded ${decompressed.length} bytes (expected 1024)`);
+        e.target.value=''; return;
+      }
+      raw = decompressed;
+    } catch(err) {
+      toast(`PLX decompression failed: ${err.message}`);
+      e.target.value=''; return;
+    } finally {
+      dec.buf = savedBuf; dec.u8 = savedU8;
+    }
+
+  } else {
+    toast(`Unrecognised PLX format — expected 1024-byte raw or PKX-wrapped palette (got ${u8.length} bytes)`);
+    e.target.value=''; return;
+  }
+
+  // Apply the loaded palette: copy R/G/B from raw PLX, keep A=255 for display
+  // (game stores A=0 but we need A=255 for canvas rendering)
+  for(let i = 0; i < 256; i++){
+    dec.palette[i*4]   = raw[i*4];
+    dec.palette[i*4+1] = raw[i*4+1];
+    dec.palette[i*4+2] = raw[i*4+2];
+    dec.palette[i*4+3] = 255;
+  }
+
+  // Save as the persistent PLX override so exports and seeks use it
+  uploadedPlxPalette = new Uint8Array(1024);
+  for(let i = 0; i < 256; i++){
+    uploadedPlxPalette[i*4]   = raw[i*4];
+    uploadedPlxPalette[i*4+1] = raw[i*4+1];
+    uploadedPlxPalette[i*4+2] = raw[i*4+2];
+    uploadedPlxPalette[i*4+3] = 0; // game stores 0, resetPalette sets to 255 for display
+  }
+
+  renderFrame();
+  if($('tab-info').classList.contains('active')) updateInfo();
+
+  // Mark the upload label green to show a PLX is active
+  $('plx-load-label').style.borderColor = 'var(--good)';
+  $('plx-load-label').style.color = 'var(--good)';
+  $('plx-load-label').title = `PLX loaded: ${f.name} — palette overridden`;
+  toast(`PLX palette loaded from ${f.name} — ${f.size} bytes`);
+  dec._l('info', `PLX palette applied: pal[0]=(${dec.palette[0]},${dec.palette[1]},${dec.palette[2]}) pal[1]=(${dec.palette[4]},${dec.palette[5]},${dec.palette[6]})`);
+  e.target.value='';
+});
+// Pure-JS ZIP writer using STORE (no compression) — no external libs needed.
+// Format: local file headers + data + central directory + end-of-central-directory.
+function makeZip(files){
+  // files: [{name, data: Uint8Array}]
+  const enc=new TextEncoder();
+  const parts=[];
+  const central=[];
+  let offset=0;
+
+  function u16(n){const b=new Uint8Array(2);new DataView(b.buffer).setUint16(0,n,true);return b;}
+  function u32(n){const b=new Uint8Array(4);new DataView(b.buffer).setUint32(0,n,true);return b;}
+
+  function crc32(data){
+    let crc=0xFFFFFFFF;
+    const table=crc32.table||(crc32.table=(()=>{
+      const t=new Uint32Array(256);
+      for(let i=0;i<256;i++){let c=i;for(let j=0;j<8;j++)c=c&1?(0xEDB88320^(c>>>1)):(c>>>1);t[i]=c;}
+      return t;
+    })());
+    for(let i=0;i<data.length;i++) crc=table[(crc^data[i])&0xFF]^(crc>>>8);
+    return (crc^0xFFFFFFFF)>>>0;
+  }
+
+  for(const f of files){
+    const name=enc.encode(f.name);
+    const crc=crc32(f.data);
+    const size=f.data.length;
+    // Local file header
+    const lfh=new Uint8Array(30+name.length);
+    const lv=new DataView(lfh.buffer);
+    lv.setUint32(0,0x04034b50,true);  // signature
+    lv.setUint16(4,20,true);           // version needed
+    lv.setUint16(6,0,true);            // flags
+    lv.setUint16(8,0,true);            // compression: STORE
+    lv.setUint16(10,0,true);           // mod time
+    lv.setUint16(12,0,true);           // mod date
+    lv.setUint32(14,crc,true);
+    lv.setUint32(18,size,true);        // compressed size
+    lv.setUint32(22,size,true);        // uncompressed size
+    lv.setUint16(26,name.length,true);
+    lv.setUint16(28,0,true);           // extra length
+    lfh.set(name,30);
+
+    // Central directory entry
+    const cde=new Uint8Array(46+name.length);
+    const cv=new DataView(cde.buffer);
+    cv.setUint32(0,0x02014b50,true);   // signature
+    cv.setUint16(4,20,true);           // version made by
+    cv.setUint16(6,20,true);           // version needed
+    cv.setUint16(8,0,true);            // flags
+    cv.setUint16(10,0,true);           // compression: STORE
+    cv.setUint16(12,0,true);cv.setUint16(14,0,true); // mod time/date
+    cv.setUint32(16,crc,true);
+    cv.setUint32(20,size,true);
+    cv.setUint32(24,size,true);
+    cv.setUint16(28,name.length,true);
+    cv.setUint16(30,0,true);           // extra
+    cv.setUint16(32,0,true);           // comment
+    cv.setUint16(34,0,true);           // disk start
+    cv.setUint16(36,0,true);           // internal attr
+    cv.setUint32(38,0,true);           // external attr
+    cv.setUint32(42,offset,true);      // local header offset
+    cde.set(name,46);
+
+    parts.push(lfh,f.data);
+    central.push(cde);
+    offset+=lfh.length+size;
+  }
+
+  const centralData=concat(central);
+  const cdOffset=offset;
+  const cdSize=centralData.length;
+
+  // End of central directory record
+  const eocd=new Uint8Array(22);
+  const ev=new DataView(eocd.buffer);
+  ev.setUint32(0,0x06054b50,true);
+  ev.setUint16(4,0,true);ev.setUint16(6,0,true);
+  ev.setUint16(8,files.length,true);
+  ev.setUint16(10,files.length,true);
+  ev.setUint32(12,cdSize,true);
+  ev.setUint32(16,cdOffset,true);
+  ev.setUint16(20,0,true);
+
+  return concat([...parts,centralData,eocd]);
+}
+
+function concat(arrays){
+  const total=arrays.reduce((s,a)=>s+a.length,0);
+  const out=new Uint8Array(total);
+  let off=0;
+  for(const a of arrays){out.set(a,off);off+=a.length;}
+  return out;
+}
+
+// Render a specific frame index to a new offscreen canvas → PNG bytes
+async function frameToPNG(frameIdx){
+  const W=dec.width,H=dec.height;
+  const offCanvas=new OffscreenCanvas(W,H);
+  const offCtx=offCanvas.getContext('2d');
+  const offIdata=new ImageData(W,H);
+  const offPixels=new Uint8Array(W*H);
+
+  // Re-decode from scratch up to this frame (delta encoding)
+  const savedPal=dec.palette.slice();
+  resetPalette();  // applies PLX base if loaded, then FLX chunks overlay on top
+  offPixels.fill(0);
+  for(let f=0;f<=frameIdx;f++) dec.decodeFrame(f,offPixels);
+  dec.toRGBA(offPixels,offIdata.data,flipH,flipV);
+  dec.palette.set(savedPal);
+
+  offCtx.putImageData(offIdata,0,0);
+  const blob=await offCanvas.convertToBlob({type:'image/png'});
+  return new Uint8Array(await blob.arrayBuffer());
+}
+
+$('zip-btn').addEventListener('click',async()=>{
+  if(!dec)return;
+  const total=P();
+  zipCancelled=false;
+
+  // Show progress
+  stopPlay();
+  $('zip-progress').style.display='flex';
+  $('zip-btn').disabled=true;
+  $('zip-bar').style.width='0%';
+  $('zip-label').textContent=`Frame 0 / ${total}`;
+
+  const files=[];
+  // Save current decode state so we can restore it
+  const savedPal=dec.palette.slice();
+  const savedPixels=pixels.slice();
+  const savedCur=cur;
+
+  // Batch decode: accumulate state sequentially — much faster than re-decoding from 0 each time
+  const batchPixels=new Uint8Array(dec.width*dec.height);
+  resetPalette();  // applies PLX base if loaded, then FLX chunks overlay per-frame
+  batchPixels.fill(0);
+
+  for(let f=0;f<total;f++){
+    if(zipCancelled) break;
+    dec.decodeFrame(f,batchPixels);
+    applyPlxOverride(); // PLX wins over any type-4 chunks in this frame
+
+    // Render to PNG
+    const W=dec.width,H=dec.height;
+    const offCanvas=new OffscreenCanvas(W,H);
+    const offCtx=offCanvas.getContext('2d');
+    const offIdata=new ImageData(W,H);
+    dec.toRGBA(batchPixels,offIdata.data,flipH,flipV);
+    offCtx.putImageData(offIdata,0,0);
+    const blob=await offCanvas.convertToBlob({type:'image/png'});
+    const pngBytes=new Uint8Array(await blob.arrayBuffer());
+    files.push({name:`${srcFileName}_${String(f+1).padStart(4,'0')}.png`,data:pngBytes});
+
+    const pct=Math.round((f+1)/total*100);
+    $('zip-bar').style.width=pct+'%';
+    $('zip-label').textContent=`Frame ${f+1} / ${total}`;
+
+    // Yield to keep UI responsive every 4 frames
+    if(f%4===3) await new Promise(r=>setTimeout(r,0));
+  }
+
+  // Restore decode state
+  dec.palette.set(savedPal);
+  pixels.set(savedPixels);
+  cur=savedCur;
+  renderFrame();
+
+  $('zip-progress').style.display='none';
+  $('zip-btn').disabled=false;
+
+  if(zipCancelled||!files.length) return;
+
+  // Build ZIP
+  $('zip-label').textContent='Building ZIP…';
+  $('zip-progress').style.display='flex';
+  $('zip-bar').style.width='100%';
+  await new Promise(r=>setTimeout(r,0));
+
+  const zipData=makeZip(files);
+  const zipName=`${srcFileName}_frames.zip`;
+
+  $('zip-progress').style.display='none';
+
+  try{
+    const dl=await claude.use('downloads');
+    if(dl){await dl.save({filename:zipName,data:zipData.buffer});return;}
+  }catch{}
+  // Fallback: anchor download
+  const blob=new Blob([zipData],{type:'application/zip'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');a.href=url;a.download=zipName;a.click();
+  setTimeout(()=>URL.revokeObjectURL(url),5000);
+});
+
+$('zip-cancel').addEventListener('click',()=>{
+  zipCancelled=true;
+  $('zip-progress').style.display='none';
+  $('zip-btn').disabled=false;
+});
+
+document.addEventListener('dragover',e=>{e.preventDefault();dz.classList.add('drag-over');});
+document.addEventListener('dragleave',()=>dz.classList.remove('drag-over'));
+document.addEventListener('drop',e=>{e.preventDefault();dz.classList.remove('drag-over');const f=e.dataTransfer.files[0];if(f)loadFile(f);});
+dz.addEventListener('click',()=>$('fi').click());
+$('fi').addEventListener('change',e=>{if(e.target.files[0])loadFile(e.target.files[0]);});
+
+document.addEventListener('keydown',e=>{
+  if(!dec||e.target.tagName==='INPUT')return;
+  switch(e.code){
+    case'Space':e.preventDefault();playing?stopPlay():startPlay();break;
+    case'ArrowRight':stopPlay();seekTo(cur+1);break;
+    case'ArrowLeft':stopPlay();seekTo(cur-1);break;
+    case'Home':stopPlay();seekTo(0);break;
+    case'End':stopPlay();seekTo(P()-1);break;
+  }
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,1266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>ANX Frame Viewer</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root{
+    --bg:#15181c;
+    --panel:#1b1f24;
+    --panel-2:#20242a;
+    --line:#33393f;
+    --text:#dcdcd4;
+    --text-dim:#8b9198;
+    --amber:#e8a33d;
+    --amber-dim:#7a5a24;
+    --cyan:#6fb8bd;
+    --bad:#d9695f;
+    --good:#7fae6f;
+    font-family: 'IBM Plex Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+  }
+  @media (prefers-color-scheme: light){
+    :root:not([data-theme="dark"]){
+      --bg:#f0efe9;
+      --panel:#ffffff;
+      --panel-2:#f5f4ee;
+      --line:#d6d3c8;
+      --text:#242220;
+      --text-dim:#6b6862;
+      --amber:#a3670f;
+      --amber-dim:#e8cfa0;
+      --cyan:#1f7278;
+      --bad:#b7392f;
+      --good:#3f7a30;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#15181c; --panel:#1b1f24; --panel-2:#20242a; --line:#33393f;
+    --text:#dcdcd4; --text-dim:#8b9198; --amber:#e8a33d; --amber-dim:#7a5a24;
+    --cyan:#6fb8bd; --bad:#d9695f; --good:#7fae6f;
+  }
+
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--text);}
+  body{
+    min-height:100vh;
+    padding:28px 20px 60px;
+    line-height:1.5;
+    font-size:13px;
+  }
+  .wrap{max-width:1180px;margin:0 auto;}
+
+  header{
+    display:flex; align-items:baseline; justify-content:space-between;
+    border-bottom:1px solid var(--line); padding-bottom:16px; margin-bottom:22px;
+    flex-wrap:wrap; gap:10px;
+  }
+  h1{
+    font-size:15px; font-weight:600; letter-spacing:.02em; margin:0;
+    color:var(--text);
+  }
+  h1 .dim{color:var(--text-dim); font-weight:400;}
+  .byline{color:var(--text-dim); font-size:11.5px;}
+
+  .grid{display:grid; grid-template-columns: 340px 1fr; gap:18px;}
+  @media (max-width:900px){ .grid{grid-template-columns:1fr;} }
+
+  .panel{
+    background:var(--panel); border:1px solid var(--line); border-radius:3px;
+    padding:16px;
+  }
+  .panel + .panel{margin-top:18px;}
+
+  .section-label{
+    font-size:10.5px; letter-spacing:.08em; color:var(--text-dim);
+    margin:0 0 10px; text-transform:uppercase;
+  }
+
+  /* drop zone */
+  .drop{
+    border:1px dashed var(--line); border-radius:3px; padding:22px 14px;
+    text-align:center; cursor:pointer; transition:border-color .15s, background .15s;
+    color:var(--text-dim); font-size:12px;
+  }
+  .drop:hover, .drop.drag{ border-color:var(--amber); color:var(--text); background:var(--panel-2); }
+  .drop b{color:var(--text); font-weight:600;}
+  input[type=file]{display:none;}
+
+  button{
+    font-family:inherit; font-size:11.5px; cursor:pointer;
+    background:var(--panel-2); color:var(--text); border:1px solid var(--line);
+    padding:7px 12px; border-radius:3px; transition:border-color .15s, color .15s;
+  }
+  button:hover{border-color:var(--amber); color:var(--amber);}
+  button.primary{ background:var(--amber-dim); border-color:var(--amber); color:var(--text); }
+  button.primary:hover{ color:var(--amber); }
+  button:disabled{opacity:.4; cursor:default;}
+  button:disabled:hover{border-color:var(--line); color:var(--text);}
+
+  .kv{display:grid; grid-template-columns: auto 1fr; gap:3px 10px; font-size:12px;}
+  .kv dt{color:var(--text-dim);}
+  .kv dd{margin:0; text-align:right; font-variant-numeric:tabular-nums;}
+  .kv .ok{color:var(--good);}
+  .kv .err{color:var(--bad);}
+
+  .status-line{
+    display:flex; align-items:center; gap:7px; font-size:12px; margin-bottom:12px;
+  }
+  .dot{width:7px;height:7px;border-radius:50%; background:var(--line); flex:none;}
+  .dot.ok{background:var(--good);}
+  .dot.err{background:var(--bad);}
+  .dot.wait{background:var(--amber);}
+
+  .errbox{
+    border:1px solid var(--bad); background:rgba(217,105,95,.08); color:var(--bad);
+    padding:10px 12px; border-radius:3px; font-size:12px; white-space:pre-wrap;
+    margin-top:10px;
+  }
+
+  /* frame gallery */
+  .empty-state{
+    color:var(--text-dim); font-size:12.5px; padding:60px 20px; text-align:center;
+    border:1px dashed var(--line); border-radius:3px;
+  }
+  .frames{display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:14px;}
+  .frame-card{
+    border:1px solid var(--line); border-radius:3px; background:var(--panel-2);
+    padding:10px; display:flex; flex-direction:column; gap:8px;
+  }
+  .frame-card .idx{
+    font-size:10.5px; color:var(--amber); letter-spacing:.05em;
+  }
+  .canvas-wrap{
+    background:
+      linear-gradient(45deg, #2a2e33 25%, transparent 25%),
+      linear-gradient(-45deg, #2a2e33 25%, transparent 25%),
+      linear-gradient(45deg, transparent 75%, #2a2e33 75%),
+      linear-gradient(-45deg, transparent 75%, #2a2e33 75%);
+    background-size:12px 12px;
+    background-position:0 0, 0 6px, 6px -6px, -6px 0px;
+    background-color:#1a1a1a;
+    border-radius:2px; display:flex; align-items:center; justify-content:center;
+    padding:10px; min-height:110px;
+  }
+  canvas{image-rendering:pixelated; max-width:100%; display:block;}
+  .frame-meta{font-size:10.5px; color:var(--text-dim); line-height:1.6;}
+  .frame-meta b{color:var(--text); font-weight:600;}
+  .frame-actions{display:flex; gap:6px; flex-wrap:wrap;}
+  .frame-actions button{flex:1 1 auto; min-width:76px; font-size:10.5px; padding:6px 8px;}
+
+  .toolbar{
+    display:flex; gap:10px; align-items:center; margin-bottom:16px; flex-wrap:wrap;
+  }
+  .toolbar .group{display:flex; gap:4px; align-items:center; background:var(--panel-2);
+    border:1px solid var(--line); border-radius:3px; padding:3px;}
+  .toolbar .group button{border:none; background:none; padding:6px 10px; border-radius:2px;}
+  .toolbar .group button.active{background:var(--amber-dim); color:var(--amber);}
+  .toolbar .group button:disabled{opacity:.35; cursor:not-allowed;}
+  .toolbar .group button:disabled:hover{color:var(--text);}
+  .toolbar .spacer{flex:1;}
+
+  .zoom-row{display:flex; align-items:center; gap:6px;}
+  .zoom-row input[type=range]{width:90px;}
+
+  code.tag{
+    background:var(--panel-2); border:1px solid var(--line); border-radius:2px;
+    padding:1px 5px; font-size:10.5px;
+  }
+
+  footer{margin-top:36px; color:var(--text-dim); font-size:10.5px; text-align:center;}
+
+  .swatch-grid{
+    display:grid; grid-template-columns:repeat(16, 1fr); gap:1px;
+    border:1px solid var(--line); background:var(--line); border-radius:2px;
+    overflow:hidden;
+  }
+  .swatch{
+    aspect-ratio:1; background:#000; position:relative; cursor:default;
+  }
+  .swatch.reserved{
+    opacity:.35;
+    outline:1px dotted rgba(255,255,255,.4);
+    outline-offset:-1px;
+  }
+  .swatch:hover::after{
+    content: attr(data-tip);
+    position:absolute; bottom:100%; left:50%; transform:translateX(-50%);
+    background:#000; color:#fff; font-size:9px; padding:2px 5px;
+    white-space:nowrap; border-radius:2px; z-index:5; pointer-events:none;
+    margin-bottom:3px;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <h1>ANX Frame Viewer <span class="dim">/ sprite decoder</span></h1>
+    <div class="byline">container → LZSS/RLE → frame records → pixels</div>
+  </header>
+
+  <div class="grid">
+    <!-- LEFT: input + header info -->
+    <div>
+      <div class="panel">
+        <p class="section-label">Load a file</p>
+        <div class="drop" id="dropZone">
+          Drop an <b>.ANX</b> file here<br>or click to browse
+        </div>
+        <input type="file" id="fileInput" accept=".anx,*">
+      </div>
+
+      <div class="panel" id="headerPanel" style="display:none;">
+        <p class="section-label">Container</p>
+        <div class="status-line">
+          <span class="dot" id="statusDot"></span>
+          <span id="statusText">—</span>
+        </div>
+        <dl class="kv" id="headerKv"></dl>
+        <div id="errBoxHost"></div>
+      </div>
+
+      <div class="panel">
+        <p class="section-label">Load a palette (optional)</p>
+        <div class="drop" id="plxDropZone">
+          Drop a <b>.PLX</b> file here<br>or click to browse
+        </div>
+        <input type="file" id="plxFileInput" accept=".plx,*">
+      </div>
+
+      <div class="panel" id="plxPanel" style="display:none;">
+        <p class="section-label">Palette</p>
+        <div class="status-line">
+          <span class="dot" id="plxStatusDot"></span>
+          <span id="plxStatusText">—</span>
+        </div>
+        <dl class="kv" id="plxKv"></dl>
+        <div id="plxErrBoxHost"></div>
+        <div id="plxSwatchHost" style="margin-top:10px;"></div>
+        <p class="hint" style="margin:8px 0 0; color:var(--text-dim); font-size:10px; line-height:1.5;">
+          Slots 0–9 and 246–255 (dimmed, dotted border) are reserved for the
+          Windows system palette in the original engine — never taken from
+          the .plx file itself. Only 10–245 are real image colors.
+        </p>
+        <button id="clearPlxBtn" style="margin-top:10px; width:100%;">clear palette</button>
+      </div>
+    </div>
+
+    <!-- RIGHT: frame gallery -->
+    <div>
+      <div class="toolbar" id="toolbar" style="display:none;">
+        <div class="group" id="paletteGroup">
+          <button data-mode="gray" class="active">grayscale</button>
+          <button data-mode="pseudo">false-color</button>
+          <button data-mode="true" id="trueColorBtn" disabled title="load a .plx to enable">true color</button>
+        </div>
+        <div class="zoom-row">
+          <span class="hint" style="color:var(--text-dim);font-size:10.5px;">zoom</span>
+          <input type="range" id="zoom" min="1" max="8" value="3" step="1">
+          <span id="zoomVal" style="font-size:10.5px;color:var(--text-dim);">3×</span>
+        </div>
+        <div class="spacer"></div>
+        <div id="downloadBtnsHost" style="display:flex; gap:6px; flex-wrap:wrap; justify-content:flex-end;"></div>
+      </div>
+
+      <div id="galleryHost">
+        <div class="empty-state">No file loaded yet. Frames will appear here once an .ANX file is parsed.</div>
+      </div>
+    </div>
+  </div>
+
+  <footer>Format traced from binary analysis. Handles both standard per-frame codecs (0/1/12/14) and the 0x0D direct-blit escape (background/montage records, spec §2.3) used by files like BASELITE.BMX. If no palette is loaded, frames render in grayscale or a synthetic false-color map — not the game's true colors. Load a matching .PLX to check true colors (spec §15: only palette slots 10–245 come from the file; 0–9/246–255 are reserved and render magenta as a flag, never guessed).</footer>
+</div>
+
+<script>
+(() => {
+  "use strict";
+
+  // ---------- ANX decode engine (mirrors the verified Python reference) ----------
+
+  function u32(dv, off){ return dv.getUint32(off, true); }
+  function u16(dv, off){ return dv.getUint16(off, true); }
+  function i32(dv, off){ return dv.getInt32(off, true); }
+
+  class DecodeError extends Error {}
+
+  function lzssDecompress(src, expectedOutSize){
+    // src: Uint8Array. expectedOutSize is optional -- when omitted, the
+    // output grows dynamically and no final-length assertion is made
+    // (used for the nested/escape-record decode path -- see decodeRowRLE
+    // and spec §2.3, where the true size isn't known ahead of time).
+    let pos = 0;
+    const header = src[pos];
+    let segmentFlag, blockCount;
+    if (header < 8){
+      segmentFlag = header;
+      blockCount = src[pos+1] | (src[pos+2] << 8);
+      pos += 3;
+      if (blockCount === 0xFFFF){
+        blockCount = (src[pos] | (src[pos+1]<<8) | (src[pos+2]<<16) | (src[pos+3]<<24)) >>> 0;
+        pos += 4;
+      }
+    } else {
+      segmentFlag = header & 0x07;
+      blockCount = (header >> 3) - 1;
+      pos += 1;
+    }
+
+    const out = [];
+
+    while (true){
+      let bitBudget = segmentFlag;
+      blockCount -= 1;
+      let flag;
+      if (blockCount < 0){
+        if (segmentFlag === 0) break;
+        segmentFlag = 0;
+        flag = src[pos]; pos += 1;
+        // bitBudget stays at its pre-exhaustion value -- NOT reset to 8
+      } else {
+        flag = src[pos]; pos += 1;
+        if (flag === 0x00){
+          for (let k=0;k<8;k++) out.push(src[pos+k]);
+          pos += 8;
+          continue;
+        }
+        bitBudget = 8;
+      }
+
+      let bitsDone = 0;
+      while (bitsDone < bitBudget){
+        const bit = (flag >> (7 - bitsDone)) & 1;
+        bitsDone += 1;
+        if (bit){
+          const token = src[pos] | (src[pos+1] << 8);
+          pos += 2;
+          const length = (token & 0x0F) + 3;
+          const distance = (token >> 4) + 1;
+          let start = out.length - distance;
+          for (let i=0;i<length;i++){
+            out.push(out[start+i]);
+          }
+        } else {
+          out.push(src[pos]); pos += 1;
+        }
+      }
+    }
+    const data = Uint8Array.from(out);
+    if (expectedOutSize !== undefined && expectedOutSize !== null && data.length !== expectedOutSize){
+      throw new DecodeError(`LZSS size mismatch: got ${data.length}, expected ${expectedOutSize}`);
+    }
+    return { data, consumed: pos };
+  }
+
+  // ---------- Direct-blit escape records: codec byte low nibble == 0x0D ----------
+  // Derived from DecodeAndBlit_RLE12_Unscaled (formerly FUN_0047f5e0) -- a distinct
+  // RLE variant, NOT identical to codec 1 or codec 12: each image row is
+  // independently RLE-encoded and self-terminated. See spec §2.3.
+
+  function decodeRowRLE(src, width, height){
+    const out = new Uint8Array(width * height);
+    let pos = 0;
+    for (let row = 0; row < height; row++){
+      let col = 0;
+      const rowStart = row * width;
+      while (true){
+        if (pos >= src.length) throw new DecodeError("row-RLE: ran off end of buffer");
+        const c = src[pos]; pos += 1;
+        if ((c & 0x7F) === 0) break; // row terminator (0x00 or 0x80)
+        const count = c & 0x7F;
+        if (c & 0x80){
+          const f = src[pos]; pos += 1;
+          if (f === 0){
+            col += count; // skip -- leaves 0 (transparent) in a fresh buffer
+          } else {
+            for (let i=0;i<count;i++) out[rowStart+col+i] = f;
+            col += count;
+          }
+        } else {
+          for (let i=0;i<count;i++) out[rowStart+col+i] = src[pos+i];
+          pos += count;
+          col += count;
+        }
+      }
+    }
+    return { data: out, consumed: pos };
+  }
+
+  function rleDecompressCodec1(src, maxLen){
+    const out = [];
+    let pos = 0;
+    while (true){
+      if (pos >= src.length) throw new DecodeError("codec1: ran off end of buffer");
+      const c = src[pos]; pos += 1;
+      if ((c & 0x7F) === 0) break; // terminator (0x00 or 0x80)
+      if (c & 0x80){
+        const count = c & 0x7F;
+        const f = src[pos]; pos += 1;
+        for (let i=0;i<count;i++) out.push(f);
+      } else {
+        for (let i=0;i<c;i++) out.push(src[pos+i]);
+        pos += c;
+      }
+      if (maxLen && out.length > maxLen + 4096) throw new DecodeError("codec1: runaway decode");
+    }
+    return { data: Uint8Array.from(out), consumed: pos };
+  }
+
+  function rleDecompressCodec12(src, maxLen){
+    const out = [];
+    let pos = 0;
+    while (true){
+      if (pos >= src.length) throw new DecodeError("codec12: ran off end of buffer");
+      const c = src[pos]; pos += 1;
+      if (c >= 0x01 && c <= 0x7F){
+        for (let i=0;i<c;i++) out.push(src[pos+i]);
+        pos += c;
+      } else if (c === 0x00){
+        const k = src[pos]; const f = src[pos+1]; pos += 2;
+        for (let i=0;i<k;i++) out.push(f);
+      } else if (c === 0x80){
+        const raw16 = src[pos] | (src[pos+1] << 8); pos += 2;
+        if (raw16 === 0x0000){
+          break;
+        } else if (raw16 <= 0x7FFF){
+          for (let i=0;i<raw16;i++) out.push(0);
+        } else if (raw16 <= 0xBFFF){
+          const n = raw16 - 0x8000;
+          for (let i=0;i<n;i++) out.push(src[pos+i]);
+          pos += n;
+        } else {
+          const n = raw16 - 0xC000;
+          const f = src[pos]; pos += 1;
+          for (let i=0;i<n;i++) out.push(f);
+        }
+      } else {
+        const skip = c & 0x7F;
+        for (let i=0;i<skip;i++) out.push(0);
+      }
+      if (maxLen && out.length > maxLen + 4096) throw new DecodeError("codec12: runaway decode");
+    }
+    return { data: Uint8Array.from(out), consumed: pos };
+  }
+
+  function decompress(codecId, src, expectedSize){
+    if (codecId === 14) return lzssDecompress(src, expectedSize);
+    if (codecId === 1)  return rleDecompressCodec1(src, expectedSize);
+    if (codecId === 12) return rleDecompressCodec12(src, expectedSize);
+    if (codecId === 0){
+      // raw / uncompressed
+      return { data: src.slice(0, expectedSize), consumed: expectedSize };
+    }
+    throw new DecodeError(`unsupported/unimplemented codec ${codecId}`);
+  }
+
+  const MAGIC1 = 0x3A584B50, MAGIC2 = 0x10011966, MAGIC3 = 0x9BAEBACF;
+
+  function decodeAnx(bytes){
+    // bytes: Uint8Array of the whole file
+    const dv = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
+    let payload, container = null;
+
+    if (bytes.length >= 0x18 &&
+        u32(dv,0) === MAGIC1 && u32(dv,4) === MAGIC2 && u32(dv,8) === MAGIC3){
+      const codecId = u32(dv, 0x0C);
+      const compressedSize = u32(dv, 0x10);
+      const decompressedSize = u32(dv, 0x14);
+      container = { codecId, compressedSize, decompressedSize, fileSize: bytes.length };
+      if (compressedSize !== bytes.length - 0x18){
+        throw new DecodeError(`compressedSize (${compressedSize}) != fileSize-0x18 (${bytes.length-0x18})`);
+      }
+      if (!(decompressedSize >= 1 && decompressedSize <= 9999999)){
+        throw new DecodeError(`decompressedSize out of range: ${decompressedSize}`);
+      }
+      const compData = bytes.subarray(0x18);
+      const res = decompress(codecId, compData, decompressedSize);
+      if (res.data.length !== decompressedSize){
+        throw new DecodeError(`decompressed length ${res.data.length} != header ${decompressedSize}`);
+      }
+      payload = res.data;
+    } else {
+      payload = bytes; // raw, uncontained payload
+    }
+
+    if (payload.length < 4) throw new DecodeError("payload too short to hold frameCount");
+    const pdv = new DataView(payload.buffer, payload.byteOffset, payload.byteLength);
+    const frameCount = u32(pdv, 0);
+    if (frameCount === 0 || frameCount > 4096){
+      throw new DecodeError(`frameCount looks implausible: ${frameCount}`);
+    }
+
+    const frames = [];
+    for (let i=0;i<frameCount;i++){
+      const recOff = 4 + i*12;
+      if (recOff + 12 > payload.length) throw new DecodeError(`frame record ${i} out of bounds`);
+      const dataOffset = i32(pdv, recOff+0);
+      const width = u16(pdv, recOff+4);
+      const height = u16(pdv, recOff+6);
+      const reserved8 = payload[recOff+8];
+      const codec = payload[recOff+9];
+      const reservedTail = u16(pdv, recOff+10);
+
+      const pixelStart = recOff + dataOffset;
+      const expected = width*height;
+      let pixels;
+      let escapeUsed = false;
+
+      if (width === 0 || height === 0){
+        // A real production file exposed this: some records have
+        // width==0 (or height==0) and are NOT meant to be read as pixel
+        // images at all. In the traced engine, a specific consumer
+        // (BlitFrameRecord_RawUnchecked) reinterprets width/height for
+        // these records as (destOffsetInDwords, countInDwords) and does
+        // a raw memory copy instead -- e.g. a record with width=0,
+        // height=256 turned out to be exactly a 1024-byte (256*4) raw
+        // data blob (very likely a palette fragment), not a 0x256 image.
+        // Attempting to treat this as a normal image and hand a 0-sized
+        // dimension to canvas.createImageData() throws in every browser
+        // per spec, which is what broke this exact file. Skip normal
+        // decode for these and flag them instead of guessing their
+        // true meaning.
+        pixels = new Uint8Array(0);
+        const embeddedPalette = extractEmbeddedPalette(payload, recOff, dataOffset, width, height);
+        frames.push({ index:i, dataOffset, width, height, reserved8, codec, reservedTail, pixels, escapeUsed: false, degenerate: true, embeddedPalette });
+        continue;
+      }
+
+      if (pixelStart < 0 || pixelStart > payload.length){
+        throw new DecodeError(`frame ${i}: pixelStart ${pixelStart} out of bounds`);
+      }
+      if ((codec & 0x0F) === 0x0D){
+        // Direct-blit escape (see decodeRowRLE / spec §2.3): the real codec
+        // is in the HIGH nibble; 0 means the row-RLE stream follows directly,
+        // nonzero means it's wrapped in one more layer of standard
+        // compression first.
+        escapeUsed = true;
+        const highNibble = codec >> 4;
+        let src2 = payload.subarray(pixelStart);
+        if (highNibble !== 0){
+          const res = decompress(highNibble, src2, null); // size unknown ahead of time
+          src2 = res.data;
+        }
+        const rowRes = decodeRowRLE(src2, width, height);
+        pixels = rowRes.data;
+        if (pixels.length !== expected){
+          throw new DecodeError(`frame ${i}: row-RLE decoded ${pixels.length} bytes, expected ${expected} (width*height)`);
+        }
+      } else if (codec === 0){
+        pixels = payload.subarray(pixelStart, pixelStart+expected);
+        if (pixels.length !== expected) throw new DecodeError(`frame ${i}: raw pixel data truncated`);
+      } else {
+        const sub = payload.subarray(pixelStart);
+        const res = decompress(codec, sub, expected);
+        pixels = res.data;
+        if (pixels.length !== expected){
+          throw new DecodeError(`frame ${i}: decoded ${pixels.length} bytes, expected ${expected} (width*height)`);
+        }
+      }
+      frames.push({ index:i, dataOffset, width, height, reserved8, codec, reservedTail, pixels, escapeUsed });
+    }
+
+    return { container, payloadSize: payload.length, frameCount, frames };
+  }
+
+  // ---------- Embedded palette extraction (degenerate width==0 records) ----------
+  // Confirmed via decompiled code: LoadBackgroundBitmap_AndBlit's second
+  // "frame" for background .BMX files (width=0, height=256) gets copied
+  // raw and fed directly into PostProcessLoadedPalette /
+  // SetPaletteRange_ClampedToUsableSlots -- the exact same pipeline a
+  // standalone .PLX file goes through. So these bytes ARE a palette,
+  // laid out identically to .PLX's flat PALETTEENTRY[256].
+
+  function extractEmbeddedPalette(payload, recOff, dataOffset, width, height){
+    if (width !== 0 || height <= 0) return null;
+    const pixelStart = recOff + dataOffset;
+    const byteLen = height * 4;
+    if (pixelStart < 0 || pixelStart + byteLen > payload.length) return null;
+
+    const entries = [];
+    for (let i = 0; i < height; i++){
+      const off = pixelStart + i*4;
+      entries.push({
+        r: payload[off+0], g: payload[off+1], b: payload[off+2], flags: payload[off+3],
+        reserved: (i < 10 || i > 245), // same reserved-slot convention as .PLX, since it
+                                        // goes through the identical apply pipeline
+      });
+    }
+    return {
+      entries,
+      byteLen,
+      // Exact bytes as found -- exporting this directly (rather than
+      // reconstructing from `entries`) guarantees a byte-perfect .plx
+      // file, including whatever filler happens to sit in the reserved
+      // slots, rather than a lossy round-trip through the parsed form.
+      rawBytes: payload.slice(pixelStart, pixelStart + byteLen),
+      // height===256 is the exact confirmed real-world pattern (a full
+      // standard 256-entry palette); anything else is still extracted
+      // and shown, just flagged as an unconfirmed/non-standard size
+      // rather than asserted with the same confidence.
+      standardSize: height === 256,
+    };
+  }
+
+  // ---------- .PLX palette decode (§15 of the spec) ----------
+
+  class PlxError extends Error {}
+
+  function decodePlx(bytes){
+    const dv = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
+    let payload, container = null;
+
+    if (bytes.length >= 0x18 &&
+        u32(dv,0) === MAGIC1 && u32(dv,4) === MAGIC2 && u32(dv,8) === MAGIC3){
+      const codecId = u32(dv, 0x0C);
+      const compressedSize = u32(dv, 0x10);
+      const decompressedSize = u32(dv, 0x14);
+      container = { codecId, compressedSize, decompressedSize, fileSize: bytes.length };
+      if (compressedSize !== bytes.length - 0x18){
+        throw new PlxError(`compressedSize (${compressedSize}) != fileSize-0x18 (${bytes.length-0x18})`);
+      }
+      if (!(decompressedSize >= 1 && decompressedSize <= 9999999)){
+        throw new PlxError(`decompressedSize out of range: ${decompressedSize}`);
+      }
+      const compData = bytes.subarray(0x18);
+      const res = decompress(codecId, compData, decompressedSize);
+      if (res.data.length !== decompressedSize){
+        throw new PlxError(`decompressed length ${res.data.length} != header ${decompressedSize}`);
+      }
+      payload = res.data;
+    } else {
+      payload = bytes;
+    }
+
+    if (payload.length < 1024){
+      throw new PlxError(`payload too short for a 256-entry palette: ${payload.length} bytes (need >= 1024)`);
+    }
+
+    // Flat PALETTEENTRY[256]: {peRed, peGreen, peBlue, peFlags}, no header.
+    const entries = [];
+    for (let i=0;i<256;i++){
+      const off = i*4;
+      entries.push({
+        r: payload[off+0],
+        g: payload[off+1],
+        b: payload[off+2],
+        flags: payload[off+3],
+        reserved: (i < 10 || i > 245), // slots the engine overwrites with GetSystemPaletteEntries
+      });
+    }
+
+    return { container, payloadSize: payload.length, entries };
+  }
+
+  // ---------- ZIP writer (store method, no compression) ----------
+  // Minimal, dependency-free ZIP builder -- verified against Python's
+  // zipfile.testzip() and the system unzip -t before shipping.
+
+  const CRC_TABLE = (() => {
+    const table = [];
+    for (let n = 0; n < 256; n++){
+      let c = n;
+      for (let k = 0; k < 8; k++){
+        c = (c & 1) ? (0xEDB88320 ^ (c >>> 1)) : (c >>> 1);
+      }
+      table[n] = c;
+    }
+    return table;
+  })();
+
+  function crc32(bytes){
+    let crc = 0xFFFFFFFF;
+    for (let i = 0; i < bytes.length; i++){
+      crc = CRC_TABLE[(crc ^ bytes[i]) & 0xFF] ^ (crc >>> 8);
+    }
+    return (crc ^ 0xFFFFFFFF) >>> 0;
+  }
+
+  function zu16le(n){ return [n & 0xFF, (n>>8)&0xFF]; }
+  function zu32le(n){ return [n&0xFF,(n>>8)&0xFF,(n>>16)&0xFF,(n>>24)&0xFF]; }
+
+  function buildZip(files){
+    // files: [{name: string, data: Uint8Array}]
+    const localParts = [];
+    const centralParts = [];
+    let offset = 0;
+    const dosTime = 0, dosDate = 0x21; // fixed placeholder date/time, not load-bearing
+
+    files.forEach(f => {
+      const nameBytes = new TextEncoder().encode(f.name);
+      const crc = crc32(f.data);
+      const size = f.data.length;
+
+      const localHeader = new Uint8Array([
+        0x50,0x4B,0x03,0x04,   // local file header signature
+        20,0,                   // version needed to extract
+        0,0,                    // general purpose flag
+        0,0,                    // compression method: 0 = stored
+        ...zu16le(dosTime),
+        ...zu16le(dosDate),
+        ...zu32le(crc),
+        ...zu32le(size),        // compressed size == uncompressed (stored)
+        ...zu32le(size),
+        ...zu16le(nameBytes.length),
+        0,0,                    // extra field length
+      ]);
+      localParts.push(localHeader, nameBytes, f.data);
+
+      const centralHeader = new Uint8Array([
+        0x50,0x4B,0x01,0x02,   // central directory header signature
+        20,0,                   // version made by
+        20,0,                   // version needed to extract
+        0,0,                    // flags
+        0,0,                    // method
+        ...zu16le(dosTime),
+        ...zu16le(dosDate),
+        ...zu32le(crc),
+        ...zu32le(size),
+        ...zu32le(size),
+        ...zu16le(nameBytes.length),
+        0,0,                    // extra length
+        0,0,                    // comment length
+        0,0,                    // disk number start
+        0,0,                    // internal attrs
+        ...zu32le(0),           // external attrs
+        ...zu32le(offset),      // offset of local header
+      ]);
+      centralParts.push(centralHeader, nameBytes);
+
+      offset += localHeader.length + nameBytes.length + f.data.length;
+    });
+
+    const centralDirOffset = offset;
+    let centralSize = 0;
+    centralParts.forEach(p => centralSize += p.length);
+
+    const eocd = new Uint8Array([
+      0x50,0x4B,0x05,0x06,     // end of central directory signature
+      0,0, 0,0,                 // disk numbers
+      ...zu16le(files.length),
+      ...zu16le(files.length),
+      ...zu32le(centralSize),
+      ...zu32le(centralDirOffset),
+      0,0,                      // comment length
+    ]);
+
+    const allParts = [...localParts, ...centralParts, eocd];
+    let totalLen = 0;
+    allParts.forEach(p => totalLen += p.length);
+    const out = new Uint8Array(totalLen);
+    let pos = 0;
+    allParts.forEach(p => { out.set(p, pos); pos += p.length; });
+    return out;
+  }
+
+  // ---------- .gpl (GIMP Palette) export for embedded palettes ----------
+
+  function buildGpl(entries, name, columns, includeReserved){
+    const lines = [];
+    lines.push("GIMP Palette");
+    lines.push(`Name: ${name || "palette"}`);
+    lines.push(`Columns: ${columns || 16}`);
+    lines.push("#");
+    entries.forEach((e, i) => {
+      if (e.reserved && !includeReserved) return;
+      const r = String(e.r).padStart(3, ' ');
+      const g = String(e.g).padStart(3, ' ');
+      const b = String(e.b).padStart(3, ' ');
+      const label = e.reserved ? `index_${String(i).padStart(3,'0')} (reserved)` : `index_${String(i).padStart(3,'0')}`;
+      lines.push(`${r} ${g} ${b}\t${label}`);
+    });
+    return lines.join("\n") + "\n";
+  }
+
+  // ---------- UI wiring ----------
+
+  const dropZone = document.getElementById('dropZone');
+  const fileInput = document.getElementById('fileInput');
+  const headerPanel = document.getElementById('headerPanel');
+  const headerKv = document.getElementById('headerKv');
+  const statusDot = document.getElementById('statusDot');
+  const statusText = document.getElementById('statusText');
+  const errBoxHost = document.getElementById('errBoxHost');
+  const galleryHost = document.getElementById('galleryHost');
+  const toolbar = document.getElementById('toolbar');
+  const paletteGroup = document.getElementById('paletteGroup');
+  const zoomSlider = document.getElementById('zoom');
+  const zoomVal = document.getElementById('zoomVal');
+  const downloadBtnsHost = document.getElementById('downloadBtnsHost');
+
+  const plxDropZone = document.getElementById('plxDropZone');
+  const plxFileInput = document.getElementById('plxFileInput');
+  const plxPanel = document.getElementById('plxPanel');
+  const plxKv = document.getElementById('plxKv');
+  const plxStatusDot = document.getElementById('plxStatusDot');
+  const plxStatusText = document.getElementById('plxStatusText');
+  const plxErrBoxHost = document.getElementById('plxErrBoxHost');
+  const plxSwatchHost = document.getElementById('plxSwatchHost');
+  const clearPlxBtn = document.getElementById('clearPlxBtn');
+  const trueColorBtn = document.getElementById('trueColorBtn');
+
+  let currentPalette = null; // array of 256 {r,g,b,flags,reserved} or null
+
+  let currentResult = null;
+  let currentMode = 'gray';
+  let currentZoom = 3;
+  let currentBaseName = 'anx';
+
+  dropZone.addEventListener('click', () => fileInput.click());
+  dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('drag'); });
+  dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag'));
+  dropZone.addEventListener('drop', e => {
+    e.preventDefault(); dropZone.classList.remove('drag');
+    if (e.dataTransfer.files && e.dataTransfer.files[0]) loadFile(e.dataTransfer.files[0]);
+  });
+  fileInput.addEventListener('change', () => {
+    if (fileInput.files[0]) loadFile(fileInput.files[0]);
+  });
+
+  function loadFile(file){
+    const reader = new FileReader();
+    reader.onload = () => {
+      const bytes = new Uint8Array(reader.result);
+      const baseName = file.name.replace(/\.[^/.]+$/, '') || 'anx';
+      runDecode(bytes, file.name, baseName);
+    };
+    reader.readAsArrayBuffer(file);
+  }
+
+  // ---------- PLX wiring ----------
+
+  plxDropZone.addEventListener('click', () => plxFileInput.click());
+  plxDropZone.addEventListener('dragover', e => { e.preventDefault(); plxDropZone.classList.add('drag'); });
+  plxDropZone.addEventListener('dragleave', () => plxDropZone.classList.remove('drag'));
+  plxDropZone.addEventListener('drop', e => {
+    e.preventDefault(); plxDropZone.classList.remove('drag');
+    if (e.dataTransfer.files && e.dataTransfer.files[0]) loadPlxFile(e.dataTransfer.files[0]);
+  });
+  plxFileInput.addEventListener('change', () => {
+    if (plxFileInput.files[0]) loadPlxFile(plxFileInput.files[0]);
+  });
+
+  function loadPlxFile(file){
+    const reader = new FileReader();
+    reader.onload = () => {
+      const bytes = new Uint8Array(reader.result);
+      runPlxDecode(bytes, file.name);
+    };
+    reader.readAsArrayBuffer(file);
+  }
+
+  function setPlxStatus(kind, text){
+    plxStatusDot.className = 'dot ' + kind;
+    plxStatusText.textContent = text;
+  }
+
+  function runPlxDecode(bytes, name){
+    plxPanel.style.display = 'block';
+    plxErrBoxHost.innerHTML = '';
+    plxKv.innerHTML = '';
+    plxSwatchHost.innerHTML = '';
+    setPlxStatus('wait', 'parsing…');
+
+    let result;
+    try{
+      result = decodePlx(bytes);
+    } catch(err){
+      setPlxStatus('err', 'decode failed');
+      const box = document.createElement('div');
+      box.className = 'errbox';
+      box.textContent = err.message || String(err);
+      plxErrBoxHost.appendChild(box);
+      currentPalette = null;
+      trueColorBtn.disabled = true;
+      refreshGalleryCanvases();
+      return;
+    }
+
+    setPlxStatus('ok', `parsed OK — ${name}`);
+    currentPalette = result.entries;
+    renderPlxHeader(result, bytes.length);
+    renderPlxSwatches(result.entries);
+    trueColorBtn.disabled = false;
+    refreshGalleryCanvases();
+  }
+
+  function renderPlxHeader(result, fileSize){
+    const rows = [];
+    rows.push(['file size', fileSize + ' bytes']);
+    if (result.container){
+      const c = result.container;
+      const codecName = {1:'RLE (zero-run)', 12:'RLE (standard)', 14:'LZSS', 0:'raw'}[c.codecId] || ('unknown ('+c.codecId+')');
+      rows.push(['container', '<span class="ok">PKX: detected</span>']);
+      rows.push(['codec', codecName]);
+      rows.push(['decompressed', c.decompressedSize + ' bytes']);
+    } else {
+      rows.push(['container', 'none (raw payload)']);
+    }
+    rows.push(['entries', '256 (10–245 usable)']);
+    plxKv.innerHTML = rows.map(([k,v]) => `<dt>${k}</dt><dd>${v}</dd>`).join('');
+  }
+
+  function renderPlxSwatches(entries){
+    const grid = document.createElement('div');
+    grid.className = 'swatch-grid';
+    entries.forEach((e, i) => {
+      const sw = document.createElement('div');
+      sw.className = 'swatch' + (e.reserved ? ' reserved' : '');
+      sw.style.background = `rgb(${e.r},${e.g},${e.b})`;
+      sw.setAttribute('data-tip', `#${i}: ${e.r},${e.g},${e.b}${e.reserved ? ' (reserved)' : ''}`);
+      grid.appendChild(sw);
+    });
+    plxSwatchHost.appendChild(grid);
+  }
+
+  clearPlxBtn.addEventListener('click', () => {
+    currentPalette = null;
+    plxPanel.style.display = 'none';
+    trueColorBtn.disabled = true;
+    if (currentMode === 'true') {
+      currentMode = 'gray';
+      paletteGroup.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+      paletteGroup.querySelector('[data-mode="gray"]').classList.add('active');
+    }
+    refreshGalleryCanvases();
+  });
+
+  function setStatus(kind, text){
+    statusDot.className = 'dot ' + kind;
+    statusText.textContent = text;
+  }
+
+  function fmtHex(n, digits){
+    return '0x' + n.toString(16).toUpperCase().padStart(digits||2, '0');
+  }
+
+  function runDecode(bytes, name, baseName){
+    headerPanel.style.display = 'block';
+    errBoxHost.innerHTML = '';
+    headerKv.innerHTML = '';
+    setStatus('wait', 'parsing…');
+
+    let result;
+    try{
+      result = decodeAnx(bytes);
+    } catch(err){
+      setStatus('err', err instanceof DecodeError ? 'decode failed' : 'unexpected error');
+      const box = document.createElement('div');
+      box.className = 'errbox';
+      box.textContent = err.message || String(err);
+      errBoxHost.appendChild(box);
+      toolbar.style.display = 'none';
+      galleryHost.innerHTML = '<div class="empty-state">Decoding failed — see error above.</div>';
+      currentResult = null;
+      return;
+    }
+
+    setStatus('ok', `parsed OK — ${name}`);
+    currentResult = result;
+    currentBaseName = baseName || 'anx';
+    renderHeader(result, bytes.length);
+    renderGallery(result);
+    renderDownloadButtons(result.frames.length);
+    toolbar.style.display = 'flex';
+  }
+
+  function renderHeader(result, fileSize){
+    const rows = [];
+    rows.push(['file size', fileSize + ' bytes']);
+    if (result.container){
+      const c = result.container;
+      const codecName = {1:'RLE (zero-run)', 12:'RLE (standard)', 14:'LZSS', 0:'raw'}[c.codecId] || ('unknown ('+c.codecId+')');
+      rows.push(['container', '<span class="ok">PKX: detected</span>']);
+      rows.push(['codec', codecName + ' <span class="hint" style="color:var(--text-dim)">(' + c.codecId + ')</span>']);
+      rows.push(['compressed', c.compressedSize + ' bytes']);
+      rows.push(['decompressed', c.decompressedSize + ' bytes']);
+    } else {
+      rows.push(['container', 'none (raw payload)']);
+    }
+    rows.push(['payload size', result.payloadSize + ' bytes']);
+    rows.push(['frameCount', String(result.frameCount)]);
+
+    headerKv.innerHTML = rows.map(([k,v]) =>
+      `<dt>${k}</dt><dd>${v}</dd>`
+    ).join('');
+  }
+
+  function palette(idx, mode){
+    if (idx === 0) return [0,0,0,0];
+    if (mode === 'true' && currentPalette){
+      const e = currentPalette[idx];
+      if (e.reserved){
+        // Slot never comes from the .plx file in the real engine (it's
+        // system-palette territory) -- flag it visually rather than
+        // silently showing whatever garbage/placeholder sits there.
+        return [255,0,220,255];
+      }
+      return [e.r, e.g, e.b, 255];
+    }
+    if (mode === 'gray'){
+      return [idx, idx, idx, 255];
+    }
+    // false-color: deterministic pseudo-random-looking mapping, same
+    // formula used during spec verification
+    return [(idx*37)%256, (idx*91)%256, (idx*143)%256, 255];
+  }
+
+  function drawFrameToCanvas(frame, mode, zoom){
+    const { width, height, pixels } = frame;
+    const off = document.createElement('canvas');
+    off.width = width; off.height = height;
+    const octx = off.getContext('2d');
+    const imgData = octx.createImageData(width, height);
+    for (let i=0;i<width*height;i++){
+      const [r,g,b,a] = palette(pixels[i], mode);
+      imgData.data[i*4+0] = r;
+      imgData.data[i*4+1] = g;
+      imgData.data[i*4+2] = b;
+      imgData.data[i*4+3] = a;
+    }
+    octx.putImageData(imgData, 0, 0);
+
+    const canvas = document.createElement('canvas');
+    canvas.width = width*zoom; canvas.height = height*zoom;
+    const ctx = canvas.getContext('2d');
+    ctx.imageSmoothingEnabled = false;
+    ctx.drawImage(off, 0, 0, width*zoom, height*zoom);
+    return { canvas, off };
+  }
+
+  function renderGallery(result){
+    galleryHost.innerHTML = '';
+    const grid = document.createElement('div');
+    grid.className = 'frames';
+
+    result.frames.forEach(frame => {
+      const card = document.createElement('div');
+      card.className = 'frame-card';
+
+      const idx = document.createElement('div');
+      idx.className = 'idx';
+      idx.textContent = `FRAME ${frame.index + 1}`;
+      card.appendChild(idx);
+
+      const canvasWrap = document.createElement('div');
+      canvasWrap.className = 'canvas-wrap';
+
+      if (frame.degenerate){
+        // width==0 or height==0 -- confirmed on a real file to NOT be an
+        // image at all (a specific consumer reinterprets these fields
+        // for a raw data copy instead). Canvas APIs throw on a 0-sized
+        // dimension, so this is never rendered as an image -- flagged
+        // instead, with a palette preview when the bytes match the
+        // confirmed embedded-palette pattern.
+        if (frame.embeddedPalette){
+          const ep = frame.embeddedPalette;
+          const label = ep.standardSize
+            ? `<b style="color:var(--good)">embedded palette</b> (confirmed pattern — fed into the same PostProcessLoadedPalette/SetPaletteRange pipeline as a .plx file)`
+            : `<b style="color:var(--amber)">possible palette</b> (${ep.entries.length} entries — non-standard count, less certain than the confirmed 256-entry case)`;
+          const swGrid = document.createElement('div');
+          swGrid.className = 'swatch-grid';
+          swGrid.style.marginBottom = '8px';
+          ep.entries.forEach((e, i) => {
+            const sw = document.createElement('div');
+            sw.className = 'swatch' + (e.reserved ? ' reserved' : '');
+            sw.style.background = `rgb(${e.r},${e.g},${e.b})`;
+            sw.setAttribute('data-tip', `#${i}: ${e.r},${e.g},${e.b}${e.reserved ? ' (reserved)' : ''}`);
+            swGrid.appendChild(sw);
+          });
+          canvasWrap.innerHTML = '';
+          canvasWrap.style.flexDirection = 'column';
+          canvasWrap.style.alignItems = 'stretch';
+          canvasWrap.style.padding = '10px';
+          const labelDiv = document.createElement('div');
+          labelDiv.style.fontSize = '10px';
+          labelDiv.style.color = 'var(--text-dim)';
+          labelDiv.style.marginBottom = '6px';
+          labelDiv.innerHTML = label;
+          canvasWrap.appendChild(labelDiv);
+          canvasWrap.appendChild(swGrid);
+        } else {
+          canvasWrap.innerHTML = `<div class="empty-state" style="padding:20px;">not an image<br><span style="font-size:10px;">width or height is 0 -- raw/metadata data reusing this record slot, see spec §2.3</span></div>`;
+        }
+        card.appendChild(canvasWrap);
+        card._offCanvas = null;
+        card._frame = frame;
+      } else {
+        const { canvas, off } = drawFrameToCanvas(frame, currentMode, currentZoom);
+        canvasWrap.appendChild(canvas);
+        card.appendChild(canvasWrap);
+        card._offCanvas = off;
+        card._frame = frame;
+      }
+
+      const meta = document.createElement('div');
+      meta.className = 'frame-meta';
+      const codecLabel = frame.degenerate
+        ? (frame.embeddedPalette ? `<span style="color:var(--good)">palette data</span>` : `<span style="color:var(--bad)">non-image record</span>`)
+        : frame.escapeUsed
+          ? `<span style="color:var(--amber)">0x0D escape</span> (real codec: ${frame.codec >> 4 === 0 ? 'none, raw row-RLE' : frame.codec >> 4})`
+          : `codec ${frame.codec}`;
+      meta.innerHTML =
+        `<b>${frame.width}×${frame.height}</b> px &nbsp;·&nbsp; ${codecLabel}<br>` +
+        `dataOffset ${frame.dataOffset} &nbsp;·&nbsp; reserved ${fmtHex(frame.reserved8)}/${fmtHex(frame.reservedTail,4)}`;
+      card.appendChild(meta);
+
+      const actions = document.createElement('div');
+      actions.className = 'frame-actions';
+
+      if (frame.degenerate && frame.embeddedPalette){
+        const useBtn = document.createElement('button');
+        useBtn.textContent = 'use as active palette';
+        useBtn.addEventListener('click', () => {
+          currentPalette = frame.embeddedPalette.entries;
+          trueColorBtn.disabled = false;
+          plxPanel.style.display = 'none'; // avoid implying it came from a loaded .plx file
+          paletteGroup.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+          paletteGroup.querySelector('[data-mode="true"]').classList.add('active');
+          currentMode = 'true';
+          refreshGalleryCanvases();
+        });
+        actions.appendChild(useBtn);
+
+        const plxBtn = document.createElement('button');
+        plxBtn.textContent = 'export .plx';
+        plxBtn.addEventListener('click', () => {
+          const safeBase = (currentBaseName || 'anx').replace(/[^a-z0-9_\-]+/gi, '_');
+          // Byte-perfect raw .plx: no container, just the flat
+          // PALETTEENTRY[256] payload exactly as documented in the .PLX
+          // spec -- directly reloadable by this viewer's .plx panel, or
+          // by the original engine's LoadPaletteFile_PLX.
+          const blob = new Blob([frame.embeddedPalette.rawBytes], { type: 'application/octet-stream' });
+          triggerBrowserDownload(blob, `${safeBase}_frame${frame.index+1}_palette.plx`);
+        });
+        actions.appendChild(plxBtn);
+
+        const gplBtn = document.createElement('button');
+        gplBtn.textContent = 'export .gpl';
+        gplBtn.addEventListener('click', () => {
+          const safeBase = (currentBaseName || 'anx').replace(/[^a-z0-9_\-]+/gi, '_');
+          const gpl = buildGpl(frame.embeddedPalette.entries, `${safeBase}_frame${frame.index+1}`, 16, true);
+          const blob = new Blob([gpl], { type: 'text/plain' });
+          triggerBrowserDownload(blob, `${safeBase}_frame${frame.index+1}_palette.gpl`);
+        });
+        actions.appendChild(gplBtn);
+      } else {
+        const dlBtn = document.createElement('button');
+        dlBtn.textContent = 'save PNG';
+        dlBtn.disabled = !!frame.degenerate;
+        dlBtn.addEventListener('click', () => downloadFrame(card));
+        actions.appendChild(dlBtn);
+      }
+      card.appendChild(actions);
+
+      grid.appendChild(card);
+    });
+
+    galleryHost.appendChild(grid);
+  }
+
+  function refreshGalleryCanvases(){
+    if (!currentResult) return;
+    document.querySelectorAll('.frame-card').forEach(card => {
+      const frame = card._frame;
+      if (frame.degenerate) return; // never had a canvas to begin with
+      const wrap = card.querySelector('.canvas-wrap');
+      wrap.innerHTML = '';
+      const { canvas, off } = drawFrameToCanvas(frame, currentMode, currentZoom);
+      wrap.appendChild(canvas);
+      card._offCanvas = off;
+    });
+  }
+
+  paletteGroup.addEventListener('click', e => {
+    const btn = e.target.closest('button[data-mode]');
+    if (!btn || btn.disabled) return;
+    paletteGroup.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    currentMode = btn.dataset.mode;
+    refreshGalleryCanvases();
+  });
+
+  zoomSlider.addEventListener('input', () => {
+    currentZoom = parseInt(zoomSlider.value, 10);
+    zoomVal.textContent = currentZoom + '×';
+    refreshGalleryCanvases();
+  });
+
+  function triggerBrowserDownload(blob, filename){
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(url), 2000);
+  }
+
+  function downloadFrame(card){
+    const frame = card._frame;
+    const off = card._offCanvas;
+    if (!off) return; // degenerate record, nothing to save
+    off.toBlob((blob) => {
+      const safeBase = (currentBaseName || 'anx').replace(/[^a-z0-9_\-]+/gi, '_');
+      const filename = `${safeBase}_${frame.index + 1}.png`;
+      triggerBrowserDownload(blob, filename);
+    }, 'image/png');
+  }
+
+  function canvasToUint8Array(canvas){
+    return new Promise((resolve, reject) => {
+      canvas.toBlob(async (blob) => {
+        if (!blob){ reject(new Error('toBlob failed')); return; }
+        const buf = await blob.arrayBuffer();
+        resolve(new Uint8Array(buf));
+      }, 'image/png');
+    });
+  }
+
+  async function downloadAllAsZip(btn){
+    if (!currentResult) return;
+    const cards = Array.from(document.querySelectorAll('.frame-card'));
+    if (cards.length === 0) return;
+
+    const originalLabel = btn.textContent;
+    btn.disabled = true;
+    const safeBase = (currentBaseName || 'anx').replace(/[^a-z0-9_\-]+/gi, '_');
+
+    try{
+      const files = [];
+      for (let i = 0; i < cards.length; i++){
+        const frame = cards[i]._frame;
+        if (frame.degenerate || !cards[i]._offCanvas) continue; // no image data to export
+        btn.textContent = `zipping ${files.length+1}/${cards.length}…`;
+        const bytes = await canvasToUint8Array(cards[i]._offCanvas);
+        files.push({ name: `${safeBase}_${frame.index + 1}.png`, data: bytes });
+      }
+      if (files.length === 0){
+        alert('No image frames to export (all records in this file are non-image data).');
+        return;
+      }
+      btn.textContent = 'building zip…';
+      const zipBytes = buildZip(files);
+      const blob = new Blob([zipBytes], { type: 'application/zip' });
+      triggerBrowserDownload(blob, `${safeBase}_frames.zip`);
+    } catch(err){
+      console.error('zip export failed', err);
+      alert('ZIP export failed: ' + (err.message || err));
+    } finally {
+      btn.disabled = false;
+      btn.textContent = originalLabel;
+    }
+  }
+
+  function renderDownloadButtons(frameCount){
+    downloadBtnsHost.innerHTML = '';
+    const btn = document.createElement('button');
+    btn.textContent = frameCount === 1 ? 'download frame (.zip)' : `download all ${frameCount} frames (.zip)`;
+    btn.addEventListener('click', () => downloadAllAsZip(btn));
+    downloadBtnsHost.appendChild(btn);
+  }
+
+})();
+</script>
+</body>
+</html>
